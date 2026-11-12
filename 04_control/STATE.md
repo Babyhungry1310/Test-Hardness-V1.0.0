@@ -2,21 +2,22 @@ PHASE: EXECUTE
 CYCLE: CYC-01
 PROFILE: SHORT
 
-## Handover board (updated: 2026-11-12, main @ 29aec90)
+## Handover board (updated: 2026-11-12, main @ f8e9a6a)
 ### 1. Progress
-- CYC-01 | đang thi công | TK-0001 BLOCKED R1, TK-0002 ASSIGNED
+- CYC-01 | TK-0001 DONE R2; TK-0002 DONE R1; TK-0004 ASSIGNED | kiểm định vòng 2 FAIL, còn 1 vòng
 - CYC-02 | chưa có task | 01_plan/PLAN.md#CYC_02
 ### 2. Open risks
-- RSK-0003 | OPEN | level: LOW | due: 2026-11-19 | owner: LEAD
 - RSK-0001 | OPEN | level: MEDIUM | due: 2026-11-26 | owner: LEAD
 ### 3. Recent decisions
-- DEC-0005 | ACTIVE | Giữ phân công DEC-0003 dù run R1 của TK-0001 chạy Gemini
+- DEC-0007 | ACTIVE | Phân công model CYC-01: WORKER dùng Codex, REVIEWER dùng Claude
+- DEC-0006 | ACTIVE | Khắc phục thu thập test bằng cách giới hạn pytest về tests/
 - DEC-0004 | ACTIVE | So khớp id câu hỏi không phân biệt hoa thường
-- DEC-0003 | ACTIVE | Phân công model cho WORKER và REVIEWER của CYC-01
 - DEC-0002 | ACTIVE | Lưu ngân hàng câu hỏi dạng JSON và xuất handout Markdown
+- DEC-0005 | RETIRED
+- DEC-0003 | SUPERSEDED_BY DEC-0007
 - DEC-0001 | SUPERSEDED_BY DEC-0002
 ### 4. Next action
-- Run TK-0001 lần hai (R2, loop từ L01) theo DEC-0004 và Run TK-0002, cả hai chạy nhóm Codex theo DEC-0003, DEC-0005
+- OWNER merge PR chứa TK-0004; Run TK-0004 (nhóm Codex, R1); merge run; LEAD chạy pytest toàn repo trên main rồi mới giao kiểm định vòng 3 (nhóm Claude). Chưa tạo cổng PASS.
 ### 5. Never do
 - Không xuất PDF
 - Không dùng tên học viên thật trong dữ liệu thử

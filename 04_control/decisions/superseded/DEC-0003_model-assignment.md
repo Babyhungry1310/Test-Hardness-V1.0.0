@@ -14,6 +14,7 @@ affects: [TK-0001, TK-0002]
 keywords: [model-assignment, worker, reviewer]
 ---
 ## Status (newest first)
+- 2026-11-12 | SUPERSEDED_BY DEC-0007
 - 2026-11-12 | ACTIVE
 <!-- ANCHOR: CONTEXT -->
 ## Context
