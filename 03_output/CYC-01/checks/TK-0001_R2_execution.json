@@ -1,0 +1,40 @@
+{
+  "task": "TK-0001",
+  "run": 2,
+  "base_commit": "29aec9050b03c68687d9c2f64294bdf515445859",
+  "worker": {
+    "agent": "GPT/Codex",
+    "runtime": {
+      "session_id": "01a1d012-f0be-7213-abaf-e292cce9e2d5",
+      "model": "gpt-6.1-sol",
+      "model_provider": "9router",
+      "source": "Codex session turn_context metadata"
+    }
+  },
+  "verification": {
+    "task": "TK-0001",
+    "run": 2,
+    "loop": "L01",
+    "command": "python -m pytest -q --tb=line tests/test_dupes.py",
+    "exit_code": 0,
+    "started_at": "2026-11-12T14:34:18.668516+00:00",
+    "finished_at": "2026-11-12T14:34:19.576938+00:00",
+    "files_sha256": {
+      "src/dupes.py": "8f21b1e17c2f884ff04a26e2febc9ad02cf445017b76f83d083a6301ac0a0ab6",
+      "tests/test_dupes.py": "30636408501c214a4254fa8fbf6c02bd0f10435f3c6ccf61a4946d5bd65ff142"
+    }
+  },
+  "scope_validation": {
+    "status": "PASS",
+    "source_test_lines": 41,
+    "line_budget": 120,
+    "comments": 0,
+    "docstrings": 0,
+    "protected_files_changed": []
+  },
+  "done_when": {
+    "1": "Empty and unique inputs return []; each duplicate ID is returned once.",
+    "2": "q-001 and Q-001 are matched while preserving the first spelling.",
+    "3": "All 8 pytest cases passed in L01."
+  }
+}
