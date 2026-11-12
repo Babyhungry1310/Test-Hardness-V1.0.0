@@ -1,10 +1,10 @@
 # BRIEF
 
 ## Mục tiêu
-- Công cụ dòng lệnh đọc ngân hàng câu hỏi CSV, báo câu trùng id và xuất handout Markdown cho lớp học.
+- Công cụ dòng lệnh đọc ngân hàng câu hỏi JSON, báo câu trùng id và xuất handout Markdown cho lớp học.
 
 ## Phạm vi
-- Đọc ngân hàng câu hỏi CSV; báo câu trùng id; xuất handout Markdown.
+- Đọc ngân hàng câu hỏi JSON; báo câu trùng id; xuất handout Markdown.
 
 ## Không làm
 - Không xuất PDF.
