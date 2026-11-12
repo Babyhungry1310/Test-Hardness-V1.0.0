@@ -9,6 +9,7 @@ affects: ["DEC-0001", "data/bank.csv"]
 keywords: [quiz-bank, storage]
 ---
 ## Status (newest first)
+- 2026-11-12 | RESOLVED_BY DEC-0002
 - 2026-11-12 | PENDING
 <!-- ANCHOR: CONTEXT -->
 ## Context
