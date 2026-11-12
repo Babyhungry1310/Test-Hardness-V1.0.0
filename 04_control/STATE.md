@@ -1,10 +1,10 @@
-PHASE: EXECUTE
+PHASE: VERIFY
 CYCLE: CYC-01
 PROFILE: SHORT
 
-## Handover board (updated: 2026-11-12, main @ f8e9a6a)
+## Handover board (updated: 2026-11-12, main @ 193f2ed)
 ### 1. Progress
-- CYC-01 | TK-0001 DONE R2; TK-0002 DONE R1; TK-0004 ASSIGNED | kiểm định vòng 2 FAIL, còn 1 vòng
+- CYC-01 | TK-0001 DONE R2; TK-0002 DONE R1; TK-0004 DONE R1 | kiểm định vòng 2 FAIL, còn 1 vòng
 - CYC-02 | chưa có task | 01_plan/PLAN.md#CYC_02
 ### 2. Open risks
 - RSK-0001 | OPEN | level: MEDIUM | due: 2026-11-26 | owner: LEAD
@@ -17,7 +17,7 @@ PROFILE: SHORT
 - DEC-0003 | SUPERSEDED_BY DEC-0007
 - DEC-0001 | SUPERSEDED_BY DEC-0002
 ### 4. Next action
-- OWNER merge PR chứa TK-0004; Run TK-0004 (nhóm Codex, R1); merge run; LEAD chạy pytest toàn repo trên main rồi mới giao kiểm định vòng 3 (nhóm Claude). Chưa tạo cổng PASS.
+- OWNER merge PR đồng bộ này; giao kiểm định vòng 3 của CYC-01 (nhóm Claude theo DEC-0007) trên main mới nhất. Pytest toàn repo trên main 193f2ed đạt 13/13. Chưa tạo cổng PASS.
 ### 5. Never do
 - Không xuất PDF
 - Không dùng tên học viên thật trong dữ liệu thử
