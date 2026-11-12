@@ -14,6 +14,7 @@ affects: [TK-0001, TK-0002, DEC-0003]
 keywords: [model-assignment, reviewer, worker]
 ---
 ## Status (newest first)
+- 2026-11-12 | RETIRED
 - 2026-11-12 | ACTIVE
 <!-- ANCHOR: CONTEXT -->
 ## Context

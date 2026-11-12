@@ -8,5 +8,5 @@ origin: "01_plan/PLAN.md#CYC_01"
 ## Tasks
 - TK-0001 | run: R2 | outcome: DONE
 - TK-0002 | run: R1 | outcome: DONE
-- TK-0003 | run: none | outcome: ASSIGNED
+- TK-0004 | run: none | outcome: ASSIGNED
 <!-- END: TASKS -->

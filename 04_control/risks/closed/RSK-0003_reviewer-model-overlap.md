@@ -7,6 +7,7 @@ related: [DEC-0005, DEC-0003, TK-0001]
 keywords: [model-assignment, reviewer]
 ---
 ## Status (newest first)
+- 2026-11-12 | CLOSED | level: LOW | due: 2026-11-19 | owner: LEAD
 - 2026-11-12 | OPEN | level: LOW | due: 2026-11-19 | owner: LEAD
 <!-- ANCHOR: IMPACT -->
 ## Impact

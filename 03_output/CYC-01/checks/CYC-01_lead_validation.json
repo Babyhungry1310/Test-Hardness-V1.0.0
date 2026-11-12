@@ -1,69 +1,74 @@
 {
-  "base_main": "ff861809755ae3a3cd1c0dd0b62b4760f4db645c",
+  "base_main": "f8e9a6ae1b006a6a16d4d4b823aea756621850d6",
   "validation": "PASS",
-  "method": "Manual C1-C14 fallback; harness scripts not implemented",
+  "method": "Manual C1-C14 fallback; harness scripts not implemented; record front matter checked against harness/schemas and STATUS_GRAMMAR by ad hoc script",
   "checks": {
     "C1": {
       "status": "PASS",
-      "evidence": "No new run; assigned repair task is new; review round 2 is within limit."
+      "evidence": "No new run. One RVW record for CYC-01, at round 2 of 3."
     },
     "C2": {
       "status": "PASS",
-      "evidence": "Existing DONE runs retain evidence, empty unverified and last PASS loop."
+      "evidence": "No new run. Existing DONE runs keep evidence, empty unverified and last loop PASS."
     },
     "C3": {
       "status": "PASS",
-      "evidence": "LEAD metadata/evidence PR; no new run or product change; no gate written."
+      "evidence": "LEAD PR without run; no product file and no gate file changed."
     },
     "C4": {
       "status": "PASS",
-      "evidence": "New protected DEC-0006 is explicitly marked for OWNER review in PR."
+      "evidence": "Protected files listed in protected_files and in the MERGE block for OWNER review."
     },
     "C5": {
       "status": "PASS",
-      "evidence": "Existing ledgers unchanged; DEC-0006 is new and append-only status format is valid."
+      "evidence": "DEC-0003, DEC-0005, RSK-0003, PLAN each gain exactly one status line directly under the Status heading; no existing line changed. DEC-0003 SUPERSEDED_BY DEC-0007 and DEC-0005 RETIRED moved to decisions/superseded; RSK-0003 CLOSED moved to risks/closed."
     },
     "C6": {
       "status": "PASS",
-      "evidence": "STATE matches corrected cycle, actual DONE runs, unchanged risks and active decisions; phase remains EXECUTE."
+      "evidence": "PHASE EXECUTE with TK-0004 open and no CYC-01_PASS; section 2 equals live risks (RSK-0001); section 3 equals newest status line of every DEC; section 5 unchanged."
     },
     "C7": {
       "status": "PASS",
-      "evidence": "STATE <=40 lines; task/decision <=80 lines; no digest or gate created."
+      "evidence": "STATE 23 lines; PLAN 23; TK-0004 27; DEC-0006 37; DEC-0007 40; DEC-0003 41; DEC-0005 35; RSK-0003 19."
     },
     "C8": {
       "status": "PASS",
-      "evidence": "Changed records/evidence contain no credentials or real student data."
+      "evidence": "Changed files hold no credential and no real student data."
     },
     "C9": {
       "status": "PASS",
-      "evidence": "New task origin/constraint DEC-0006 ACTIVE; acceptance anchor and completed dependencies exist."
+      "evidence": "TK-0004 origin and constraint DEC-0006 ACTIVE; read_also 01_plan/ACCEPTANCE.md#CYC_01 resolves; depends_on TK-0001, TK-0002 are DONE; PLAN based_on DEC-0002, DEC-0006, DEC-0007 all ACTIVE; TK-0003 stays reserved for 01_plan/PLAN.md#CYC_02."
     },
     "C10": {
       "status": "PASS",
-      "evidence": "No new DSC-origin decision."
+      "evidence": "DEC-0006 and DEC-0007 originate from RVW-CYC-01, not from a DSC event."
     },
     "C11": {
       "status": "PASS",
-      "evidence": "Existing PLAN_GO contains eight non-FAIL answers; conditional risk IDs exist; no PASS gate created."
+      "evidence": "PLAN_GO.md untouched: eight answers, none FAIL."
     },
     "C12": {
       "status": "PASS",
-      "evidence": "Harness 1.0.0 matches document V1.0."
+      "evidence": "harness/VERSION 1.0.0 matches harness/HARNESS.md."
     },
     "C13": {
       "status": "PASS",
-      "evidence": "Task and decision match schemas/templates; anchors only; JSON contains no note/comment fields."
+      "evidence": "Records use only schema keys and template anchors; no YAML comment; JSON evidence has no note or comment field."
     },
     "C14": {
       "status": "PASS",
-      "evidence": "No test deleted, changed, skipped or weakened; proposed repair preserves all 20 tests."
+      "evidence": "This PR changes no test. Flag for OWNER: TK-0004 per DEC-0006 option B makes the repo-wide pytest command collect the 13 tests in tests/ and stop collecting the 7 harness example tests."
     }
   },
-  "actual_main_pytest": "FAIL: exit 2, two collection errors",
-  "scratch_proposed_fix_pytest": "20 passed; not a main result",
+  "actual_main_pytest": "FAIL: exit 2, two collection errors (recorded at ff86180; f8e9a6a adds only RVW-CYC-01.md)",
+  "scratch_proposed_fix_pytest": "13 passed with pytest.ini testpaths = tests on a copy of f8e9a6a; not a main result",
   "protected_files": [
-    "04_control/decisions/DEC-0006_cycle-test-collection.md"
+    "harness.yaml",
+    "01_plan/PLAN.md",
+    "04_control/decisions/DEC-0006_cycle-test-collection.md",
+    "04_control/decisions/DEC-0007_cyc-01-reviewer-claude.md",
+    "04_control/decisions/superseded/DEC-0003_model-assignment.md",
+    "04_control/decisions/superseded/DEC-0005_r1-gemini-exception.md"
   ],
   "pass_gate_created": false
 }
