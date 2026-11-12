@@ -1,0 +1,27 @@
+[
+  {
+    "id": "Q-001",
+    "text": "Độ cứng biểu thị khả năng chống lại tác động nào?",
+    "answer": "Biến dạng cục bộ như vết lõm hoặc vết xước."
+  },
+  {
+    "id": "Q-002",
+    "text": "Thang Mohs chủ yếu so sánh đặc tính nào?",
+    "answer": "Khả năng chống trầy xước của khoáng vật."
+  },
+  {
+    "id": "Q-003",
+    "text": "Phép thử Brinell sử dụng vật ấn có hình dạng gì?",
+    "answer": "Hình cầu."
+  },
+  {
+    "id": "Q-004",
+    "text": "Phép thử Vickers sử dụng vật ấn làm bằng vật liệu gì?",
+    "answer": "Kim cương."
+  },
+  {
+    "id": "Q-005",
+    "text": "Độ cứng có đồng nghĩa với độ dai va đập không?",
+    "answer": "Không."
+  }
+]

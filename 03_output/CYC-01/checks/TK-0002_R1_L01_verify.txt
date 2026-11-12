@@ -1,0 +1,16 @@
+
+=================================== ERRORS ====================================
+____________________ ERROR collecting tests/test_loader.py ____________________
+ImportError while importing test module 'C:\Users\linhdh\orca\workspaces\Test-Hardness-V1.0.0.local\scratch\TK-0002\checkout\tests\test_loader.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+C:\Users\linhdh\AppData\Local\Python\pythoncore-3.14-64\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_loader.py:6: in <module>
+    from src.loader import load_bank
+E   ModuleNotFoundError: No module named 'src'
+=========================== short test summary info ===========================
+ERROR tests/test_loader.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+1 error in 0.26s
