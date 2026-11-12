@@ -14,6 +14,7 @@ affects: ["data/bank.csv"]
 keywords: [quiz-bank, storage, handout]
 ---
 ## Status (newest first)
+- 2026-11-12 | SUPERSEDED_BY DEC-0002
 - 2026-11-12 | ACTIVE
 <!-- ANCHOR: CONTEXT -->
 ## Context
