@@ -1,0 +1,47 @@
+{
+  "task": "TK-0004",
+  "run": 1,
+  "loop": "L01",
+  "base_commit": "071d822a52c2aaba5f9aadd92892f9e49ffb87c6",
+  "task_sha256": "ea9285ede1b627d84ece5d5c8290e7da55f9a9c07f1ab14fa35b674e558bf7d4",
+  "worker": {
+    "agent": "GPT/Codex",
+    "runtime": {
+      "session_id": "01a1d012-f0be-7213-abaf-e292cce9e2d5",
+      "source": "Codex session turn_context metadata",
+      "model_provider": "9router",
+      "model": "gpt-6.1-sol"
+    }
+  },
+  "verification": {
+    "command": "python -m pytest -q --tb=line",
+    "exit_code": 0,
+    "started_at": "2026-11-12T15:38:16.588220+00:00",
+    "finished_at": "2026-11-12T15:38:17.185977+00:00"
+  },
+  "persisted_pytest_configuration": {
+    "pytest": {
+      "testpaths": "tests"
+    }
+  },
+  "pytest_ini_sha256": "c809c969ec7e11b9ff37784e9c6fcc0b7c5148d168e18b05aed797e03fbd6ead",
+  "tests_sha256_before": {
+    "tests/test_dupes.py": "30636408501c214a4254fa8fbf6c02bd0f10435f3c6ccf61a4946d5bd65ff142",
+    "tests/test_loader.py": "ca4553408761a4fbdb539359ca6a5edc6116d65649545ab07dea65b10caadb05"
+  },
+  "tests_sha256_after": {
+    "tests/test_dupes.py": "30636408501c214a4254fa8fbf6c02bd0f10435f3c6ccf61a4946d5bd65ff142",
+    "tests/test_loader.py": "ca4553408761a4fbdb539359ca6a5edc6116d65649545ab07dea65b10caadb05"
+  },
+  "tests_unchanged": true,
+  "runtime_cache_directory": "C:\\Users\\linhdh\\orca\\workspaces\\Test-Hardness-V1.0.0.local\\scratch\\TK-0004\\pytest-cache",
+  "scope_validation": {
+    "status": "PASS",
+    "configuration_lines": 2,
+    "line_budget": 40,
+    "test_files_changed": [],
+    "product_code_changed": false,
+    "harness_changed": false,
+    "run_lines": 18
+  }
+}
