@@ -1,0 +1,11 @@
+name: alert-main
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  alert-main:
+    runs-on: ubuntu-latest
+    steps:
+      - name: placeholder
+        run: exit 0

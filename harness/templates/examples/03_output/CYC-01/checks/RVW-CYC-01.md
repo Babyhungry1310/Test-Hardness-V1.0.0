@@ -1,0 +1,13 @@
+---
+schema: 1
+id: RVW-CYC-01
+cycle: CYC-01
+date: 2026-11-07
+reviewer_model: "model-c"
+worker_models: ["model-a", "model-b"]
+verdict: PASS
+items:
+  - "TK-0001 | done 2/2 | PASS"
+  - "TK-0002 | done 2/2 | PASS"
+findings: []
+---

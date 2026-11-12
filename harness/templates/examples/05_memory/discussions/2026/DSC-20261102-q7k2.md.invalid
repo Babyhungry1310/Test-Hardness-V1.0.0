@@ -1,0 +1,18 @@
+---
+schema: 1
+id: DSC-20261102-q7k2
+date: 2026-11-02
+cycle: NONE
+topic: "Định dạng lưu ngân hàng câu hỏi và đầu ra"
+model: "model-l"
+keywords: [quiz-bank, storage, handout]
+---
+## Status (newest first)
+- 2026-11-02 | E3 REJECTED
+- 2026-11-02 | E1 ACCEPTED → DEC-0002
+## Events
+- E1 | DECISION | Lưu ngân hàng câu hỏi dạng JSON và xuất handout Markdown, vì câu hỏi có nhiều dòng
+- E2 | ASSUMPTION | Mỗi đợt thi có dưới 500 câu hỏi
+- E3 | PROPOSAL | Xuất thẳng ra PDF thay cho Markdown
+- E4 | IDEA | Trộn thứ tự câu hỏi cho mỗi bản in ở bản sau
+- E5 | QUESTION | Có cần lưu độ khó cho từng câu không?

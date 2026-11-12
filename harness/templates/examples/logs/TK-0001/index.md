@@ -1,0 +1,4 @@
+- L01 | FAIL | debug=2 info=2 warn=1 error=1 | first_error: TK-0001.L01
+- L02 | FAIL | debug=1 info=2 warn=1 error=1 | first_error: TK-0001.L02
+- L03 | FAIL | debug=1 info=2 warn=2 error=2 | first_error: TK-0001.L03
+- L04 | PASS | debug=2 info=4 warn=0 error=0 | first_error: none

@@ -1,0 +1,21 @@
+---
+schema: 1
+task: TK-0002
+run: 1
+outcome: DONE
+model: "model-b"
+branch: task/TK-0002-R1
+outputs: ["src/loader.py", "tests/test_loader.py"]
+evidence: ["03_output/CYC-01/checks/TK-0002_R1_verify.txt"]
+done_check:
+  - "1 → 03_output/CYC-01/checks/TK-0002_R1_verify.txt"
+  - "2 → 03_output/CYC-01/checks/TK-0002_R1_verify.txt"
+loops:
+  - "L01 | PASS | passed=3 failed=0"
+deviations: {assumptions: [], differences: [], unverified: []}
+escalate: no
+escalation: {spec: "", problem: "", proposal: ""}
+touched_protected: no
+keywords: [quiz-bank, loader]
+usage: []
+---

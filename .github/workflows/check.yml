@@ -1,0 +1,11 @@
+name: check
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: placeholder
+        run: exit 0

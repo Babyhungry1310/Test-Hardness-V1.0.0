@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "kind", "product_paths", "verify_default", "log_level", "max_loops"],
+  "properties": {
+    "schema": {"const": 1},
+    "kind": {"enum": ["code", "doc", "research", "mixed"]},
+    "product_paths": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "pattern": "^[A-Za-z0-9_][A-Za-z0-9_./-]*$"}},
+    "verify_default": {"type": "string"},
+    "log_level": {"enum": ["LOOP", "SPAN"]},
+    "max_loops": {"type": "integer", "minimum": 1}
+  }
+}

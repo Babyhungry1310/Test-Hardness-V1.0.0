@@ -1,0 +1,6 @@
+schema: 1
+kind: mixed
+product_paths: ["03_output/"]
+verify_default: ""
+log_level: LOOP
+max_loops: 3

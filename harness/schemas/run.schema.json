@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "task", "run", "outcome", "model", "branch", "outputs", "evidence", "done_check", "loops", "deviations", "escalate", "escalation", "touched_protected", "keywords", "usage"],
+  "properties": {
+    "schema": {"const": 1},
+    "task": {"type": "string", "pattern": "^TK-\\d{4}$"},
+    "run": {"type": "integer", "minimum": 1},
+    "outcome": {"enum": ["DONE", "BLOCKED", "CANCELLED"]},
+    "model": {"type": "string", "minLength": 1},
+    "branch": {"type": "string", "pattern": "^task/TK-\\d{4}-R[1-9]\\d*$"},
+    "outputs": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/path"}},
+    "evidence": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/path"}},
+    "done_check": {"type": "array", "items": {"type": "string", "pattern": "^[1-9]\\d* → \\S.*$"}},
+    "loops": {"type": "array", "items": {"type": "string", "pattern": "^L\\d{2} \\| (?:PASS|FAIL)(?: \\| [a-z_]+=\\S+(?: [a-z_]+=\\S+)*)?$"}},
+    "deviations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["assumptions", "differences", "unverified"],
+      "properties": {
+        "assumptions": {"$ref": "#/$defs/lines"},
+        "differences": {"$ref": "#/$defs/lines"},
+        "unverified": {"$ref": "#/$defs/lines"}
+      }
+    },
+    "escalate": {"enum": ["yes", "no"]},
+    "escalation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["spec", "problem", "proposal"],
+      "properties": {
+        "spec": {"type": "string"},
+        "problem": {"type": "string"},
+        "proposal": {"type": "string"}
+      }
+    },
+    "touched_protected": {"enum": ["yes", "no"]},
+    "keywords": {"type": "array", "items": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"}},
+    "usage": {"type": "array", "items": {"type": "string"}}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"escalate": {"const": "yes"}}, "required": ["escalate"]},
+      "then": {"properties": {"escalation": {"properties": {"spec": {"minLength": 1}, "problem": {"minLength": 1}, "proposal": {"minLength": 1}}}}}
+    },
+    {
+      "if": {"properties": {"outcome": {"const": "DONE"}}, "required": ["outcome"]},
+      "then": {"properties": {"deviations": {"properties": {"unverified": {"maxItems": 0}}}, "loops": {"minItems": 1}, "escalate": {"const": "no"}}}
+    }
+  ],
+  "$defs": {
+    "path": {"type": "string", "pattern": "^[A-Za-z0-9_][A-Za-z0-9_./-]*$"},
+    "lines": {"type": "array", "items": {"type": "string", "minLength": 1}}
+  }
+}

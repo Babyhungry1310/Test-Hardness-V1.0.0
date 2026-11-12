@@ -1,0 +1,22 @@
+---
+schema: 1
+id: TK-0002
+cycle: CYC-01
+assignee: W2
+goal: "Đọc ngân hàng câu hỏi JSON và báo câu thiếu trường"
+write_scope: ["src/loader.py", "tests/test_loader.py"]
+constraints:
+  - "DEC-0002: mỗi câu có đủ id, text, answer"
+  - "NEVER: không sửa data/bank.json"
+inputs:
+  - "data/bank.json: 5 câu hỏi mẫu"
+read_also: ["SRC-0001#CONTEXT"]
+line_budget: 100
+verify: "python -m pytest -q --tb=line tests/test_loader.py"
+done_when:
+  - "load_bank trên data/bank.json trả về 5 câu, giữ thứ tự"
+  - "Đạt mọi kiểm tra trong tests/test_loader.py"
+size: "1 session · 2 files · ~40 lines"
+depends_on: []
+fixes: ""
+---

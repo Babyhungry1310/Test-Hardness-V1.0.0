@@ -1,0 +1,13 @@
+def find_duplicate_ids(questions: list[dict]) -> list[str]:
+    """Trả về các id trùng, giữ thứ tự xuất hiện đầu tiên."""
+    first_seen: dict[str, str] = {}
+    duplicates: list[str] = []
+    for question in questions:
+        # casefold để Q-001 và q-001 được coi là trùng
+        key = question["id"].casefold()
+        if key not in first_seen:
+            first_seen[key] = question["id"]
+        elif first_seen[key] not in duplicates:
+            duplicates.append(first_seen[key])
+    # TODO: báo cả vị trí của câu trùng
+    return duplicates

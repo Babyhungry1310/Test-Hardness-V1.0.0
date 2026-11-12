@@ -1,0 +1,24 @@
+2026-11-05T09:00:02+07:00 | TK-0001.L01     | INFO  | trace | LOOP_START   |
+2026-11-05T09:03:10+07:00 | TK-0001.L01.S01 | DEBUG | trace | SPAN         | kind=edit file=src/dupes.py
+2026-11-05T09:04:40+07:00 | TK-0001.L01.S02 | DEBUG | trace | SPAN         | kind=edit file=tests/test_dupes.py
+2026-11-05T09:05:01+07:00 | TK-0001.L01     | INFO  | trace | VERIFY_START | cmd="python -m pytest -q --tb=line tests/test_dupes.py"
+2026-11-05T09:05:03+07:00 | TK-0001.L01     | ERROR | trace | VERIFY_END   | result=FAIL passed=1 failed=2 ref=scratch/TK-0001/L01_verify.txt
+2026-11-05T09:05:03+07:00 | TK-0001.L01     | WARN  | trace | LOOP_END     | result=FAIL
+2026-11-05T09:06:15+07:00 | TK-0001.L02     | INFO  | trace | LOOP_START   |
+2026-11-05T09:08:52+07:00 | TK-0001.L02.S01 | DEBUG | trace | SPAN         | kind=edit file=src/dupes.py
+2026-11-05T09:09:05+07:00 | TK-0001.L02     | INFO  | trace | VERIFY_START | cmd="python -m pytest -q --tb=line tests/test_dupes.py"
+2026-11-05T09:09:07+07:00 | TK-0001.L02     | ERROR | trace | VERIFY_END   | result=FAIL passed=2 failed=1 ref=scratch/TK-0001/L02_verify.txt
+2026-11-05T09:09:07+07:00 | TK-0001.L02     | WARN  | trace | LOOP_END     | result=FAIL
+2026-11-05T09:10:20+07:00 | TK-0001.L03     | INFO  | trace | LOOP_START   |
+2026-11-05T09:13:41+07:00 | TK-0001.L03.S01 | DEBUG | trace | SPAN         | kind=edit file=src/dupes.py
+2026-11-05T09:14:02+07:00 | TK-0001.L03     | INFO  | trace | VERIFY_START | cmd="python -m pytest -q --tb=line tests/test_dupes.py"
+2026-11-05T09:14:04+07:00 | TK-0001.L03     | ERROR | trace | VERIFY_END   | result=FAIL passed=2 failed=1 ref=scratch/TK-0001/L03_verify.txt
+2026-11-05T09:14:04+07:00 | TK-0001.L03     | WARN  | trace | LOOP_END     | result=FAIL
+2026-11-05T09:14:05+07:00 | TK-0001.L03     | ERROR | trace | LOOP_CLOSED  | loops=3 evidence=03_output/CYC-01/checks/TK-0001_R1_verify.txt
+2026-11-05T09:14:05+07:00 | TK-0001.L03     | WARN  | trace | ESCALATE     | run=R1
+2026-11-06T14:00:11+07:00 | TK-0001.L04     | INFO  | trace | LOOP_START   |
+2026-11-06T14:02:30+07:00 | TK-0001.L04.S01 | DEBUG | trace | SPAN         | kind=edit file=src/dupes.py
+2026-11-06T14:03:12+07:00 | TK-0001.L04.S02 | DEBUG | trace | SPAN         | kind=edit file=tests/test_dupes.py
+2026-11-06T14:03:30+07:00 | TK-0001.L04     | INFO  | trace | VERIFY_START | cmd="python -m pytest -q --tb=line tests/test_dupes.py"
+2026-11-06T14:03:32+07:00 | TK-0001.L04     | INFO  | trace | VERIFY_END   | result=PASS passed=4 failed=0
+2026-11-06T14:03:32+07:00 | TK-0001.L04     | INFO  | trace | LOOP_END     | result=PASS

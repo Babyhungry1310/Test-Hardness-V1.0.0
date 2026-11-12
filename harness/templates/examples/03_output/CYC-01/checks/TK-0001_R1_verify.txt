@@ -1,0 +1,42 @@
+TK-0001.L01 $ python -m pytest -q --tb=line tests/test_dupes.py
+.FF                                                                      [100%]
+=================================== FAILURES ===================================
+E   AssertionError: assert ['A', 'A'] == ['A']
+
+      Left contains one more item: 'A'
+      Use -v to get more diff
+tests/test_dupes.py:14: AssertionError: assert ['A', 'A'] == ['A']
+E   AssertionError: assert ['Q-002'] == ['Q-001', 'Q-002']
+
+      At index 0 diff: 'Q-002' != 'Q-001'
+      Right contains one more item: 'Q-002'
+      Use -v to get more diff
+tests/test_dupes.py:19: AssertionError: assert ['Q-002'] == ['Q-001', 'Q-002']
+=========================== short test summary info ============================
+FAILED tests/test_dupes.py::test_exact_duplicate - AssertionError: assert ['A...
+FAILED tests/test_dupes.py::test_bank_has_two_duplicates - AssertionError: as...
+2 failed, 1 passed in 0.01s
+TK-0001.L02 $ python -m pytest -q --tb=line tests/test_dupes.py
+..F                                                                      [100%]
+=================================== FAILURES ===================================
+E   AssertionError: assert ['Q-002'] == ['Q-001', 'Q-002']
+
+      At index 0 diff: 'Q-002' != 'Q-001'
+      Right contains one more item: 'Q-002'
+      Use -v to get more diff
+tests/test_dupes.py:19: AssertionError: assert ['Q-002'] == ['Q-001', 'Q-002']
+=========================== short test summary info ============================
+FAILED tests/test_dupes.py::test_bank_has_two_duplicates - AssertionError: as...
+1 failed, 2 passed in 0.01s
+TK-0001.L03 $ python -m pytest -q --tb=line tests/test_dupes.py
+..F                                                                      [100%]
+=================================== FAILURES ===================================
+E   AssertionError: assert ['Q-002'] == ['Q-001', 'Q-002']
+
+      At index 0 diff: 'Q-002' != 'Q-001'
+      Right contains one more item: 'Q-002'
+      Use -v to get more diff
+tests/test_dupes.py:19: AssertionError: assert ['Q-002'] == ['Q-001', 'Q-002']
+=========================== short test summary info ============================
+FAILED tests/test_dupes.py::test_bank_has_two_duplicates - AssertionError: as...
+1 failed, 2 passed in 0.01s

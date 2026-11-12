@@ -1,0 +1,8 @@
+name: example-skill
+version: "1.0.0"
+kind: skill
+triggers: ["DISCUSS", "CHANGE", "glossary"]
+reads: ["05_memory/GLOSSARY.md", "harness/HARNESS.md#CONCEPTS"]
+writes: [".local/scratch/example-skill/"]
+hook: pre_context
+requires: "1.0.0"

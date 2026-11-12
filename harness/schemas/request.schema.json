@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "id", "date", "title", "proposed_by", "cycle", "affects", "keywords"],
+  "properties": {
+    "schema": {"const": 1},
+    "id": {"type": "string", "pattern": "^REQ-\\d{4}$"},
+    "date": {"type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$"},
+    "title": {"type": "string", "minLength": 1},
+    "proposed_by": {"type": "string", "pattern": "^(?:OWNER|LEAD|REVIEWER|W[1-9]\\d*)$"},
+    "cycle": {"type": "string", "pattern": "^(?:CYC-\\d{2}|NONE)$"},
+    "affects": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/pointer_or_path"}},
+    "keywords": {"type": "array", "items": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"}}
+  },
+  "$defs": {
+    "path": {"type": "string", "pattern": "^[A-Za-z0-9_][A-Za-z0-9_./-]*$"},
+    "pointer": {"type": "string", "pattern": "^(?:(?:(?:TK|DEC|RSK|REQ|SRC)-\\d{4}|CYC-\\d{2}|RVW-CYC-\\d{2}|DSC-\\d{8}-[a-z0-9]{4})(?:#[A-Z][A-Z0-9_]*)?|[A-Za-z0-9_][A-Za-z0-9_./-]*#[A-Z][A-Z0-9_]*|TK-\\d{4}\\.L\\d{2}(?:\\.S\\d{2})?)$"},
+    "pointer_or_path": {"anyOf": [{"$ref": "#/$defs/pointer"}, {"$ref": "#/$defs/path"}]}
+  }
+}
