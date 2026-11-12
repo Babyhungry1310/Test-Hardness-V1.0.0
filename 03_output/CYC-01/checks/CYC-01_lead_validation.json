@@ -1,0 +1,69 @@
+{
+  "base_main": "ff861809755ae3a3cd1c0dd0b62b4760f4db645c",
+  "validation": "PASS",
+  "method": "Manual C1-C14 fallback; harness scripts not implemented",
+  "checks": {
+    "C1": {
+      "status": "PASS",
+      "evidence": "No new run; assigned repair task is new; review round 2 is within limit."
+    },
+    "C2": {
+      "status": "PASS",
+      "evidence": "Existing DONE runs retain evidence, empty unverified and last PASS loop."
+    },
+    "C3": {
+      "status": "PASS",
+      "evidence": "LEAD metadata/evidence PR; no new run or product change; no gate written."
+    },
+    "C4": {
+      "status": "PASS",
+      "evidence": "New protected DEC-0006 is explicitly marked for OWNER review in PR."
+    },
+    "C5": {
+      "status": "PASS",
+      "evidence": "Existing ledgers unchanged; DEC-0006 is new and append-only status format is valid."
+    },
+    "C6": {
+      "status": "PASS",
+      "evidence": "STATE matches corrected cycle, actual DONE runs, unchanged risks and active decisions; phase remains EXECUTE."
+    },
+    "C7": {
+      "status": "PASS",
+      "evidence": "STATE <=40 lines; task/decision <=80 lines; no digest or gate created."
+    },
+    "C8": {
+      "status": "PASS",
+      "evidence": "Changed records/evidence contain no credentials or real student data."
+    },
+    "C9": {
+      "status": "PASS",
+      "evidence": "New task origin/constraint DEC-0006 ACTIVE; acceptance anchor and completed dependencies exist."
+    },
+    "C10": {
+      "status": "PASS",
+      "evidence": "No new DSC-origin decision."
+    },
+    "C11": {
+      "status": "PASS",
+      "evidence": "Existing PLAN_GO contains eight non-FAIL answers; conditional risk IDs exist; no PASS gate created."
+    },
+    "C12": {
+      "status": "PASS",
+      "evidence": "Harness 1.0.0 matches document V1.0."
+    },
+    "C13": {
+      "status": "PASS",
+      "evidence": "Task and decision match schemas/templates; anchors only; JSON contains no note/comment fields."
+    },
+    "C14": {
+      "status": "PASS",
+      "evidence": "No test deleted, changed, skipped or weakened; proposed repair preserves all 20 tests."
+    }
+  },
+  "actual_main_pytest": "FAIL: exit 2, two collection errors",
+  "scratch_proposed_fix_pytest": "20 passed; not a main result",
+  "protected_files": [
+    "04_control/decisions/DEC-0006_cycle-test-collection.md"
+  ],
+  "pass_gate_created": false
+}

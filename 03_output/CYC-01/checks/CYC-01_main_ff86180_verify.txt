@@ -1,0 +1,21 @@
+
+=================================== ERRORS ====================================
+____________________ ERROR collecting tests/test_dupes.py _____________________
+import file mismatch:
+imported module 'test_dupes' has this __file__ attribute:
+  C:\Users\linhdh\orca\workspaces\Test-Hardness-V1.0.0.local\scratch\CYC-01-completion\checkout\harness\templates\examples\tests\test_dupes.py
+which is not the same as the test file we want to collect:
+  C:\Users\linhdh\orca\workspaces\Test-Hardness-V1.0.0.local\scratch\CYC-01-completion\checkout\tests\test_dupes.py
+HINT: remove __pycache__ / .pyc files and/or use a unique basename for your test file modules
+____________________ ERROR collecting tests/test_loader.py ____________________
+import file mismatch:
+imported module 'test_loader' has this __file__ attribute:
+  C:\Users\linhdh\orca\workspaces\Test-Hardness-V1.0.0.local\scratch\CYC-01-completion\checkout\harness\templates\examples\tests\test_loader.py
+which is not the same as the test file we want to collect:
+  C:\Users\linhdh\orca\workspaces\Test-Hardness-V1.0.0.local\scratch\CYC-01-completion\checkout\tests\test_loader.py
+HINT: remove __pycache__ / .pyc files and/or use a unique basename for your test file modules
+=========================== short test summary info ===========================
+ERROR tests/test_dupes.py
+ERROR tests/test_loader.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 2 errors during collection !!!!!!!!!!!!!!!!!!!
+2 errors in 0.37s

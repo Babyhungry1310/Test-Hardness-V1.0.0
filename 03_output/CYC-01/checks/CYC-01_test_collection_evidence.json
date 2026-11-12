@@ -1,0 +1,20 @@
+{
+  "actual_main_verification": {
+    "commit": "ff861809755ae3a3cd1c0dd0b62b4760f4db645c",
+    "branch": "main",
+    "command": "python -m pytest -q --tb=line",
+    "exit_code": 2,
+    "started_at": "2026-11-12T15:08:09.914448+00:00",
+    "finished_at": "2026-11-12T15:08:11.238325+00:00",
+    "output": "\n=================================== ERRORS ====================================\n____________________ ERROR collecting tests/test_dupes.py _____________________\nimport file mismatch:\nimported module 'test_dupes' has this __file__ attribute:\n  C:\\Users\\linhdh\\orca\\workspaces\\Test-Hardness-V1.0.0.local\\scratch\\CYC-01-completion\\checkout\\harness\\templates\\examples\\tests\\test_dupes.py\nwhich is not the same as the test file we want to collect:\n  C:\\Users\\linhdh\\orca\\workspaces\\Test-Hardness-V1.0.0.local\\scratch\\CYC-01-completion\\checkout\\tests\\test_dupes.py\nHINT: remove __pycache__ / .pyc files and/or use a unique basename for your test file modules\n____________________ ERROR collecting tests/test_loader.py ____________________\nimport file mismatch:\nimported module 'test_loader' has this __file__ attribute:\n  C:\\Users\\linhdh\\orca\\workspaces\\Test-Hardness-V1.0.0.local\\scratch\\CYC-01-completion\\checkout\\harness\\templates\\examples\\tests\\test_loader.py\nwhich is not the same as the test file we want to collect:\n  C:\\Users\\linhdh\\orca\\workspaces\\Test-Hardness-V1.0.0.local\\scratch\\CYC-01-completion\\checkout\\tests\\test_loader.py\nHINT: remove __pycache__ / .pyc files and/or use a unique basename for your test file modules\n=========================== short test summary info ===========================\nERROR tests/test_dupes.py\nERROR tests/test_loader.py\n!!!!!!!!!!!!!!!!!!! Interrupted: 2 errors during collection !!!!!!!!!!!!!!!!!!!\n2 errors in 0.37s\n"
+  },
+  "temporary_proposed_fix_NOT_main": {
+    "snapshot": "temporary copy of main ff861809755ae3a3cd1c0dd0b62b4760f4db645c; NOT main",
+    "proposed_change": "Add empty tests/__init__.py only",
+    "command": "python -m pytest -q --tb=line",
+    "exit_code": 0,
+    "started_at": "2026-11-12T15:11:13.015317+00:00",
+    "finished_at": "2026-11-12T15:11:14.180123+00:00",
+    "output": "....................                                                     [100%]\n20 passed in 0.25s\n"
+  }
+}
