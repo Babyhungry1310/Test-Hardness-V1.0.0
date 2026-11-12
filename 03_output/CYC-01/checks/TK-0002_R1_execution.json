@@ -1,0 +1,59 @@
+{
+  "task": "TK-0002",
+  "run": 1,
+  "base_commit": "2bef4879ef6c2f4dd4f90f808c38095d90b0df63",
+  "worker": {
+    "agent": "GPT/Codex",
+    "runtime": {
+      "session_id": "01a1d012-f0be-7213-abaf-e292cce9e2d5",
+      "source": "Codex session turn_context metadata",
+      "model_provider": "9router",
+      "model": "gpt-6.1-sol"
+    }
+  },
+  "verification": [
+    {
+      "task": "TK-0002",
+      "run": 1,
+      "loop": "L01",
+      "phase": "before_implementation",
+      "command": "python -m pytest -q --tb=line tests/test_loader.py",
+      "exit_code": 2,
+      "started_at": "2026-11-12T14:47:43.154306+00:00",
+      "finished_at": "2026-11-12T14:47:44.208892+00:00",
+      "source_exists": false,
+      "bank_exists": false,
+      "tests_sha256": "ca4553408761a4fbdb539359ca6a5edc6116d65649545ab07dea65b10caadb05"
+    },
+    {
+      "task": "TK-0002",
+      "run": 1,
+      "loop": "L02",
+      "phase": "after_implementation",
+      "command": "python -m pytest -q --tb=line tests/test_loader.py",
+      "exit_code": 0,
+      "started_at": "2026-11-12T14:48:31.973732+00:00",
+      "finished_at": "2026-11-12T14:48:33.013706+00:00",
+      "files_sha256": {
+        "data/bank.json": "db369e425d1c588b3822d568cde18f55c35aaed94a8a5e563a037d1b90258f63",
+        "src/loader.py": "6d9aabebdba2e4c168310aa46f2a22d9e9dd2fc6a33509228461e2d637c627db",
+        "tests/test_loader.py": "ca4553408761a4fbdb539359ca6a5edc6116d65649545ab07dea65b10caadb05"
+      },
+      "tests_unchanged_since_L01": true
+    }
+  ],
+  "scope_validation": {
+    "status": "PASS",
+    "product_lines": 81,
+    "line_budget": 120,
+    "comments": 0,
+    "docstrings": 0,
+    "protected_files_changed": []
+  },
+  "done_when": {
+    "1": "Five original questions with IDs Q-001 through Q-005 and exactly id, text, answer.",
+    "2": "Repository bank loads unchanged; custom ordering and Unicode are preserved.",
+    "3": "Missing id, text, or answer each raises ValueError, including in a later question.",
+    "4": "All 5 pytest cases pass at L02 with tests unchanged from L01."
+  }
+}
