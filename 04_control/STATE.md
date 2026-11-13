@@ -1,11 +1,11 @@
-PHASE: EXECUTE
+PHASE: VERIFY
 CYCLE: CYC-02
 PROFILE: SHORT
 
-## Handover board (updated: 2026-11-13, main @ e2b7944)
+## Handover board (updated: 2026-11-13, main @ 45f5fbf)
 ### 1. Progress
 - CYC-01 | PASS | TK-0001 DONE R2, TK-0002 DONE R1, TK-0004 DONE R1 | thẻ cycle/CYC-01 @ e2b7944
-- CYC-02 | chờ kích hoạt | TK-0003 ASSIGNED
+- CYC-02 | TK-0003 DONE R1 | chờ kiểm định vòng 1
 ### 2. Open risks
 - RSK-0004 | OPEN | level: HIGH | due: 2026-11-26 | owner: OWNER
 - RSK-0001 | OPEN | level: MEDIUM | due: 2026-11-26 | owner: LEAD
@@ -22,7 +22,7 @@ PROFILE: SHORT
 - DEC-0003 | SUPERSEDED_BY DEC-0007
 - DEC-0001 | SUPERSEDED_BY DEC-0002
 ### 4. Next action
-- OWNER merge PR mở CYC-02 rồi Run TK-0003 (nhóm Codex, R1). Sau khi merge run: LEAD chạy pytest toàn repo trên main, đồng bộ CYC-02.md và STATE.md, rồi mới giao kiểm định (Claude Code). Thẻ chỉ do OWNER đặt theo DEC-0011.
+- OWNER merge PR đồng bộ này; giao kiểm định vòng 1 của CYC-02 (`claude-sonnet-5-5`, Claude Code trực tiếp theo DEC-0009) trên main mới nhất. Pytest toàn repo trên main 45f5fbf đạt 19/19. Run TK-0003 R1 ghi model `gpt-5.6-luna`, không phải Claude nên REVIEWER giữ nguyên. Chưa tạo cổng PASS. Thẻ chỉ do OWNER đặt theo DEC-0011.
 ### 5. Never do
 - Không xuất PDF
 - Không dùng tên học viên thật trong dữ liệu thử
