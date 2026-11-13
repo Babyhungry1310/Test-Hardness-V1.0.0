@@ -1,11 +1,11 @@
-PHASE: EXECUTE
+PHASE: VERIFY
 CYCLE: CYC-02
 PROFILE: SHORT
 
-## Handover board (updated: 2026-11-13, main @ 97bcce9)
+## Handover board (updated: 2026-11-13, main @ f2a48ef)
 ### 1. Progress
 - CYC-01 | PASS | TK-0001 DONE R2, TK-0002 DONE R1, TK-0004 DONE R1 | thẻ cycle/CYC-01 @ e2b7944
-- CYC-02 | TK-0003 DONE R1; TK-0005 ASSIGNED | chưa kiểm định, còn 3 vòng
+- CYC-02 | TK-0003 DONE R1; TK-0005 DONE R1 | chờ kiểm định vòng 1, còn 3 vòng
 ### 2. Open risks
 - RSK-0004 | OPEN | level: HIGH | due: 2026-11-26 | owner: OWNER
 - RSK-0001 | OPEN | level: MEDIUM | due: 2026-11-26 | owner: LEAD
@@ -25,7 +25,7 @@ PROFILE: SHORT
 - DEC-0003 | SUPERSEDED_BY DEC-0007
 - DEC-0001 | SUPERSEDED_BY DEC-0002
 ### 4. Next action
-- OWNER merge PR chứa TK-0005, rồi Run TK-0005 (nhóm Codex, R1). Sau khi merge run: LEAD chạy pytest toàn repo trên main, đồng bộ CYC-02.md và STATE.md, rồi OWNER giao kiểm định vòng 1 cho nhóm Gemini theo DEC-0012. PR #20 đã đóng theo DEC-0014. Chưa tạo cổng PASS. Thẻ chỉ do OWNER đặt theo DEC-0011.
+- OWNER merge PR đồng bộ này; giao kiểm định vòng 1 của CYC-02 cho nhóm Gemini theo DEC-0012 trên main mới nhất, nhánh `review/CYC-02` tạo mới từ main. `reviewer_model` phải khác `gpt-5.6-luna` và `gpt-6.1-terra`. Pytest toàn repo trên main f2a48ef đạt 23/23. Chưa tạo cổng PASS. Thẻ chỉ do OWNER đặt theo DEC-0011.
 ### 5. Never do
 - Không xuất PDF
 - Không dùng tên học viên thật trong dữ liệu thử
