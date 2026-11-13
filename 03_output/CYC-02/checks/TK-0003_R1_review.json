@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "worker_model": "gpt-5.6-luna",
+  "reviewer_model": "gemini-3.8-flash-n",
+  "findings": [],
+  "verdict": "PASS",
+  "done": 5,
+  "total": 5,
+  "checks": [
+    "build_handout trả Markdown đúng bố cục DEC-0010 và thứ tự ngân hàng",
+    "CLI data/bank.json xuất file 5 câu Q-001 tới Q-005 mã 0",
+    "CLI phát hiện id trùng qua find_duplicate_ids in stderr mã 1 không tạo file",
+    "CLI chặn đuôi khác .md mã 2 không tạo file",
+    "19 test pass gồm 13 test cũ và 6 test mới trong tests/test_handout.py diff file cũ rỗng"
+  ]
+}
