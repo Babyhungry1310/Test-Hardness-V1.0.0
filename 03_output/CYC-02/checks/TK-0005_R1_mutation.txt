@@ -1,0 +1,12 @@
+F                                                                        [100%]
+================================== FAILURES ===================================
+E   AssertionError: assert [None] == ['\n']
+
+      At index 0 diff: None != '\n'
+      Use -v to get more diff
+C:\Users\linhdh\orca\workspaces\Test-Hardness-V1.0.0.local\scratch\TK-0005\mutation\tests\test_handout.py:134: AssertionError: assert [None] == ['\n']
+=========================== short test summary info ===========================
+FAILED tests/test_handout.py::test_output_open_uses_explicit_lf_on_all_platforms
+1 failed in 37.20s
+
+PASS: removing newline argument causes the cross-platform test to fail

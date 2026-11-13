@@ -12,7 +12,7 @@ def build_handout(questions):
             f"{question['text']}\n\n"
             f"**Đáp án:** {question['answer']}"
         )
-    return "\n\n".join(sections) + "\n"
+    return "\n\n".join(sections).rstrip("\n") + "\n"
 
 
 def main(argv=None):
@@ -30,7 +30,7 @@ def main(argv=None):
         for question_id in duplicates:
             print(f"Duplicate id: {question_id}", file=sys.stderr)
         return 1
-    with open(output_path, "w", encoding="utf-8") as output:
+    with open(output_path, "w", encoding="utf-8", newline="\n") as output:
         output.write(build_handout(questions))
     return 0
 
