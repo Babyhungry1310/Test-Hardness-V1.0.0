@@ -13,5 +13,6 @@
 ## CYC-02
 - Công cụ xuất một file handout Markdown từ `data/bank.json`, mỗi câu một mục theo thứ tự trong ngân hàng.
 - Công cụ dừng và báo id trùng trước khi xuất.
+- File handout kết thúc bằng đúng một ký tự LF và không chứa ký tự CR do công cụ thêm vào, trên cả Linux và Windows.
 - Không sinh file PDF.
 <!-- END: CYC_02 -->
