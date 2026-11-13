@@ -1,0 +1,13 @@
+{
+  "requested_model": "Hardeness",
+  "actual_model": "gpt-5.6-luna",
+  "usage": {
+    "prompt_tokens": 1552,
+    "completion_tokens": 1618,
+    "total_tokens": 3170
+  },
+  "worker_loop": "L01",
+  "verify": "python -m pytest -q --tb=line",
+  "result": "19 passed",
+  "review_status": "BLOCKED"
+}

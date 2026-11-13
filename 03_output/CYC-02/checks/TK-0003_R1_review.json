@@ -1,0 +1,9 @@
+{
+  "status": "BLOCKED",
+  "worker_model": "gpt-5.6-luna",
+  "reviewer_model": "gpt-5.6-luna",
+  "findings": [
+    "oc/union-alpha returned HTTP 400: upstream model unavailable.",
+    "Fallback reviewer model matches worker or identity unavailable; verdict rejected under REVIEWER rule 2."
+  ]
+}
