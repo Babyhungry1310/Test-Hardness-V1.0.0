@@ -2,7 +2,7 @@
 schema: 1
 task: TK-0008
 run: 1
-outcome: DONE
+outcome: BLOCKED
 model: "grok-4.7"
 branch: task/TK-0008-R1
 outputs:
@@ -27,12 +27,15 @@ deviations:
     - "Dòng 8 PASS khi đọc được boolean vì GITHUB_RULES ghi OWNER quyết, không phải bật hay tắt."
     - "Schema GET xác nhận actor_type User; RepositoryRole id 5 không được xác nhận là chỉ OWNER."
   differences: []
-  unverified: []
-escalate: no
+  unverified:
+    - "glob_covers bỏ suffix sau ** nên refs/tags/**/private bị coi phủ refs/tags/cycle/* dù chỉ là subset."
+    - "exclude_hits_prefix không nhận giao của refs/tags/*/private với cycle/private."
+    - "line3 chưa xét bypass_pull_request_allowances users teams apps nên enforce_admins true vẫn PASS sai."
+escalate: yes
 escalation:
-  spec: ""
-  problem: ""
-  proposal: ""
+  spec: "tools/github_audit.py glob_covers, exclude_hits_prefix và line3"
+  problem: "Hết 3 loop; matcher thẻ và bypass classic còn sai nên chưa đạt done_when correctness."
+  proposal: "OWNER cấp ngân sách sửa ba blocker rồi verify lại; không tạo R2 trong phiên này."
 touched_protected: no
 keywords: []
 usage: []
