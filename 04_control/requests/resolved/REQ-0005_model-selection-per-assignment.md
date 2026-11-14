@@ -17,5 +17,5 @@ OWNER yêu cầu quy định mới: "Mỗi lần giao task, LEAD chọn bất k�
 <!-- END: CONTEXT -->
 <!-- ANCHOR: IMPACT -->
 ## Impact
-Sửa luật khung trong `harness/` và nâng `harness/VERSION` lên 1.0.2 qua nhánh `upgrade/1.0.2`. Không đổi schema; bản ghi cũ vẫn hợp lệ. Không sửa `harness.yaml`, sản phẩm, plan, task hay bản ghi của các chu kỳ. PR #28 (plan version 4) phải được sửa cho khớp và merge sau PR này. Các quyết định phân công cũ (DEC-0007, DEC-0012, DEC-0014) giữ nguyên cho các chu kỳ đã xong.
+Sửa luật khung trong `harness/` và giữ `harness/VERSION` là 1.0.1 theo yêu cầu OWNER qua nhánh `upgrade/1.0.2`. Không đổi schema; bản ghi cũ vẫn hợp lệ. Không sửa `harness.yaml`, sản phẩm, plan, task hay bản ghi của các chu kỳ. PR #28 (plan version 4) phải được sửa cho khớp và merge sau PR này. Các quyết định phân công cũ (DEC-0007, DEC-0012, DEC-0014) giữ nguyên cho các chu kỳ đã xong.
 <!-- END: IMPACT -->

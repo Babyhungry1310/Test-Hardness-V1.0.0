@@ -56,7 +56,7 @@ Tuyến trả về model khác với lần kiểm trước, hoặc tên tuyến 
 <!-- END: ELIGIBILITY -->
 
 <!-- ANCHOR: TIERS -->
-Tier (`T1`, `T2`, `T3`, `UNRATED`) không còn là điều kiện giao việc từ bản 1.0.2. Các khóa `status`, `tier1`, `tier2`, `tier3`, `tier1_candidate_families`, `tier1_approved_by`, `roles` trong `04_control/MODEL_MATRIX.md` giữ lại để bản ghi cũ còn hợp schema; chúng không có hiệu lực.
+Tier (`T1`, `T2`, `T3`, `UNRATED`) không còn là điều kiện giao việc từ DEC-0018. Các khóa `status`, `tier1`, `tier2`, `tier3`, `tier1_candidate_families`, `tier1_approved_by`, `roles` trong `04_control/MODEL_MATRIX.md` giữ lại để bản ghi cũ còn hợp schema; chúng không có hiệu lực.
 <!-- END: TIERS -->
 
 ## 3. Chọn model
@@ -100,7 +100,7 @@ Tier (`T1`, `T2`, `T3`, `UNRATED`) không còn là điều kiện giao việc t�
 | Đối chiếu | Neo `ASSIGNMENTS`, khóa `actual` và `match` | LEAD | Khi review PR của phiên |
 <!-- END: REQUESTED_ACTUAL -->
 
-Dòng phân công: `- CYC-nn | <ROLE> | requested: <code> | actual: <chuỗi thực tế hoặc pending> | record: <con trỏ tới task, run hoặc RVW> | match: yes|no|pending | route: <tên tuyến> | basis: <lý do ≤ 15 từ; hạn mức: số liệu hoặc chưa xác minh>`. Hai khóa `route` và `basis` là tùy chọn với dòng lập trước bản 1.0.2.
+Dòng phân công: `- CYC-nn | <ROLE> | requested: <code> | actual: <chuỗi thực tế hoặc pending> | record: <con trỏ tới task, run hoặc RVW> | match: yes|no|pending | route: <tên tuyến> | basis: <lý do ≤ 15 từ; hạn mức: số liệu hoặc chưa xác minh>`. Hai khóa `route` và `basis` là tùy chọn với dòng lập trước DEC-0018.
 
 - `match` so theo mục 4.1. `match: no` chưa phải lỗi: cổng model có thể tự chuyển model. LEAD kiểm model thực tế có đủ điều kiện theo mục 2 và, với REVIEWER, mục 4.2. Đạt thì tiếp tục. Không đạt thì LEAD không xuất khối `MERGE` cho PR đó và đưa về OWNER bằng khối `QUESTION`.
 - Không xác định được model thực tế của một phiên: kết quả của phiên đó không được dùng; dừng và báo OWNER.

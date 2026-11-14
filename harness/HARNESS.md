@@ -7,7 +7,7 @@
 
 | Thuộc tính | Giá trị |
 |---|---|
-| Phiên bản | 1.0.2 (Semantic Versioning [THY-26]) |
+| Phiên bản | 1.0.1 (Semantic Versioning [THY-26]) |
 | Ngày | 2026-11-14 |
 | Vị trí trong repo | `harness/HARNESS.md` |
 | Ngôn ngữ | Văn bản tiếng Việt. Mọi **mã, tên file, tên thư mục, khóa YAML, giá trị trạng thái, tên neo** dùng tiếng Anh |
@@ -793,7 +793,7 @@ Mỗi lần `scan` phát hiện được ghi một dòng log `SCAN_HIT`; nội d
 | Extension | `harness/extensions/` | Phần mở rộng cắm vào khung | 11 |
 | Model catalog | `04_control/MODEL_CATALOG.md` | Danh mục mã model cụ thể, nguồn thông tin, ngày cập nhật | 3.5 |
 | Model matrix | `04_control/MODEL_MATRIX.md` | Ma trận ưu tiên model theo vai và fallback | 3.5 |
-| Tier | `T1`, `T2`, `T3`, `UNRATED` | Hạng model của bản 1.0.1; không còn hiệu lực từ bản 1.0.2 | 3.5 |
+| Tier | `T1`, `T2`, `T3`, `UNRATED` | Hạng model theo chính sách trước DEC-0018; không còn hiệu lực từ DEC-0018 | 3.5 |
 | Model role | `BRAINSTORM`, `PLANNING`, `REVIEWER`, `WORKER` | Vai dùng model trong ma trận | 3.5 |
 | Summary | `SUMMARY` | Phần tóm tắt dạng dọc đứng trước khối kết thúc | 3.6 |
 | Chat / Storage | — | Hai nơi viết với hai bộ quy tắc: trao đổi với OWNER, và file trong repo | 3.6 |

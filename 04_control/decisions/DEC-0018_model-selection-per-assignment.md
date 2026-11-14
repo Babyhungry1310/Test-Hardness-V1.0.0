@@ -2,7 +2,7 @@
 schema: 1
 id: DEC-0018
 date: 2026-11-14
-title: "Khung 1.0.2: LEAD chọn model theo từng lần giao việc; REVIEWER khác model thực tế với WORKER của phần được kiểm"
+title: "Khung 1.0.1: LEAD chọn model theo từng lần giao việc; REVIEWER khác model thực tế với WORKER của phần được kiểm"
 proposed_by: LEAD
 decided_by: OWNER
 cycle: NONE
@@ -38,7 +38,7 @@ Lượt merge PR của OWNER là chữ ký. LEAD soạn câu chữ của luật;
 | 4 | Không có model phù hợp, không xác định được model thực tế, hoặc không có REVIEWER phù hợp: dừng và báo OWNER. Hạn mức hay model thực tế chưa xác minh được thì ghi `chưa xác minh`, và báo OWNER khi điều đó ảnh hưởng việc giao | `harness/MODEL_POLICY.md` mục 3, 6 |
 | 5 | Một PR `upgrade/` được mở cùng lúc với một PR `lead/` khi cùng phiên LEAD soạn, không chạm chung file, mã bản ghi không đụng nhau và cả hai PR ghi thứ tự merge | `harness/tools/PREFLIGHT.md` dòng 15 |
 
-Không đổi schema: các khóa tier của ma trận giữ lại nhưng không có hiệu lực; `availability: confirmed` nay nghĩa là đã có phiên tác tử có công cụ. Số phiên bản 1.0.2 theo cách OWNER đã đặt cho bản 1.0.1; theo bảng ở `harness/HARNESS.md` mục 11 thay đổi này ở mức MINOR.
+Không đổi schema: các khóa tier của ma trận giữ lại nhưng không có hiệu lực; `availability: confirmed` nay nghĩa là đã có phiên tác tử có công cụ. Theo yêu cầu OWNER, giữ số 1.0.1 dù nội dung thay đổi so với 1.0.1 trên main; theo bảng ở `harness/HARNESS.md` mục 11 thay đổi này ở mức MINOR. Hai trạng thái cùng số cần phân biệt bằng commit.
 <!-- END: RATIONALE -->
 <!-- ANCHOR: CONSEQUENCES -->
 ## Consequences
@@ -48,5 +48,5 @@ Không đổi schema: các khóa tier của ma trận giữ lại nhưng không 
 - OWNER không còn duyệt trước từng model. Thứ OWNER thấy là dòng kiểm tuyến, dòng phân công và báo cáo của LEAD ở mỗi điểm dừng; hai file model vẫn vào `main` qua PR do OWNER merge.
 - `04_control/MODEL_CATALOG.md` và `04_control/MODEL_MATRIX.md` của dự án được cập nhật trong PR #28, không trong PR này. Phiên `DISCUSS` không còn bị chặn vì `tier1` rỗng.
 - Thứ tự merge: PR `upgrade/1.0.2` trước; sau đó LEAD đưa `main` vào nhánh của PR #28 bằng `git merge` (không rebase, không ép đẩy), kiểm lại, rồi OWNER merge PR #28. `04_control/STATE.md` được cập nhật ở PR #28 để hai PR không chạm chung file.
-- Chưa có nguồn đọc hạn mức được xác nhận; chưa có script nào thi hành các kiểm tra này. Việc đưa bản 1.0.2 sang repo khung gốc cần PR riêng.
+- Chưa có nguồn đọc hạn mức được xác nhận; chưa có script nào thi hành các kiểm tra này. Việc đưa thay đổi sang repo khung gốc cần PR riêng.
 <!-- END: CONSEQUENCES -->

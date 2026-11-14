@@ -107,7 +107,7 @@ Mỗi vai một combo trên 9Router (bảng 1 dòng 7). Ba tên `lead`, `worker`
 | `worker` | Phiên `RUN` | Model làm code hoặc viết; dự phòng rẻ hơn được phép |
 | `reviewer` | Phiên kiểm định chu kỳ | Model khác mọi model trong `worker`, nên khác hãng [THY-23] |
 
-**Combo và tính độc lập của REVIEWER (từ bản 1.0.2):**
+**Combo và tính độc lập của REVIEWER (từ DEC-0018):**
 
 1. Tính độc lập xét trên model thực tế của từng phiên theo `harness/MODEL_POLICY.md#REVIEWER_INDEPENDENCE`, không xét theo tên combo, tên tuyến hay nhóm.
 2. Vì 9Router có thể chuyển model giữa phiên (bảng 1 dòng 8) và tên tuyến có thể khác model trả về, phiên giao việc gọi tuyến của một model cụ thể. Combo chỉ được dùng khi mọi thành phần của nó đủ điều kiện cho vai đó; combo cho REVIEWER không chứa model nào các WORKER của phần được kiểm đã dùng.
