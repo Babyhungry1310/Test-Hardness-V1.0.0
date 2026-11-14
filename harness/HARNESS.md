@@ -87,7 +87,7 @@ Bốn quy tắc phân vai:
 - **Người làm không tự nghiệm thu** [THY-12]; model có thiên lệch ưu ái sản phẩm của chính mình [THY-23].
 - **Chỉ OWNER đưa thay đổi vào nhánh chính.** Model không commit trên `main`, không merge, không đẩy thẳng, không bật auto-merge, không tạo hay đẩy thẻ git, kể cả khi được bảo trong chat [THY-13]. Đọc và kiểm tra `main` thì được. Chi tiết: `harness/MAIN_PROTECTION.md`.
 - **Mỗi sổ một người ghi:** chỉ LEAD ghi sổ, `STATE.md`, task, bản ghi thảo luận [THY-19].
-- **Model dùng tài khoản GitHub riêng**, không dùng chung tài khoản hay token với OWNER. Bằng chứng duyệt duy nhất là thao tác merge của tài khoản OWNER.
+- **OWNER và tác tử dùng chung một tài khoản GitHub.** Tác tử được đẩy nhánh làm việc và tạo PR; chỉ OWNER quyết định và thực hiện merge. Cùng danh tính không chứng minh ai thao tác; xem RSK-0004.
 
 ### 3.2. Ai quyết điều gì
 
@@ -689,7 +689,7 @@ Ba cách gọi: **SETUP** (lệnh thiết lập của Orca khi tạo worktree) �
 |---|---|---|
 | 1. Luật | `rules/*.md`, ba file định tuyến, khối chuẩn, chỉ OWNER merge; pre-flight gate và hook cục bộ để ngăn thao tác nhầm | — |
 | 2. Kiểm tra bằng máy | C1–C14 trên mọi PR, bộ kiểm tra lấy từ nhánh chính | Model quên hoặc bỏ qua luật |
-| 3. Nền tảng | Luật bảo vệ nhánh `main` và thẻ `cycle/*` trên GitHub, `CODEOWNERS`, tài khoản riêng cho tác tử | Merge, đẩy thẳng, đẩy thẻ trái phép |
+| 3. Nền tảng | Luật bảo vệ nhánh `main` và thẻ `cycle/*` trên GitHub, `CODEOWNERS`, tài khoản chung của OWNER và tác tử | Merge, đẩy thẳng, đẩy thẻ trái phép |
 | 4. Phát hiện | Workflow mở cảnh báo khi có thay đổi vào nhánh chính không do OWNER merge; câu 7 cổng PASS | Sự cố lọt qua ba lớp trên [THY-34] |
 
 **Lớp 3 là lớp kiểm soát chính đối với `main`.** Luật, pre-flight gate và hook cục bộ ở lớp 1 đều vượt qua được (`--no-verify`, bản clone chưa cài hook, tác tử bỏ qua luật); chúng ngăn nhầm lẫn, không ngăn được cố ý. Lớp 3 có sẵn hay không tùy gói GitHub và chỉ phân biệt được tác tử với OWNER khi hai bên dùng tài khoản khác nhau. Thiếu lớp 3 thì câu 7 cổng PASS trả `CONDITIONAL` kèm một `RSK`. Đặc tả từng lớp, hook, pre-flight gate và danh sách thao tác được phép: `harness/MAIN_PROTECTION.md`.

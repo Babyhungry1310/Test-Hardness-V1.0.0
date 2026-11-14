@@ -2,9 +2,11 @@
 schema: 1
 id: PLAN
 date: 2026-11-12
-based_on: [DEC-0002, DEC-0006, DEC-0007, DEC-0010, DEC-0013, DEC-0015, DEC-0016, DEC-0017, DEC-0018]
+based_on: [DEC-0002, DEC-0006, DEC-0007, DEC-0010, DEC-0013, DEC-0015, DEC-0016, DEC-0017, DEC-0018, DEC-0019, DEC-0020]
 ---
 ## Status (newest first)
+- 2026-11-14 | ACTIVE | version: 6
+- 2026-11-14 | ACTIVE | version: 5
 - 2026-11-14 | ACTIVE | version: 4
 - 2026-11-13 | ACTIVE | version: 3
 - 2026-11-12 | ACTIVE | version: 2
@@ -26,11 +28,12 @@ based_on: [DEC-0002, DEC-0006, DEC-0007, DEC-0010, DEC-0013, DEC-0015, DEC-0016,
 - TK-0007 | Kiểm pre-flight cho main theo vai và thời điểm | depends: none | assignee: W2
 - TK-0008 | Kiểm chỉ đọc lớp bảo vệ main và thẻ phía GitHub | depends: none | assignee: W3
 - TK-0018 | Ca biên và ca lách cho hook và pre-flight | depends: TK-0006, TK-0007 | assignee: W3
+- TK-0027 | Kiểm hồi quy kiểm toán GitHub với tài khoản OWNER dùng chung | depends: TK-0008 | assignee: W2
 <!-- END: CYC_03 -->
 <!-- ANCHOR: CYC_03_BATCHES -->
 ## CYC-03 batches
 - B1 | tasks: TK-0006, TK-0007, TK-0008 | after: none
-- B2 | tasks: TK-0018 | after: B1
+- B2 | tasks: TK-0018, TK-0027 | after: B1
 <!-- END: CYC_03_BATCHES -->
 <!-- ANCHOR: CYC_04 -->
 ## CYC-04
@@ -73,14 +76,16 @@ based_on: [DEC-0002, DEC-0006, DEC-0007, DEC-0010, DEC-0013, DEC-0015, DEC-0016,
 - TK-0016 | Chứng minh mẫu pytest.ini chỉ thu thập tests/ | depends: none | assignee: W2
 - TK-0024 | Kiểm tương thích cấu hình pytest hiện có, không ghi đè | depends: none | assignee: W3
 - TK-0025 | Kiểm thử worktree và nền tích hợp tạm | depends: none | assignee: W2
-- TK-0026 | Tài liệu sử dụng tools/README.md | depends: TK-0006, TK-0007, TK-0008, TK-0009, TK-0010, TK-0011, TK-0012, TK-0013, TK-0014, TK-0015, TK-0016, TK-0018, TK-0019, TK-0020, TK-0021, TK-0022, TK-0023, TK-0024, TK-0025 | assignee: W2
-- TK-0017 | Hồi quy toàn bộ trên Windows | depends: TK-0006, TK-0007, TK-0008, TK-0009, TK-0010, TK-0011, TK-0012, TK-0013, TK-0014, TK-0015, TK-0016, TK-0018, TK-0019, TK-0020, TK-0021, TK-0022, TK-0023, TK-0024, TK-0025, TK-0026 | assignee: W3
+- TK-0026 | Tài liệu sử dụng tools/README.md | depends: TK-0006, TK-0007, TK-0008, TK-0009, TK-0010, TK-0011, TK-0012, TK-0013, TK-0014, TK-0015, TK-0016, TK-0018, TK-0019, TK-0020, TK-0021, TK-0022, TK-0023, TK-0024, TK-0025, TK-0027 | assignee: W2
+- TK-0028 | Kiểm kê thay đổi dry run để đề xuất chuyển về repo mẹ | depends: TK-0026, TK-0027 | assignee: W2
+- TK-0017 | Hồi quy toàn bộ trên Windows | depends: TK-0006, TK-0007, TK-0008, TK-0009, TK-0010, TK-0011, TK-0012, TK-0013, TK-0014, TK-0015, TK-0016, TK-0018, TK-0019, TK-0020, TK-0021, TK-0022, TK-0023, TK-0024, TK-0025, TK-0026, TK-0027, TK-0028 | assignee: W3
 <!-- END: CYC_07 -->
 <!-- ANCHOR: CYC_07_BATCHES -->
 ## CYC-07 batches
 - B1 | tasks: TK-0015, TK-0016, TK-0024, TK-0025 | after: none
 - B2 | tasks: TK-0026 | after: B1
-- B3 | tasks: TK-0017 | after: B2
+- B3 | tasks: TK-0028 | after: B2
+- B4 | tasks: TK-0017 | after: B3
 <!-- END: CYC_07_BATCHES -->
 <!-- ANCHOR: RISKS -->
 ## Risks

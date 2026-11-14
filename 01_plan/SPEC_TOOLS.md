@@ -29,7 +29,7 @@ Nguồn: DEC-0015, DEC-0016. Nền: `main` @ 67a092f.
 ## 3. Đã là quy tắc, còn cần làm
 | Nhóm | Đã là quy tắc trong khung | Còn cần code, cấu hình, tài liệu, kiểm thử | Task |
 |---|---|---|---|
-| 1. Bảo vệ `main` | `harness/MAIN_PROTECTION.md`; luật 33 của LEAD; ba file định tuyến; `PREFLIGHT.md` dòng 16 | Code hook; code kiểm pre-flight; kiểm chỉ đọc cài đặt GitHub. Cấu hình phía GitHub và cài hook: OWNER làm | TK-0006, TK-0007, TK-0008, TK-0018 |
+| 1. Bảo vệ `main` | `harness/MAIN_PROTECTION.md`; luật 33 của LEAD; ba file định tuyến; `PREFLIGHT.md` dòng 16 | Code hook; code kiểm pre-flight; kiểm chỉ đọc cài đặt GitHub. Cấu hình phía GitHub và cài hook: OWNER làm | TK-0006, TK-0007, TK-0008, TK-0018, TK-0027 |
 | 2. Chọn model | `harness/MODEL_POLICY.md` mục 2–6 (bản 1.0.2, DEC-0018); DEC-0017 | Code liệt kê model đủ điều kiện, so cùng model, kiểm REVIEWER; test dừng khi không có model; đối chiếu yêu cầu và thực tế trên bản ghi | TK-0009, TK-0010, TK-0019 |
 | 3. Catalog model | `harness/MODEL_POLICY.md` mục 1; schema và mẫu; dòng kiểm tuyến trong catalog | Code kiểm schema, dòng kiểm tuyến, dòng phân công. Kiểm bằng phiên tác tử có công cụ và nguồn hạn mức: LEAD làm khi vận hành | TK-0009 |
 | 4. Trace log | RFC-0001 `OPEN`; `LOG_GRAMMAR.md` không đổi | Test giữ nguyên ngữ pháp log. Chọn phương án: OWNER | TK-0020 |

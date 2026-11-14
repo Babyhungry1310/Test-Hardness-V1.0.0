@@ -10,7 +10,7 @@ Cả ba workflow **chưa kích hoạt**: mỗi file chỉ có trigger `workflow_
 |---|---|---|---|
 | `workflows/check.yml` | Chạy các kiểm tra C1–C14 của khung trên nội dung file thay đổi của PR. Bộ kiểm tra luôn lấy từ `main`; không chạy code của PR | PR vào `main` | Chỉ đọc |
 | `workflows/test.yml` | Chạy test của PR (lệnh `verify_default` trong `harness.yaml`). Kết quả để tham khảo; không dùng secret | PR vào `main`, khi `kind` là `code` hoặc `mixed` | Token chỉ đọc |
-| `workflows/alert-main.yml` | Mở cảnh báo khi có thay đổi vào `main` không do tài khoản OWNER merge | Push vào `main` | Đọc repo, ghi issue |
+| `workflows/alert-main.yml` | Mở cảnh báo khi có thay đổi vào `main` không do tài khoản OWNER merge; không phân biệt được tác tử dùng tài khoản OWNER | Push vào `main` | Đọc repo, ghi issue |
 
 ## CODEOWNERS
 
@@ -20,4 +20,4 @@ Cả ba workflow **chưa kích hoạt**: mỗi file chỉ có trigger `workflow_
 
 - Bảo vệ nhánh `main` và thẻ `cycle/*` theo `harness/MAIN_PROTECTION.md#GITHUB_RULES`: bắt buộc PR, cấm đẩy thẳng, cấm ép đẩy, không cho bỏ qua luật (nếu gói GitHub hỗ trợ). Đây là lớp kiểm soát chính; hook cục bộ và chỉ dẫn cho tác tử chỉ chống nhầm.
 - Chỉ cho phép squash merge; tắt auto-merge. Tự xóa nhánh nguồn sau merge: OWNER quyết theo `harness/GIT_CONVENTIONS.md#AUTO_DELETE`.
-- Model dùng tài khoản GitHub riêng, không dùng chung tài khoản hay token với OWNER.
+- OWNER và tác tử dùng chung một tài khoản GitHub; tác tử chỉ đẩy nhánh làm việc và mở PR. Chỉ OWNER quyết định và thực hiện merge. Nhật ký cùng tài khoản không phân biệt người và tác tử (RSK-0004).

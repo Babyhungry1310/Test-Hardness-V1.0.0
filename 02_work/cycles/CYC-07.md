@@ -6,6 +6,7 @@ origin: "01_plan/PLAN.md#CYC_07"
 ---
 <!-- ANCHOR: TASKS -->
 ## Tasks
+- TK-0028 | run: none | outcome: ASSIGNED
 - TK-0015 | run: none | outcome: ASSIGNED
 - TK-0016 | run: none | outcome: ASSIGNED
 - TK-0024 | run: none | outcome: ASSIGNED
