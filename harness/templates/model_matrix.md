@@ -32,5 +32,5 @@ roles:
 ---
 <!-- ANCHOR: ASSIGNMENTS -->
 ## Assignments
-- CYC-nn | WORKER | requested: <code> | actual: <code> | record: <con trỏ> | match: yes
+- CYC-nn | WORKER | requested: <code> | actual: <code> | record: <con trỏ> | match: yes | route: <tên tuyến> | basis: <lý do; hạn mức: chưa xác minh>
 <!-- END: ASSIGNMENTS -->

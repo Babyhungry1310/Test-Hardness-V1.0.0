@@ -80,7 +80,7 @@ Phân vai theo mẫu Orchestrator–Workers và Evaluator–Optimizer [THY-01].
 | `OWNER` | Chủ dự án | Con người | Đưa đề bài; brainstorm và chốt hướng làm; duyệt plan, cổng, nguồn; kích hoạt loop; **bấm merge mọi PR**; nghiệm thu |
 | `LEAD` | Điều phối | Một model tại một thời điểm, loại suy luận mạnh | Brainstorm với OWNER, ghi quyết định, lập plan, viết task, giữ sổ và `STATE.md`, kiểm tra loop đã đóng vì lỗi, review PR, đề nghị merge. Không tự merge |
 | `WORKER` (`W1`, `W2`…) | Thực hiện | Một hoặc nhiều model, có thể khác hãng | Làm đúng một task trên nhánh riêng; nộp bản ghi lần chạy (run) |
-| `REVIEWER` | Kiểm định | Model khác với WORKER đã làm, hoặc chuyên gia | Kiểm độc lập cuối chu kỳ; nộp bản ghi kiểm định |
+| `REVIEWER` | Kiểm định | Model thực tế khác với model của các WORKER đã làm phần được kiểm, hoặc chuyên gia | Kiểm độc lập cuối chu kỳ; nộp bản ghi kiểm định |
 
 Bốn quy tắc phân vai:
 
@@ -167,15 +167,15 @@ recommend: a
 
 `OK` hay `Go` trong chat chỉ cho phép bắt đầu làm; nó không phải bằng chứng duyệt.
 
-### 3.5. Model: catalog, ma trận ưu tiên, fallback
+### 3.5. Model: chọn theo lần giao việc
 
 Chi tiết: `harness/MODEL_POLICY.md`.
 
-- `04_control/MODEL_CATALOG.md` chuẩn hóa mã model cụ thể, bí danh, nhà cung cấp, nguồn thông tin và ngày cập nhật. Không khẳng định năng lực hay chi phí khi chưa có nguồn.
-- `04_control/MODEL_MATRIX.md` là nguồn tra cứu phân công và fallback theo vai (`BRAINSTORM`, `PLANNING`, `REVIEWER`, `WORKER`). `DEC` đang `ACTIVE` thắng ma trận.
-- Tier xếp theo mã model cụ thể, đã xác nhận khả dụng và được OWNER duyệt bằng `DEC`; một dòng model không kéo theo mọi biến thể của nó. Phiên `DISCUSS` bắt buộc dùng model `T1`.
-- Ghi cả model yêu cầu và model thực tế. REVIEWER khác mã và khác nhóm với mọi WORKER của chu kỳ, và đáp ứng mọi `DEC` đang hiệu lực [THY-23].
-- Không có model hợp lệ thì dừng và báo bằng khối `QUESTION`. Danh sách fallback chỉ là thứ tự thử; nó không bảo đảm hệ thống luôn vận hành được.
+- `04_control/MODEL_CATALOG.md` ghi model nào đã được kiểm chạy được qua cổng model, tuyến, thời điểm và cách kiểm. Không khẳng định năng lực hay chi phí khi chưa có nguồn.
+- Mỗi lần giao việc, LEAD chọn một model đã kiểm chạy được, theo yêu cầu công việc, khả năng thực tế và hạn mức; áp cho mọi vai. Không có tier, thứ tự chọn hay fallback cố định. `DEC` đang `ACTIVE` về phân công thắng lựa chọn của LEAD.
+- LEAD tự kiểm tuyến và ghi bằng chứng; không cần PR duyệt trước từng model. Vai cần dùng công cụ thì phải kiểm bằng phiên tác tử có công cụ; hỏi đáp ngắn chưa đủ.
+- Ghi cả model yêu cầu và model thực tế hệ thống trả về (`04_control/MODEL_MATRIX.md`, neo `ASSIGNMENTS`). REVIEWER khác mã model thực tế với các WORKER đã làm phần được kiểm định; biến thể của cùng một model gốc coi là cùng model; không bắt buộc khác nhóm [THY-23].
+- Không có model phù hợp, không xác định được model thực tế, hoặc không có REVIEWER phù hợp thì dừng và báo OWNER bằng khối `QUESTION`. Hạn mức hay model thực tế chưa xác minh được thì ghi rõ `chưa xác minh`.
 
 ### 3.6. Chat và Storage
 
@@ -276,8 +276,8 @@ Không trỏ bằng số dòng. Không trỏ tới sổ bằng đường dẫn, 
 ├── <product_paths>        Dự án code: mã nguồn và test ở vị trí chuẩn của ngôn ngữ (mục 5.5)
 ├── 04_control/
 │   ├── STATE.md           Trạng thái dự án (≤ 40 dòng) — bản chiếu, do script sinh
-│   ├── MODEL_CATALOG.md 🔒 Catalog model (mục 3.5)
-│   ├── MODEL_MATRIX.md 🔒  Ma trận ưu tiên model và fallback (mục 3.5)
+│   ├── MODEL_CATALOG.md 🔒 Model đã kiểm chạy được, dòng kiểm tuyến (mục 3.5)
+│   ├── MODEL_MATRIX.md 🔒  Sổ phân công: model yêu cầu và thực tế (mục 3.5)
 │   ├── decisions/ 🔒      DEC đang hiệu lực  (+ superseded/ = kho lạnh)
 │   ├── risks/             RSK đang mở       (+ closed/)
 │   ├── requests/          REQ chưa xử lý    (+ resolved/)
@@ -793,7 +793,7 @@ Mỗi lần `scan` phát hiện được ghi một dòng log `SCAN_HIT`; nội d
 | Extension | `harness/extensions/` | Phần mở rộng cắm vào khung | 11 |
 | Model catalog | `04_control/MODEL_CATALOG.md` | Danh mục mã model cụ thể, nguồn thông tin, ngày cập nhật | 3.5 |
 | Model matrix | `04_control/MODEL_MATRIX.md` | Ma trận ưu tiên model theo vai và fallback | 3.5 |
-| Tier | `T1`, `T2`, `T3`, `UNRATED` | Hạng của một mã model cụ thể, do OWNER duyệt | 3.5 |
+| Tier | `T1`, `T2`, `T3`, `UNRATED` | Hạng model theo chính sách trước DEC-0018; không còn hiệu lực từ DEC-0018 | 3.5 |
 | Model role | `BRAINSTORM`, `PLANNING`, `REVIEWER`, `WORKER` | Vai dùng model trong ma trận | 3.5 |
 | Summary | `SUMMARY` | Phần tóm tắt dạng dọc đứng trước khối kết thúc | 3.6 |
 | Chat / Storage | — | Hai nơi viết với hai bộ quy tắc: trao đổi với OWNER, và file trong repo | 3.6 |
@@ -895,7 +895,7 @@ Mỗi lần `scan` phát hiện được ghi một dòng log `SCAN_HIT`; nội d
 | DC-23 | Mã và ký hiệu bằng tiếng Anh | Repo đọc được với người dùng và công cụ tiếng Anh | THY-04 |
 | DC-24 | Bảo vệ nhánh phía GitHub là lớp chính; hook và chỉ dẫn chỉ chống nhầm | Mọi thứ nằm trên máy của tác tử đều vượt qua được | THY-11, THY-35, THY-49 |
 | DC-25 | Tier gắn với mã model cụ thể được OWNER duyệt, không gắn với tên dòng model | Biến thể cùng dòng khác nhau về năng lực và giá | THY-22, THY-33 |
-| DC-26 | Hết model hợp lệ thì dừng, không tự hạ tier | Fallback âm thầm làm mất tính độc lập của kiểm định | THY-10, THY-23 |
+| DC-26 | Hết model phù hợp thì dừng và báo OWNER; REVIEWER luôn khác model thực tế với WORKER của phần được kiểm | Tự dùng model chưa kiểm hoặc để người làm tự kiểm làm mất giá trị của kiểm định | THY-10, THY-23 |
 | DC-27 | Chat dạng dọc; storage theo schema; hai bộ quy tắc tách nhau | Người đọc và mục đích khác nhau; file cũ không bị viết lại vì quy tắc trình bày | THY-06, THY-32, THY-41 |
 | DC-28 | Tên nhánh kiểm định duy nhất theo chu kỳ, vòng, mã phiên; model là dữ liệu của bản ghi | Model có thể đổi giữa phiên; tên nhánh trùng làm lẫn hai lượt kiểm định | THY-16, THY-39 |
 | DC-29 | Dọn nhánh theo hai bước: liệt kê rồi xóa đúng danh sách OWNER duyệt | Xóa là thao tác không hoàn tác được | THY-13, THY-15 |
