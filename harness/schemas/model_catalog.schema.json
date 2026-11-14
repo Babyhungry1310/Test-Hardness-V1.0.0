@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "id", "updated", "models"],
+  "properties": {
+    "schema": {"const": 1},
+    "id": {"const": "MODEL_CATALOG"},
+    "updated": {"type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$"},
+    "models": {"type": "array", "items": {"$ref": "#/$defs/model"}}
+  },
+  "$defs": {
+    "source": {"type": "string", "pattern": "^(?:(?:(?:TK|DEC|RSK|REQ|SRC)-\\d{4}|CYC-\\d{2}|RVW-CYC-\\d{2}|DSC-\\d{8}-[a-z0-9]{4})(?:#[A-Z][A-Z0-9_]*)?|[A-Za-z0-9_][A-Za-z0-9_./-]*(?:#[A-Z][A-Z0-9_]*)?|https://\\S+|none)$"},
+    "model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "provider", "provider_source", "group", "group_source", "aliases", "recommended_roles", "capability_source", "price_source", "availability", "availability_evidence", "updated"],
+      "properties": {
+        "code": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$"},
+        "provider": {"type": "string", "minLength": 1},
+        "provider_source": {"$ref": "#/$defs/source"},
+        "group": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+        "group_source": {"$ref": "#/$defs/source"},
+        "aliases": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "recommended_roles": {"type": "array", "uniqueItems": true, "items": {"enum": ["BRAINSTORM", "PLANNING", "REVIEWER", "WORKER"]}},
+        "capability_source": {"$ref": "#/$defs/source"},
+        "price_source": {"type": "string", "pattern": "^(?:https://\\S+|none)$"},
+        "availability": {"enum": ["confirmed", "unconfirmed", "unavailable"]},
+        "availability_evidence": {"$ref": "#/$defs/source"},
+        "updated": {"type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$"}
+      }
+    }
+  }
+}

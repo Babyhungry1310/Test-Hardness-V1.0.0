@@ -10,6 +10,11 @@ based_on: []
 ## CYC-01
 - TK-nnnn | <goal> | depends: none | assignee: W1
 <!-- END: CYC_01 -->
+<!-- ANCHOR: CYC_01_BATCHES -->
+## CYC-01 batches
+- B1 | tasks: TK-nnnn, TK-nnnn | after: none
+- B2 | tasks: TK-nnnn | after: B1
+<!-- END: CYC_01_BATCHES -->
 <!-- ANCHOR: RISKS -->
 ## Risks
 - RSK-nnnn

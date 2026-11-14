@@ -2,14 +2,16 @@ PHASE: CLOSE
 CYCLE: CYC-02
 PROFILE: SHORT
 
-## Handover board (updated: 2026-11-14, main @ cc0c4f9)
+## Handover board (updated: 2026-11-14, main @ 36bafbe)
 ### 1. Progress
 - CYC-01 | PASS | TK-0001 DONE R2, TK-0002 DONE R1, TK-0004 DONE R1 | thẻ cycle/CYC-01 @ e2b7944
-- CYC-02 | PASS | TK-0003 DONE R1, TK-0005 DONE R1 | RVW-CYC-02 vòng 1 PASS | chờ OWNER đặt thẻ cycle/CYC-02
+- CYC-02 | PASS | TK-0003 DONE R1, TK-0005 DONE R1 | RVW-CYC-02 vòng 1 PASS | thẻ cycle/CYC-02 @ 36bafbe
+- Khung | V1.0.1 | DEC-0015 | đặc tả, chưa có script
 ### 2. Open risks
 - RSK-0004 | OPEN | level: HIGH | due: 2026-11-26 | owner: OWNER
 - RSK-0001 | OPEN | level: MEDIUM | due: 2026-11-26 | owner: LEAD
 ### 3. Recent decisions
+- DEC-0015 | ACTIVE | Nâng khung lên V1.0.1: bảo vệ main, ma trận model, chat và storage, dọn nhánh, scanner
 - DEC-0014 | ACTIVE | Bản kiểm định CYC-02 do gpt-6.1-sol chạy không tính là một vòng kiểm định
 - DEC-0013 | ACTIVE | Handout kết thúc bằng đúng một LF và ghi file với newline LF
 - DEC-0012 | ACTIVE | Phân công model CYC-02: WORKER dùng Codex, REVIEWER dùng nhóm Gemini; không gắn cứng Claude
@@ -25,7 +27,7 @@ PROFILE: SHORT
 - DEC-0003 | SUPERSEDED_BY DEC-0007
 - DEC-0001 | SUPERSEDED_BY DEC-0002
 ### 4. Next action
-- OWNER merge PR cổng CYC-02_PASS rồi tự đặt thẻ cycle/CYC-02 tại commit merge theo DEC-0011. PLAN.md không còn chu kỳ nào. Tiếp theo LEAD đóng dự án trong một PR: viết 05_memory/CORE.md (≤ 300 dòng), soạn 04_control/gates/CLOSED.md để OWNER ký bằng lượt merge. Trước đó OWNER quyết cách xử lý RSK-0004 và RSK-0001 (đóng, hoặc ghi rõ phần bàn giao trong CORE.md). Pytest toàn repo trên main cc0c4f9 đạt 23/23.
+- OWNER merge PR upgrade/1.0.1 rồi thử khung V1.0.1 trên repo này. Việc OWNER cần chốt: mã model T1 và duyệt 04_control/MODEL_MATRIX.md (đang PROPOSED); phương án của harness/rfc/RFC-0001_trace-attribution.md; bật luật bảo vệ main và thẻ cycle/* trên GitHub (main hiện chưa được bảo vệ, RSK-0004); tự xóa nhánh nguồn; danh sách nhánh cũ được dọn. Đóng dự án vẫn còn: LEAD viết 05_memory/CORE.md, soạn 04_control/gates/CLOSED.md; trước đó xử lý RSK-0004 và RSK-0001. Pytest toàn repo trên main 36bafbe đạt 23/23.
 ### 5. Never do
 - Không xuất PDF
 - Không dùng tên học viên thật trong dữ liệu thử

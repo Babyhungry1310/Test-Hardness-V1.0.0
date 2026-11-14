@@ -14,6 +14,7 @@
 
 - Một dòng một sự kiện; chỉ thêm, không sửa. Được đệm khoảng trắng trước dấu `|` để thẳng cột.
 - `source`: vai (`W1`, `LEAD`, `REVIEWER`) hoặc tên script (`trace`, `scan`).
+- Việc ghi model thực tế và mã phiên vào dòng log là đề xuất mở ở `harness/rfc/RFC-0001_trace-attribution.md`; chưa phương án nào có hiệu lực, định dạng ở đây giữ nguyên.
 - Giá trị có khoảng trắng đặt trong ngoặc kép. Đầu ra dài để ở file trong `scratch/` và trỏ bằng `ref=`.
 
 ## 2. EVENT và khóa đi kèm

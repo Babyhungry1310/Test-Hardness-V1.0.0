@@ -59,7 +59,7 @@ Lệnh thiết lập chạy trong worktree vừa tạo, trước khi tác tử b
 <!-- ANCHOR: ORCA_NAMING -->
 | Thứ | Nguồn | Quy ước |
 |---|---|---|
-| Nhánh | `harness/GIT_CONVENTIONS.md` mục 1 (đã chốt) | `task/TK-nnnn-Rn` · `lead/<slug>` · `review/CYC-nn` · `upgrade/<version>` |
+| Nhánh | `harness/GIT_CONVENTIONS.md` mục 1 (đã chốt) | `task/TK-nnnn-Rn` · `lead/<slug>` · `review/CYC-nn-Rk-xxxx` · `upgrade/<version>` |
 | Thư mục worktree của task | `harness/GIT_CONVENTIONS.md` mục 5 (đã chốt) | `<worktree-dir>\TK-nnnn-Rn` |
 | `<worktree-dir>` | Chưa có quy ước; tài liệu Orca không nêu (bảng 1 dòng 3) | Cần OWNER kiểm và chọn. Điều kiện bắt buộc: nằm ngoài bản checkout chính và ngoài `<project>.local\` [HARNESS.md mục 5.2] |
 | Tên workspace trên Orca | Chưa có quy ước; tài liệu Orca chỉ nói tên nhánh mặc định lấy từ tên workspace (bảng 1 dòng 4) | Cần OWNER kiểm. Khung không dựa vào tên workspace; chỉ dựa vào tên nhánh |
@@ -72,7 +72,7 @@ Orca có thể thêm tiền tố hoặc hậu tố số vào tên nhánh (bảng
 ### 2.3. Giao một task cho một tác tử
 
 <!-- ANCHOR: ORCA_ASSIGN -->
-Một task một worktree, một worktree một phiên tác tử, một phiên một task [THY-50]. Prompt giao việc luôn đúng một dòng `Run TK-nnnn`; tác tử tự định tuyến tới `harness/rules/WORKER.md` qua `AGENTS.md`, `CLAUDE.md` hoặc `GEMINI.md`.
+Một task một worktree, một worktree một phiên tác tử, một phiên một task [THY-50]. Nhiều task chỉ được giao cùng lúc khi chúng cùng một batch của plan (`harness/HARNESS.md#BATCH_RULES`). Prompt giao việc luôn đúng một dòng `Run TK-nnnn`; tác tử tự định tuyến tới `harness/rules/WORKER.md` qua `AGENTS.md`, `CLAUDE.md` hoặc `GEMINI.md`.
 
 Cách dùng hiện tại (không phụ thuộc tính năng chưa xác nhận):
 
@@ -113,6 +113,8 @@ Mỗi vai một combo trên 9Router (bảng 1 dòng 7). Ba tên `lead`, `worker`
 2. `lead` được trùng với `worker` hoặc `reviewer`; LEAD không nghiệm thu chu kỳ.
 3. OWNER sửa combo trên Dashboard. Sửa làm `worker` và `reviewer` có model chung là sai quy tắc 1; nếu không tránh được, LEAD ghi một `DEC` nêu chu kỳ bị ảnh hưởng và câu 2 cổng PASS của chu kỳ đó trả `CONDITIONAL` kèm một `RSK`.
 4. Kiểm quy tắc 1 ở đầu mỗi phiên kiểm định: `PREFLIGHT.md` mục 2, dòng 13.
+
+Thành phần của mỗi combo chỉ gồm các mã model mà `04_control/MODEL_MATRIX.md` cho phép đối với vai đó; ma trận và `harness/MODEL_POLICY.md` là nguồn tra cứu, combo là cách thi hành trên 9Router.
 
 Khi chưa xác nhận combo: OWNER giữ trên máy một bảng tay gồm ba nhóm trên và chọn model cố định cho mỗi phiên theo bảng đó; quy tắc 1–4 giữ nguyên.
 <!-- END: MODEL_GROUPS -->

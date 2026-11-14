@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "id", "updated", "status", "tier1_candidate_families", "tier1", "tier1_approved_by", "tier2", "tier3", "roles"],
+  "properties": {
+    "schema": {"const": 1},
+    "id": {"const": "MODEL_MATRIX"},
+    "updated": {"type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$"},
+    "status": {"enum": ["PROPOSED", "APPROVED"]},
+    "tier1_candidate_families": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "tier1": {"$ref": "#/$defs/codes"},
+    "tier1_approved_by": {"type": "string", "pattern": "^(?:DEC-\\d{4})?$"},
+    "tier2": {"$ref": "#/$defs/codes"},
+    "tier3": {"$ref": "#/$defs/codes"},
+    "roles": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["role", "min_tier", "order", "fallback", "evidence"],
+        "properties": {
+          "role": {"enum": ["BRAINSTORM", "PLANNING", "REVIEWER", "WORKER"]},
+          "min_tier": {"enum": ["T1", "T2", "T3"]},
+          "order": {"$ref": "#/$defs/codes"},
+          "fallback": {"$ref": "#/$defs/codes"},
+          "evidence": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"status": {"const": "APPROVED"}}, "required": ["status"]},
+      "then": {"properties": {"tier1_approved_by": {"pattern": "^DEC-\\d{4}$"}}}
+    }
+  ],
+  "$defs": {
+    "codes": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$"}}
+  }
+}

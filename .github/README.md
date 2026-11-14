@@ -18,6 +18,6 @@ Cả ba workflow **chưa kích hoạt**: mỗi file chỉ có trigger `workflow_
 
 ## Việc OWNER tự thiết lập trên GitHub
 
-- Bảo vệ nhánh `main`: bắt buộc PR, bắt buộc duyệt của code owner, cấm đẩy thẳng (nếu gói GitHub hỗ trợ).
-- Chỉ cho phép squash merge; tắt auto-merge.
+- Bảo vệ nhánh `main` và thẻ `cycle/*` theo `harness/MAIN_PROTECTION.md#GITHUB_RULES`: bắt buộc PR, cấm đẩy thẳng, cấm ép đẩy, không cho bỏ qua luật (nếu gói GitHub hỗ trợ). Đây là lớp kiểm soát chính; hook cục bộ và chỉ dẫn cho tác tử chỉ chống nhầm.
+- Chỉ cho phép squash merge; tắt auto-merge. Tự xóa nhánh nguồn sau merge: OWNER quyết theo `harness/GIT_CONVENTIONS.md#AUTO_DELETE`.
 - Model dùng tài khoản GitHub riêng, không dùng chung tài khoản hay token với OWNER.

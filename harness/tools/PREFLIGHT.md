@@ -8,10 +8,10 @@ Lệnh viết cho PowerShell trên Windows, chạy ở gốc worktree của phi�
 
 | Phiên | Ai kiểm | Các dòng ở mục 2 |
 |---|---|---|
-| `RUN` | WORKER | 1–10, 12, 14 |
-| `CHANGE`, `DISCUSS` | LEAD | 1–11, 14, 15 |
+| `RUN` | WORKER | 1–10, 12, 14, 16 |
+| `CHANGE`, `DISCUSS` | LEAD | 1–11, 14, 15, 16; `DISCUSS` thêm 17 |
 | `ASK` | Không nhận vai | 1, 6, 9 |
-| Kiểm định chu kỳ | REVIEWER | 1–10, 13, 14 |
+| Kiểm định chu kỳ | REVIEWER | 1–10, 13, 14, 16 |
 | Lần đầu dùng một bản cài Orca hoặc 9Router | OWNER | Mục 3 |
 | Lần đầu dựng repo trên máy | OWNER | Mục 4 |
 
@@ -21,7 +21,7 @@ Lệnh viết cho PowerShell trên Windows, chạy ở gốc worktree của phi�
 | # | Kiểm gì | Cách kiểm bằng tay | Đạt khi | Khi không đạt |
 |:---:|---|---|---|---|
 | 1 | Đang ở đúng worktree của phiên, không ở bản checkout chính | `git rev-parse --show-toplevel` | Đường dẫn là thư mục worktree đã tạo cho phiên này | Dừng; không tạo hay sửa file; báo OWNER đường dẫn đang đứng |
-| 2 | Đúng nhánh theo loại phiên, không phải `main` | `git branch --show-current` | `task/TK-nnnn-Rn` (`RUN`), `lead/<slug>` (LEAD), `review/CYC-nn` (REVIEWER); `ASK` thì bất kỳ | Nhánh chưa đẩy và chỉ lệch tiền tố hay hậu tố do công cụ thêm: `git branch -m <tên đúng>`. Mọi trường hợp khác: dừng, báo OWNER tạo lại worktree |
+| 2 | Đúng nhánh theo loại phiên, không phải `main` | `git branch --show-current` | `task/TK-nnnn-Rn` (`RUN`), `lead/<slug>` (LEAD), `review/CYC-nn-Rk-xxxx` (REVIEWER); `ASK` thì bất kỳ | Nhánh chưa đẩy và chỉ lệch tiền tố hay hậu tố do công cụ thêm: `git branch -m <tên đúng>`. Mọi trường hợp khác: dừng, báo OWNER tạo lại worktree |
 | 3 | Nhánh dựng từ `origin/main` mới nhất | `git fetch origin` rồi `git rev-list --count HEAD..origin/main` | Kết quả `0` | Nhánh chưa có commit riêng: `git merge --ff-only origin/main`. Đã có commit riêng: dừng, báo OWNER; không rebase, không ép đẩy |
 | 4 | Worktree sạch | `git status --porcelain` | Không in gì | Không xóa, không hoàn tác; báo OWNER danh sách file (có thể là việc dở của phiên trước) |
 | 5 | `<project>.local` có đủ 5 thư mục, nằm ngoài worktree | `$c = Split-Path (git rev-parse --path-format=absolute --git-common-dir)`, `$l = Join-Path (Split-Path $c) ((Split-Path $c -Leaf) + '.local')` rồi `'scratch','logs','quarantine','transcripts','cache' \| ForEach-Object { Test-Path (Join-Path $l $_) }` | Năm dòng `True` | Không tạo trong worktree. OWNER tạo theo `README.md` bước 1 rồi mở lại phiên. `doctor` |
@@ -32,9 +32,11 @@ Lệnh viết cho PowerShell trên Windows, chạy ở gốc worktree của phi�
 | 10 | Đẩy bằng tài khoản GitHub riêng của model | `gh auth status` | Tài khoản đang dùng khác tài khoản OWNER ghi trong `.github/CODEOWNERS` | Không đẩy, không mở PR; báo OWNER cấp tài khoản riêng cho model |
 | 11 | `STATE.md` khớp dấu hiệu file (C6) | `Get-Content 04_control\STATE.md -TotalCount 2` và `Test-Path 00_brief\BRIEF.md, 01_plan\PLAN.md, 04_control\gates\PLAN_GO.md` | Không có `BRIEF.md` → `BRAINSTORM`; có `BRIEF.md`, chưa có `PLAN_GO.md` → `PLAN`; có `PLAN_GO.md` → `EXECUTE`, `VERIFY`, `CLOSE` hoặc `CLOSED` theo file cổng chu kỳ | Bản gốc thắng: LEAD sửa `STATE.md` trong PR của phiên này và nêu trong mô tả PR. `doctor` |
 | 12 | Task sẵn sàng giao và số run đúng | `git ls-tree -r --name-only origin/main 02_work/tasks \| Select-String 'TK-0007'` và `git ls-tree --name-only origin/main 02_work/runs/ \| Select-String 'TK-0007_R'`; với mỗi mã trong `depends_on`, lệnh thứ hai cho mã đó | Task có trên `main`; chưa có run `DONE` hay `CANCELLED` của task; mỗi task trong `depends_on` có run `DONE`; `n` của nhánh = 1 + số run lớn nhất (không có run thì `n` = 1) | Không xuất `CONFIRM`, không sửa file; báo OWNER điều kiện nào thiếu |
-| 13 | REVIEWER khác model với mọi WORKER của chu kỳ | Lấy mã task: `git ls-tree --name-only origin/main 02_work/tasks/CYC-02/`; lấy model: `git grep -h "^model:" origin/main -- "02_work/runs/TK-0007_*"` cho từng task; so với model của phiên (`INTEGRATION.md#SESSION_MODEL`, cách A) và bảng nhóm model (`INTEGRATION.md#MODEL_GROUPS`, quy tắc 1) | Model của phiên không có trong danh sách và không thuộc nhóm của WORKER | Dừng; xuất khối `QUESTION` cho OWNER (`harness/rules/REVIEWER.md` luật 2) |
+| 13 | REVIEWER khác model với mọi WORKER của chu kỳ | Lấy mã task: `git ls-tree --name-only origin/main 02_work/tasks/CYC-02/`; lấy model: `git grep -h "^model:" origin/main -- "02_work/runs/TK-0007_*"` cho từng task; so với model của phiên (`INTEGRATION.md#SESSION_MODEL`, cách A), khóa `group` trong `04_control/MODEL_CATALOG.md` và bảng nhóm model (`INTEGRATION.md#MODEL_GROUPS`, quy tắc 1) | Model của phiên không có trong danh sách, không cùng `group` với WORKER nào (`unverified` coi là cùng), và đáp ứng `DEC` phân công đang `ACTIVE` (`harness/MODEL_POLICY.md` mục 4) | Dừng; xuất khối `QUESTION` cho OWNER (`harness/rules/REVIEWER.md` luật 2) |
 | 14 | Biết model thực tế của phiên | Xem tên model công cụ tác tử hiển thị (`INTEGRATION.md#SESSION_MODEL`, cách A) | Có tên model cụ thể | Hỏi OWNER trước khi bắt đầu; không đoán, không để trống trường `model` |
 | 15 | Không có phiên LEAD khác đang ghi repo | `gh pr list --state open --search "head:lead/"` | Không có PR mở nào từ nhánh `lead/` khác nhánh của phiên này | Không ghi sổ, không cấp mã; báo OWNER chờ PR kia được merge hoặc đóng [THY-19] |
+| 16 | Pre-flight gate cho `main`: hook cục bộ đã cài; biết quy tắc kiểm trước commit và push | `git config --get core.hooksPath` | In `harness/tools/hooks` (khi hook đã có trong khung). Hook chưa có hoặc chưa cài: vẫn làm được, nhưng trước mỗi `git commit` chạy `git branch --show-current` và trước mỗi `git push` kiểm ref đích khác `main` và không phải thẻ (`harness/MAIN_PROTECTION.md#PREFLIGHT_GATE`) | Không tự đổi cấu hình Git; báo OWNER hook chưa cài. Đang đứng ở `main`: không commit, làm theo `harness/MAIN_PROTECTION.md` mục 3 |
+| 17 | Phiên `DISCUSS` dùng model `T1` | Đối chiếu model của phiên (dòng 14) với `tier1` trong `04_control/MODEL_MATRIX.md` | Ma trận có `status: APPROVED` và mã model của phiên nằm trong `tier1` | Dừng; xuất khối `QUESTION` cho OWNER; không tự hạ tier (`harness/MODEL_POLICY.md` mục 6) |
 <!-- END: SESSION_CHECKS -->
 
 Dòng 5 dùng `--path-format=absolute`, có từ Git 2.31. Bản Git cũ hơn: chạy `git rev-parse --git-common-dir`, tự nối thành đường dẫn đầy đủ rồi dùng `Test-Path`.
@@ -69,8 +71,11 @@ OWNER làm trên một repo thử (ví dụ repo chạy thử của `harness/tem
 
 | # | Việc | Ai | Cách kiểm | Khi không đạt |
 |:---:|---|---|---|---|
-| 1 | Bảo vệ `main`: bắt buộc PR, bắt buộc duyệt của code owner, cấm đẩy thẳng | OWNER | GitHub → Settings → Branches (`.github/README.md`) | Chưa có thì mọi PR vẫn chỉ OWNER merge; câu 7 cổng PASS kiểm lại |
+| 1 | Bảo vệ `main` và thẻ `cycle/*` theo `harness/MAIN_PROTECTION.md#GITHUB_RULES`; đây là lớp kiểm soát chính | OWNER | GitHub → Settings → Rules hoặc Branches (`.github/README.md`) | Chưa có thì hook và luật chỉ chống nhầm; câu 7 cổng PASS trả `CONDITIONAL` kèm một `RSK` |
 | 2 | Chỉ squash merge; tắt auto-merge | OWNER | GitHub → Settings → General → Pull Requests | Bật lại đúng cài đặt trước phiên đầu tiên |
 | 3 | `<project>.local` cạnh bản checkout chính | OWNER | Mục 2, dòng 5 | Tạo theo `README.md` bước 1 |
 | 4 | Bộ nhớ đệm gói dùng chung | OWNER | `echo $env:PIP_CACHE_DIR` (dự án Python) trỏ vào `<project>.local\cache\` | Đặt theo `INTEGRATION.md#ORCA_SETUP` |
 | 5 | Tài khoản GitHub riêng cho model | OWNER | Mục 2, dòng 10 | Không giao phiên có đẩy nhánh cho model tới khi có tài khoản riêng |
+| 6 | Cài hook cục bộ cho bản clone (khi hook đã có trong khung) | OWNER | `git config --get core.hooksPath` in `harness/tools/hooks` | Chạy `git config core.hooksPath harness/tools/hooks` ở bản checkout chính |
+| 7 | Quyết định tự xóa nhánh nguồn sau merge | OWNER | GitHub → Settings → General → Pull Requests | Đọc `harness/GIT_CONVENTIONS.md#AUTO_DELETE` rồi chọn |
+| 8 | Catalog và ma trận model | OWNER duyệt, LEAD soạn | `04_control/MODEL_MATRIX.md` có `status: APPROVED` | Chưa duyệt thì chưa mở được phiên `DISCUSS` mới theo `harness/MODEL_POLICY.md` |
