@@ -1,20 +1,20 @@
 # SPEC_DRYRUN — ĐIỀU PHỐI THEO BATCH QUA ORCA
 
-Nguồn: DEC-0016 (ngoại lệ E1, E2), RSK-0005, `harness/HARNESS.md#BATCH_RULES`. Prompt bàn giao: `01_plan/SPEC_ORCA_PROMPT.md#PROMPT`.
+Nguồn: DEC-0016 (ngoại lệ E1, E2), DEC-0017, DEC-0018, RSK-0005, RSK-0006, `harness/HARNESS.md#BATCH_RULES`. Prompt bàn giao: `01_plan/SPEC_ORCA_PROMPT.md#PROMPT`.
 
 <!-- ANCHOR: ORDER -->
 ## 1. Thứ tự, song song, phụ thuộc
 - Thứ tự chu kỳ: CYC-03, CYC-04, CYC-05, CYC-06, CYC-07; trong chu kỳ theo neo `CYC_nn_BATCHES` của plan. Tổng cộng 21 task, 11 batch.
 - Task độc lập, nhánh dựng từ `origin/main`, chạy song song trong batch: TK-0006, TK-0007, TK-0008 (CYC-03 B1); TK-0009 (CYC-04 B1); TK-0011, TK-0012, TK-0020, TK-0021 (CYC-05 B1); TK-0013 (CYC-06 B1); TK-0016, TK-0024, TK-0025 (CYC-07 B1).
 - Task cần kết quả đã merge của batch trước: TK-0018 (TK-0006, TK-0007); TK-0010, TK-0019 (TK-0009); TK-0014, TK-0022 (TK-0013); TK-0023 (TK-0014, TK-0022); TK-0015 (TK-0009, khác chu kỳ); TK-0026 (mọi task trước); TK-0017 (mọi task trước và TK-0026).
-- Số task chạy cùng lúc không vượt số chỗ WORKER có model hợp lệ, không vượt giới hạn của Orca và 9Router. Mỗi chỗ một task tại một thời điểm; một chỗ có hai task trong batch thì chạy lần lượt.
+- Số task chạy cùng lúc không vượt ba chỗ, không vượt số model đủ điều kiện còn lại sau khi để dành cho REVIEWER, không vượt giới hạn của Orca và 9Router. Mỗi chỗ một task tại một thời điểm; một chỗ có hai task trong batch thì chạy lần lượt.
 - Mỗi task một worktree, một nhánh `task/TK-nnnn-Rn` dựng từ cùng một commit của `origin/main` ghi lúc mở batch, một phiên, một PR.
 - Orca: khi `harness/tools/INTEGRATION.md#FEATURES` dòng 1, 2, 4, 5 đã được OWNER xác nhận trên bản đang cài thì giao task bằng `orca worktree create`; chưa xác nhận thì tạo worktree bằng `git worktree add` và OWNER mở phiên WORKER trong từng worktree.
 <!-- END: ORDER -->
 
 <!-- ANCHOR: STOPS -->
 ## 2. Hai điểm dừng an toàn
-- Dừng 1, task `BLOCKED`: sau loop `FAIL` thứ ba, hoặc khi không có model hợp lệ, run là `BLOCKED`. LEAD dừng điều phối batch: không giao task mới, không mở thêm lượt, không sang batch kế. LEAD thu trạng thái thật của từng WORKER còn chạy (nhánh, commit cuối, run, PR, tiến trình) trước khi báo; lệnh dừng đã gửi không phải bằng chứng WORKER đã dừng.
+- Dừng 1, task `BLOCKED`: sau loop `FAIL` thứ ba, hoặc khi không có model phù hợp, không xác định được model thực tế, không có REVIEWER phù hợp (`01_plan/SPEC_MODELS.md#STOPS`). LEAD dừng điều phối batch: không giao task mới, không mở thêm lượt, không sang batch kế. LEAD thu trạng thái thật của từng WORKER còn chạy (nhánh, commit cuối, run, PR, tiến trình) trước khi báo; lệnh dừng đã gửi không phải bằng chứng WORKER đã dừng.
 - Dừng 2, hết batch: khi mọi task của batch có run `DONE`, PR mở và LEAD đã rà C1–C14, LEAD xuất khối `MERGE` có dòng `order` rồi dừng. Im lặng không phải phê duyệt.
 - Tiếp tục sau Dừng 2 chỉ khi OWNER viết rõ tiếp tục. Khi đó LEAD kiểm: các PR cần thiết đã merge vào `main`; ghi SHA `origin/main` mới; chạy mục 6; rồi mới mở batch kế.
 - Hết batch cuối của chu kỳ: LEAD soạn gói kiểm định, REVIEWER kiểm trên `main`, PR `RVW` chờ merge; `RVW` đạt thì LEAD soạn `CYC-nn_PASS.md` trong PR đồng bộ, chờ merge. Chu kỳ sau chỉ mở khi file cổng đã ở `main`.

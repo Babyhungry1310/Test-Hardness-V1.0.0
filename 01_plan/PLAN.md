@@ -2,7 +2,7 @@
 schema: 1
 id: PLAN
 date: 2026-11-12
-based_on: [DEC-0002, DEC-0006, DEC-0007, DEC-0010, DEC-0013, DEC-0015, DEC-0016, DEC-0017]
+based_on: [DEC-0002, DEC-0006, DEC-0007, DEC-0010, DEC-0013, DEC-0015, DEC-0016, DEC-0017, DEC-0018]
 ---
 ## Status (newest first)
 - 2026-11-14 | ACTIVE | version: 4
@@ -35,7 +35,7 @@ based_on: [DEC-0002, DEC-0006, DEC-0007, DEC-0010, DEC-0013, DEC-0015, DEC-0016,
 <!-- ANCHOR: CYC_04 -->
 ## CYC-04
 - TK-0009 | Kiểm schema và ràng buộc chéo của catalog và ma trận model | depends: none | assignee: W1
-- TK-0010 | Chọn model theo vai, fallback và tính độc lập của REVIEWER | depends: TK-0009 | assignee: W1
+- TK-0010 | Model đủ điều kiện, so cùng model, REVIEWER khác model thực tế | depends: TK-0009 | assignee: W1
 - TK-0019 | Đối chiếu model yêu cầu và thực tế trên bản ghi | depends: TK-0009 | assignee: W3
 <!-- END: CYC_04 -->
 <!-- ANCHOR: CYC_04_BATCHES -->
@@ -87,4 +87,5 @@ based_on: [DEC-0002, DEC-0006, DEC-0007, DEC-0010, DEC-0013, DEC-0015, DEC-0016,
 - RSK-0001
 - RSK-0004
 - RSK-0005
+- RSK-0006
 <!-- END: RISKS -->

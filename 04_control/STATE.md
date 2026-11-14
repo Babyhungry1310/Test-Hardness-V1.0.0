@@ -14,9 +14,11 @@ PROFILE: SHORT
 ### 2. Open risks
 - RSK-0004 | OPEN | level: HIGH | due: 2026-11-26 | owner: OWNER
 - RSK-0005 | OPEN | level: MEDIUM | due: 2026-12-12 | owner: LEAD
+- RSK-0006 | OPEN | level: MEDIUM | due: 2026-12-12 | owner: LEAD
 - RSK-0001 | OPEN | level: MEDIUM | due: 2026-11-26 | owner: LEAD
 ### 3. Recent decisions
-- DEC-0017 | ACTIVE | Bổ sung catalog và ma trận model theo kết quả kiểm tuyến 9Router; phân công CYC-03 tới CYC-07 theo thế mạnh
+- DEC-0018 | ACTIVE | Khung 1.0.2: LEAD chọn model theo từng lần giao việc; REVIEWER khác model thực tế với WORKER của phần được kiểm
+- DEC-0017 | ACTIVE | Phân công model của CYC-03 tới CYC-07 theo luật khung 1.0.2: dữ kiện kiểm tuyến 9Router và giới hạn khi chọn
 - DEC-0016 | ACTIVE | Thử khung V1.0.1 trên repo này: nguồn chuẩn, nơi đặt code, duyệt ma trận model, ngoại lệ tạo task và nền tích hợp tạm
 - DEC-0015 | ACTIVE | Nâng khung lên V1.0.1: bảo vệ main, ma trận model, chat và storage, dọn nhánh, scanner
 - DEC-0014 | ACTIVE | Bản kiểm định CYC-02 do gpt-6.1-sol chạy không tính là một vòng kiểm định
@@ -31,10 +33,8 @@ PROFILE: SHORT
 - DEC-0002 | ACTIVE | Lưu ngân hàng câu hỏi dạng JSON và xuất handout Markdown
 - DEC-0009 | SUPERSEDED_BY DEC-0012
 - DEC-0005 | RETIRED
-- DEC-0003 | SUPERSEDED_BY DEC-0007
-- DEC-0001 | SUPERSEDED_BY DEC-0002
 ### 4. Next action
-- OWNER dán prompt ở 01_plan/SPEC_ORCA_PROMPT.md#PROMPT vào một phiên Orca để chạy CYC-03 B1 (TK-0006, TK-0007, TK-0008); phiên đó dừng sau mỗi batch chờ OWNER squash-merge. Phân công model theo 01_plan/SPEC_MODELS.md (DEC-0017): W1 gpt-5.6-luna, W2 claude-sonnet-4-6, W3 grok-4.7, REVIEWER gemini-3.8-flash-n; phiên Orca kiểm lại từng tuyến trước khi giao. Việc OWNER cần chốt: mã model T1; phương án RFC-0001; bật luật bảo vệ main và thẻ cycle/* (RSK-0004); tài khoản riêng cho tác tử; tự xóa nhánh nguồn. Đóng dự án lùi sau CYC-07. Pytest toàn repo trên main 67a092f đạt 23/23.
+- OWNER dán prompt ở 01_plan/SPEC_ORCA_PROMPT.md#PROMPT vào một phiên Orca để chạy CYC-03 B1 (TK-0006, TK-0007, TK-0008); phiên đó dừng sau mỗi batch chờ OWNER squash-merge. LEAD chọn model theo từng lần giao (DEC-0018, DEC-0017, 01_plan/SPEC_MODELS.md) và kiểm tuyến bằng phiên tác tử có công cụ trước lần giao đầu của mỗi model; hạn mức chưa xác minh. Việc OWNER cần chốt: phương án RFC-0001; bật luật bảo vệ main và thẻ cycle/* (RSK-0004); tài khoản riêng cho tác tử; tự xóa nhánh nguồn. Đóng dự án lùi sau CYC-07. Pytest toàn repo trên main 67a092f đạt 23/23.
 ### 5. Never do
 - Không xuất PDF
 - Không dùng tên học viên thật trong dữ liệu thử

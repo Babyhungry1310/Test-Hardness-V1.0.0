@@ -29,10 +29,12 @@
 
 <!-- ANCHOR: CYC_04 -->
 ## CYC-04
-- `04_control/MODEL_CATALOG.md` và `04_control/MODEL_MATRIX.md` trên `main` đạt kiểm schema và ràng buộc chéo; mỗi ca sai trong bộ test bị từ chối với lý do đúng.
-- Chọn model cho bốn vai đúng `harness/MODEL_POLICY.md#ROLE_ORDER`; REVIEWER trùng mã, trùng nhóm hoặc `group: unverified` bị loại.
-- Hết model hợp lệ thì dừng với mã thoát `1` và lý do từng model; không tự hạ tier, không dùng model `UNRATED`.
-- Model yêu cầu và model thực tế được đối chiếu trên dòng `ASSIGNMENTS`, run và `RVW`; REVIEWER trùng mã hoặc trùng nhóm với một WORKER của chu kỳ bị báo dù tên agent khác nhau.
+- `04_control/MODEL_CATALOG.md` và `04_control/MODEL_MATRIX.md` trên `main` đạt kiểm schema, dòng kiểm tuyến và dòng phân công; mỗi ca sai trong bộ test bị từ chối với lý do đúng.
+- Danh sách model đủ điều kiện đúng `harness/MODEL_POLICY.md#ELIGIBILITY`: vai dùng công cụ không nhận model mới qua hỏi đáp ngắn; tuyến có lần kiểm mới nhất lỗi bị loại. Script không xếp hạng và không chọn thay LEAD.
+- Phép so cùng model đúng `harness/MODEL_POLICY.md#SAME_MODEL`: biến thể ngoặc vuông và bí danh là cùng model; khác mã gốc là khác model dù cùng nhóm.
+- REVIEWER trùng model thực tế với một WORKER của phần được kiểm bị báo dù tên agent hay tên tuyến khác nhau; REVIEWER khác mã gốc nhưng cùng nhóm thì đạt.
+- Không có model phù hợp, hoặc thiếu model thực tế: mã thoát `1` kèm lý do; không suy model từ tên tuyến.
+- Model yêu cầu và model thực tế được đối chiếu trên dòng `ASSIGNMENTS`, run và `RVW`.
 <!-- END: CYC_04 -->
 
 <!-- ANCHOR: CYC_05 -->

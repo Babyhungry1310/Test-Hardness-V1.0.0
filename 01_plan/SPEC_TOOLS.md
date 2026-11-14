@@ -18,11 +18,11 @@ Nguồn: DEC-0015, DEC-0016. Nền: `main` @ 67a092f.
 
 <!-- ANCHOR: MODELS -->
 ## 2. Model
-- Phân công theo chỗ, theo task, dự phòng và điều kiện dừng: `01_plan/SPEC_MODELS.md`. Quyền dùng một mã do `04_control/MODEL_CATALOG.md` và `04_control/MODEL_MATRIX.md` trên `origin/main` quy định.
-- Ba chỗ: W1 logic, thuật toán, công cụ, unit test; W2 triển khai, tích hợp, tài liệu; W3 ca biên, stress, bảo mật, phản biện.
-- Model thực tế ghi vào `model` của run và `reviewer_model` của `RVW`; LEAD ghi dòng `ASSIGNMENTS` khi giao việc và khi review PR. Không xác nhận được model thực tế: `BLOCKED`.
-- REVIEWER khác mã và khác nhóm với model thực tế của mọi WORKER trong chu kỳ. Tên agent khác nhau không chứng minh model khác nhau.
-- Không có model hợp lệ: dừng phần đó, trạng thái `BLOCKED`, xuất `QUESTION`. Không tự hạ tier, không dùng model `group: unverified`, không tự thêm model vào catalog hay ma trận.
+- LEAD chọn model cho từng lần giao theo `harness/MODEL_POLICY.md` (bản 1.0.2) và `01_plan/SPEC_MODELS.md`; không có model gắn cố định cho chỗ hay task.
+- W1, W2, W3 là chỗ chạy song song và loại việc: W1 logic, thuật toán, công cụ, unit test; W2 triển khai, tích hợp, tài liệu; W3 ca biên, stress, bảo mật, phản biện.
+- Ghi model yêu cầu, tuyến, lý do và hạn mức ở neo `ASSIGNMENTS` trước khi phiên bắt đầu; ghi model thực tế vào `model` của run và `reviewer_model` của `RVW`. Điều chưa xác minh ghi `chưa xác minh`.
+- REVIEWER khác mã model thực tế với các WORKER đã làm phần được kiểm; biến thể cùng mã gốc là cùng model; tên agent hay tên tuyến khác nhau không đủ.
+- Không có model phù hợp, không xác định được model thực tế, hoặc không có REVIEWER phù hợp: `BLOCKED`, báo OWNER.
 <!-- END: MODELS -->
 
 <!-- ANCHOR: CLASSIFICATION -->
@@ -30,8 +30,8 @@ Nguồn: DEC-0015, DEC-0016. Nền: `main` @ 67a092f.
 | Nhóm | Đã là quy tắc trong khung | Còn cần code, cấu hình, tài liệu, kiểm thử | Task |
 |---|---|---|---|
 | 1. Bảo vệ `main` | `harness/MAIN_PROTECTION.md`; luật 33 của LEAD; ba file định tuyến; `PREFLIGHT.md` dòng 16 | Code hook; code kiểm pre-flight; kiểm chỉ đọc cài đặt GitHub. Cấu hình phía GitHub và cài hook: OWNER làm | TK-0006, TK-0007, TK-0008, TK-0018 |
-| 2. Ma trận model | `harness/MODEL_POLICY.md` mục 2–6; ma trận `APPROVED` theo DEC-0016 | Code chọn model, fallback, tính độc lập; test dừng khi hết model; đối chiếu yêu cầu và thực tế trên bản ghi | TK-0009, TK-0010, TK-0019 |
-| 3. Catalog model | `harness/MODEL_POLICY.md` mục 1; schema và mẫu | Code kiểm schema và ràng buộc chéo. Nguồn `provider`, `capability_source`: OWNER bổ sung | TK-0009 |
+| 2. Chọn model | `harness/MODEL_POLICY.md` mục 2–6 (bản 1.0.2, DEC-0018); DEC-0017 | Code liệt kê model đủ điều kiện, so cùng model, kiểm REVIEWER; test dừng khi không có model; đối chiếu yêu cầu và thực tế trên bản ghi | TK-0009, TK-0010, TK-0019 |
+| 3. Catalog model | `harness/MODEL_POLICY.md` mục 1; schema và mẫu; dòng kiểm tuyến trong catalog | Code kiểm schema, dòng kiểm tuyến, dòng phân công. Kiểm bằng phiên tác tử có công cụ và nguồn hạn mức: LEAD làm khi vận hành | TK-0009 |
 | 4. Trace log | RFC-0001 `OPEN`; `LOG_GRAMMAR.md` không đổi | Test giữ nguyên ngữ pháp log. Chọn phương án: OWNER | TK-0020 |
 | 5. Chat | `harness/CHAT_UX.md` mục 1–2; `BLOCKS.md` | Code kiểm thông điệp cuối | TK-0012 |
 | 6. Storage | `harness/CHAT_UX.md` mục 3 | Test bất biến từng file của CYC-01, CYC-02 | TK-0020 |
