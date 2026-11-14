@@ -1,0 +1,18 @@
+task: TK-0006
+run: R1
+loop: L01
+verify: python -m pytest -q --tb=line tools/tests/test_hooks.py
+verify_result: 4 passed
+baseline: python -m pytest -q --tb=line
+baseline_result: 23 passed
+os: Microsoft Windows NT 10.0.26300.0
+git: git version 2.55.0.windows.5
+git_impl: Git for Windows
+install: OWNER, one time per clone, git config core.hooksPath tools/hooks
+github_permission: not required
+limits:
+- --no-verify passes a commit while HEAD is main. Shown by test_worktree_space_path_and_known_limits.
+- A clone with core.hooksPath unset passes a commit while HEAD is main. Shown by the same test.
+- Changing core.hooksPath skips these hooks.
+- Web merge, gh pr merge, and API merge are outside these hooks.
+- A hook exit is not proof that a commit or push was valid.
