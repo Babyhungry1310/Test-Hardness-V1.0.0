@@ -62,7 +62,7 @@ Dữ liệu tạm và log nằm ở `<project>.local\`, ngoài mọi worktree, n
 | Mục | Quy ước |
 |---|---|
 | Vị trí mã nguồn | Theo chuẩn của ngôn ngữ, ở gốc repo (ví dụ `src/`, `tests/`, file khai báo gói); liệt kê trong `product_paths`. Không lồng `00`–`06` hay `harness/` vào mã nguồn |
-| Test | Nằm cạnh mã nguồn, thuộc `product_paths`; lệnh `verify` của task là lệnh chạy test. PR xóa test hoặc nới điều kiện test bị đánh dấu (C14) |
+| Test | Nằm cạnh mã nguồn, thuộc `product_paths`; lệnh `verify` của task là lệnh chạy test. PR xóa test hoặc nới điều kiện test bị đánh dấu (C14). Dự án Python dùng pytest: chép `harness/templates/pytest.ini` ra gốc repo và thêm vào `product_paths` |
 | Kích cỡ | Mỗi task ≤ khoảng 400 dòng thay đổi |
 | Phụ thuộc | Lockfile được commit. Thêm hoặc nâng thư viện cần một `DEC`. File khai báo gói và lockfile thuộc vùng 🔒 |
 | Thẻ phát hành | `v<MAJOR>.<MINOR>.<PATCH>` cho sản phẩm, độc lập với `harness/VERSION` |

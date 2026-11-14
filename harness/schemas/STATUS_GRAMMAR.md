@@ -132,6 +132,7 @@ Sai:
 |---|---|
 | Sự kiện thảo luận | `## Events` của `DSC` |
 | Task trong plan | Neo `CYC_nn` của `PLAN.md` |
+| Batch trong plan (tùy chọn) | Neo `CYC_nn_BATCHES` của `PLAN.md` |
 | Rủi ro trong plan | Neo `RISKS` của `PLAN.md` |
 | Task trong chu kỳ (bản chiếu) | Neo `TASKS` của `02_work/cycles/CYC-nn.md` |
 | Quyết định trong tóm tắt | Neo `DECISIONS` của digest chu kỳ và digest chủ đề |
@@ -146,6 +147,7 @@ Biểu thức theo đúng thứ tự bảng trên:
 ```regex
 ^- E[1-9]\d* \| (?:PROPOSAL|ASSUMPTION|IDEA|QUESTION) \| \S.*$
 ^- TK-\d{4} \| [^|]*\S \| depends: (?:none|TK-\d{4}(?:, TK-\d{4})*) \| assignee: W[1-9]\d*$
+^- B[1-9]\d* \| tasks: TK-\d{4}(?:, TK-\d{4})* \| after: (?:none|B[1-9]\d*(?:, B[1-9]\d*)*)$
 ^- RSK-\d{4}$
 ^- TK-\d{4} \| run: (?:R[1-9]\d*|none) \| outcome: (?:ASSIGNED|DONE|BLOCKED|CANCELLED)$
 ^- DEC-\d{4} \| \S.*$

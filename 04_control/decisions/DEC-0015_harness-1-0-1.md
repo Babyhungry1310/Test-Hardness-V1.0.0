@@ -37,6 +37,8 @@ Chọn phương án sau. Lượt merge PR `upgrade/1.0.1` của OWNER là chữ 
 | 5–6. Chat và Storage | Chat dạng dọc, có phần `SUMMARY` trước khối kết thúc; storage theo schema; không viết lại file cũ | `harness/CHAT_UX.md`; `harness/HARNESS.md` mục 3.4, 3.6, 8.4; `harness/templates/BLOCKS.md` |
 | 7. Git và cleanup | Nhánh kiểm định `review/CYC-nn-Rk-xxxx`; phân tích tự xóa nhánh nguồn; đặc tả `clean` hai bước | `harness/GIT_CONVENTIONS.md` mục 7–10; `harness/tools/README.md#CLEAN` |
 | 8. Scanner | `scan` xác định, độc lập, không sửa bản gốc, có giới hạn kích thước và độ sâu giải mã; thẻ `EXTERNAL_DATA` là lớp hỗ trợ | `harness/tools/README.md#SCAN_SPEC`; `harness/HARNESS.md` mục 10.2 |
+| 9. Chia task song song | Quy tắc zero-overlap `write_scope` và chia batch; neo `CYC_nn_BATCHES` tùy chọn trong plan, dòng task của plan không đổi; bảng định tuyến tăng từ 5 lên 6 dòng | `harness/HARNESS.md#BATCH_RULES`; `harness/templates/plan.md`; `harness/schemas/STATUS_GRAMMAR.md`; ba file định tuyến; `LEAD.md` luật 21, 26 |
+| 10. Mẫu `pytest.ini` | File mẫu `testpaths = tests` để pytest không thu thập test mẫu của khung | `harness/templates/pytest.ini`; `harness/HARNESS.md` mục 5.5 |
 
 Quan hệ với quyết định đang có:
 
@@ -44,6 +46,7 @@ Quan hệ với quyết định đang có:
 - DEC-0012 (CYC-02: WORKER nhóm Codex, REVIEWER nhóm Gemini): không đổi và không bị áp lại. DEC-0012 phân công theo nhóm, còn V1.0.1 yêu cầu mã model cụ thể; điểm lệch này chỉ áp cho phân công mới, và cần một DEC mới của OWNER khi có chu kỳ hay dự án kế tiếp.
 - DEC-0014 (bản kiểm định ở PR #20 không tính là một vòng): không đổi. Verdict của RVW-CYC-02 và cổng CYC-02_PASS không đổi vì quy tắc mới.
 - DEC-0007, DEC-0008 (phân công CYC-01): không đổi.
+- DEC-0006 (giới hạn pytest về `tests/` bằng `pytest.ini`): không đổi; mẫu `pytest.ini` của khung có cùng nội dung với file đang dùng ở dự án này. `01_plan/PLAN.md` của dự án không bị sửa và không cần neo batch.
 
 Số phiên bản: theo bảng mức nâng cấp ở `harness/HARNESS.md` mục 11, thay đổi thêm cơ chế là mức MINOR. OWNER đặt tên bản là 1.0.1; số này được giữ. Không schema hiện có nào bị đổi; chỉ thêm hai schema cho hai loại file mới.
 <!-- END: RATIONALE -->

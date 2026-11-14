@@ -72,7 +72,7 @@ Orca có thể thêm tiền tố hoặc hậu tố số vào tên nhánh (bảng
 ### 2.3. Giao một task cho một tác tử
 
 <!-- ANCHOR: ORCA_ASSIGN -->
-Một task một worktree, một worktree một phiên tác tử, một phiên một task [THY-50]. Prompt giao việc luôn đúng một dòng `Run TK-nnnn`; tác tử tự định tuyến tới `harness/rules/WORKER.md` qua `AGENTS.md`, `CLAUDE.md` hoặc `GEMINI.md`.
+Một task một worktree, một worktree một phiên tác tử, một phiên một task [THY-50]. Nhiều task chỉ được giao cùng lúc khi chúng cùng một batch của plan (`harness/HARNESS.md#BATCH_RULES`). Prompt giao việc luôn đúng một dòng `Run TK-nnnn`; tác tử tự định tuyến tới `harness/rules/WORKER.md` qua `AGENTS.md`, `CLAUDE.md` hoặc `GEMINI.md`.
 
 Cách dùng hiện tại (không phụ thuộc tính năng chưa xác nhận):
 

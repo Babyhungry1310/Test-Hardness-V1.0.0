@@ -249,8 +249,9 @@ Không trỏ bằng số dòng. Không trỏ tới sổ bằng đường dẫn, 
 
 ```text
 /
-├── AGENTS.md · CLAUDE.md · GEMINI.md 🔒   Bảng định tuyến ≤ 5 dòng: RUN → rules/WORKER.md;
-│                                          kiểm định → rules/REVIEWER.md; còn lại → rules/LEAD.md
+├── AGENTS.md · CLAUDE.md · GEMINI.md 🔒   Bảng định tuyến ≤ 6 dòng, ba file giống nhau: RUN → rules/WORKER.md;
+│                                          kiểm định → rules/REVIEWER.md; còn lại → rules/LEAD.md;
+│                                          điều cấm với main; quy tắc zero-overlap khi chia task song song
 ├── README.md
 ├── harness.yaml 🔒        Cấu hình dự án: kind, product_paths, verify_default, log_level, max_loops
 ├── .gitignore · .gitattributes
@@ -345,7 +346,7 @@ Ba vùng dữ liệu: **Zone 1** công khai trong repo · **Zone 2** nhạy cả
 |---|---|
 | Vị trí mã nguồn | Theo chuẩn của ngôn ngữ, ở gốc repo (ví dụ `src/`, `tests/`, file khai báo gói). Liệt kê trong `product_paths`. Thư mục `00`–`06` và `harness/` nằm song song, không lồng vào mã nguồn |
 | Phạm vi ghi | `write_scope` của task chỉ gồm file trong `product_paths` và `03_output/CYC-nn/checks/` |
-| Test | Nằm cạnh mã nguồn, thuộc `product_paths`. Lệnh kiểm của task (`verify`) là lệnh chạy test. PR xóa test hoặc nới điều kiện test bị đánh dấu (C14) |
+| Test | Nằm cạnh mã nguồn, thuộc `product_paths`. Lệnh kiểm của task (`verify`) là lệnh chạy test. PR xóa test hoặc nới điều kiện test bị đánh dấu (C14). Dự án Python dùng pytest: chép `harness/templates/pytest.ini` (`testpaths = tests`) ra gốc repo, sửa giá trị nếu test nằm ở thư mục khác, và thêm `pytest.ini` vào `product_paths`, để pytest không thu thập test mẫu trong `harness/templates/examples/` |
 | Kích cỡ thay đổi | Mỗi task ≤ khoảng 400 dòng thay đổi, để duyệt được trong 30 phút |
 | Phụ thuộc | File khóa phiên bản (lockfile) được commit. Thêm hoặc nâng thư viện cần một `DEC`. File khai báo gói và lockfile thuộc vùng 🔒 |
 | Không commit | Sản phẩm build, thư mục gói tải về, file môi trường. Chỉ commit file mẫu môi trường không chứa giá trị thật |
@@ -503,6 +504,23 @@ stateDiagram-v2
 - Hủy task hoặc miễn trừ một điều chưa kiểm phải có `DEC` ghi mã task ở trường `cancels` hoặc `waives`.
 - PR còn mở: sửa trong cùng PR, giữ số run. Run `DONE` đã merge mà sau đó lộ lỗi: LEAD lập task mới có `fixes: TK-nnnn`.
 - Mỗi WORKER một task tại một thời điểm [THY-50]. Chạy song song chỉ khi `write_scope` không chồng nhau và không phụ thuộc dữ liệu.
+
+**Chia batch để chạy song song (zero-overlap `write_scope`).** LEAD chia task của một chu kỳ thành các batch ở neo `CYC_nn_BATCHES` của `PLAN.md`, mỗi batch một dòng `- Bn | tasks: TK-nnnn, TK-nnnn | after: none`.
+
+<!-- ANCHOR: BATCH_RULES -->
+| # | Quy tắc |
+|:---:|---|
+| 1 | Hai task cùng batch không có file chung trong `write_scope`. So theo đường dẫn; một mục là thư mục thì phủ mọi file bên trong. Giao nhau một file cũng là vi phạm |
+| 2 | Hai task cùng batch không phụ thuộc nhau: không task nào có task kia trong `depends_on` hay `inputs`, và không task nào đọc file mà task kia ghi |
+| 3 | File dùng chung không tách được (file khai báo gói, lockfile, `pytest.ini`, file cấu hình test dùng chung, file chỉ mục) chỉ thuộc `write_scope` của một task trong một batch |
+| 4 | Mỗi task của chu kỳ nằm trong đúng một batch. Chu kỳ không có neo `CYC_nn_BATCHES` thì chạy tuần tự theo thứ tự trong plan |
+| 5 | Mỗi task một worktree, một nhánh, một WORKER; mọi nhánh của một batch dựng từ cùng `origin/main`. Bằng chứng trong `03_output/CYC-nn/checks/` đặt tên bắt đầu bằng mã task để không trùng |
+| 6 | Batch sau (`after: Bn`) chỉ bắt đầu khi mọi PR của batch trước đã được OWNER merge và LEAD đã chạy `verify_default` trên `main` đạt |
+| 7 | Trong một batch, OWNER merge từng PR theo dòng `order` của khối `MERGE`. Không giao nhau về file không bảo đảm không xung đột về hành vi: sau lượt merge cuối của batch, LEAD chạy `verify_default` trên `main` |
+| 8 | Số task chạy cùng lúc không vượt số WORKER có model hợp lệ theo `04_control/MODEL_MATRIX.md`. Cách mở nhiều worktree cùng lúc trên Orca: cần kiểm trên bản đang cài |
+<!-- END: BATCH_RULES -->
+
+Câu 5 của cổng PLAN kiểm quy tắc 1–3 cho chu kỳ đầu; chu kỳ sau LEAD kiểm khi tạo task.
 
 ### 7.2. Hai cổng
 

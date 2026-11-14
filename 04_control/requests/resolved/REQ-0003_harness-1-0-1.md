@@ -13,7 +13,7 @@ keywords: [harness-upgrade, main-protection, model-matrix, chat-ux, git-cleanup,
 - 2026-11-14 | PENDING
 <!-- ANCHOR: CONTEXT -->
 ## Context
-Sau khi CYC-02 đạt cổng PASS, OWNER yêu cầu cập nhật khung lên V1.0.1 theo tám nhóm: bảo vệ `main`; ma trận ưu tiên model; catalog model; trace log (giữ ba phương án mở); vertical-first cho chat; tách Chat UX và Storage; Git và cleanup; scanner dữ liệu ngoài. Phiên chỉ thiết kế và cập nhật khung: không lập plan thi công, không tạo task, không chạy loop. OWNER sẽ thử bản này trên repo thử rồi mới đưa sang repo khung gốc.
+Sau khi CYC-02 đạt cổng PASS, OWNER yêu cầu cập nhật khung lên V1.0.1 theo tám nhóm: bảo vệ `main`; ma trận ưu tiên model; catalog model; trace log (giữ ba phương án mở); vertical-first cho chat; tách Chat UX và Storage; Git và cleanup; scanner dữ liệu ngoài. OWNER bổ sung hai điểm trong cùng phiên: quy tắc chia task song song (zero-overlap `write_scope`) kèm mẫu chia batch trong plan, và file mẫu `pytest.ini`. Phiên chỉ thiết kế và cập nhật khung: không lập plan thi công, không tạo task, không chạy loop. OWNER sẽ thử bản này trên repo thử rồi mới đưa sang repo khung gốc.
 <!-- END: CONTEXT -->
 <!-- ANCHOR: IMPACT -->
 ## Impact
