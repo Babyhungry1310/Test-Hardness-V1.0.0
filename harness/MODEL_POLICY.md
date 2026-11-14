@@ -1,98 +1,123 @@
-# MODEL POLICY — CATALOG, MA TRẬN ƯU TIÊN VÀ FALLBACK
+# MODEL POLICY — CHỌN MODEL THEO LẦN GIAO VIỆC
 
 Chi tiết của `harness/HARNESS.md` mục 3.5. Hai file dữ liệu thuộc dự án, tạo từ mẫu trong `harness/templates/`:
 
 | File | Trả lời câu hỏi | Mẫu | Schema |
 |---|---|---|---|
-| `04_control/MODEL_CATALOG.md` | Model này là gì, thông tin lấy từ đâu, cập nhật khi nào | `model_catalog.md` | `model_catalog.schema.json` |
-| `04_control/MODEL_MATRIX.md` | Vai nào dùng model nào, theo thứ tự nào, hết thì sao | `model_matrix.md` | `model_matrix.schema.json` |
+| `04_control/MODEL_CATALOG.md` | Model nào đã được kiểm chạy được, qua tuyến nào, khi nào, bằng cách kiểm nào | `model_catalog.md` | `model_catalog.schema.json` |
+| `04_control/MODEL_MATRIX.md` | Lần giao nào yêu cầu model nào và model thực tế là gì | `model_matrix.md` | `model_matrix.schema.json` |
 
-Cả hai là nguồn **tra cứu**. Quyết định vẫn nằm ở `DEC`: một `DEC` đang `ACTIVE` mâu thuẫn với ma trận thì `DEC` thắng và LEAD sửa ma trận trong PR kế tiếp. Hai file thuộc vùng 🔒; mọi thay đổi đi qua PR do OWNER merge.
+Cả hai là sổ **dữ kiện**, không cấp quyền. Hai file thuộc vùng 🔒 và chỉ đổi qua PR do OWNER merge; LEAD cập nhật chúng trong PR `lead/` kế tiếp, không cần `DEC` cho từng model và không cần chờ merge mới được dùng một model đã kiểm đạt. Một `DEC` đang `ACTIVE` về phân công thắng mọi lựa chọn của LEAD.
 
 ## 1. Catalog
 
 <!-- ANCHOR: CATALOG_FIELDS -->
 | Khóa | Giá trị | Quy tắc |
 |---|---|---|
-| `code` | Mã model cụ thể, đúng chuỗi công cụ hiển thị, kể cả hậu tố biến thể | Định danh duy nhất. Hai biến thể của một dòng là hai mục riêng |
+| `code` | Mã model gốc theo mục 4.1, đúng chuỗi hệ thống trả về sau khi bỏ hậu tố biến thể | Định danh duy nhất |
 | `provider` | Nhà cung cấp, hoặc `unverified` | Chỉ ghi tên khi có nguồn ở `provider_source` |
 | `provider_source` | Con trỏ, URL, hoặc `none` | |
-| `group` | Nhóm dùng để xét tính độc lập giữa REVIEWER và WORKER, hoặc `unverified` | Lấy từ một `DEC` hoặc từ nhà cung cấp đã có nguồn |
+| `group` | Nhóm model, hoặc `unverified` | Chỉ để tham khảo; không dùng để xét tính độc lập |
 | `group_source` | Con trỏ hoặc `none` | |
-| `aliases` | Danh sách bí danh: tên combo, tên rút gọn, tên hiển thị khác | Bí danh không dùng thay `code` trong bản ghi |
-| `recommended_roles` | Tập con của `BRAINSTORM`, `PLANNING`, `REVIEWER`, `WORKER` | Là khuyến nghị; quyền dùng thật do ma trận quy định |
+| `aliases` | Tên tuyến trên cổng model và các chuỗi biến thể được coi là cùng model | Bí danh không dùng thay `code` trong bản ghi |
+| `recommended_roles` | Tập con của `BRAINSTORM`, `PLANNING`, `REVIEWER`, `WORKER` | Là ghi nhận của LEAD; không cấp và không cấm vai nào |
 | `capability_source` | Con trỏ, URL, hoặc `none` | `none` nghĩa là chưa có căn cứ để khẳng định năng lực |
-| `price_source` | URL, hoặc `none` | Không chép con số giá vào catalog; giá đổi theo thời gian, đọc ở nguồn |
-| `availability` | `confirmed` · `unconfirmed` · `unavailable` | `confirmed` cần `availability_evidence` |
-| `availability_evidence` | Con trỏ tới bản ghi có model này chạy thật, hoặc `none` | |
+| `price_source` | URL, hoặc `none` | Không chép con số giá vào catalog |
+| `availability` | `confirmed` · `unconfirmed` · `unavailable` | `confirmed`: đã có phiên tác tử có công cụ chạy thật bằng model này. `unconfirmed`: mới kiểm bằng hỏi đáp ngắn hoặc chưa kiểm. `unavailable`: lần kiểm gần nhất lỗi |
+| `availability_evidence` | Con trỏ tới run, `RVW`, `DSC`, hoặc tới neo `ROUTE_CHECKS` của catalog; `none` khi chưa có | Bắt buộc khác `none` khi `confirmed` |
 | `updated` | `YYYY-MM-DD` | Ngày kiểm lại mục này lần gần nhất |
 <!-- END: CATALOG_FIELDS -->
 
 - Không khẳng định năng lực, chi phí, cửa sổ ngữ cảnh hay thứ hạng của một model khi `capability_source` hoặc `price_source` là `none`.
-- Tên dòng model ("Claude Opus", "Gemini Pro") không phải `code`. Một dòng model không tự kéo theo mọi biến thể của nó.
-- Mục có `updated` cũ hơn 90 ngày được coi là cần kiểm lại trước khi dùng làm căn cứ xếp tier.
-- Catalog chỉ thêm và sửa mục; model ngừng dùng thì đặt `availability: unavailable`, không xóa mục, vì bản ghi cũ còn trỏ tới `code` đó.
+- Tên dòng model, tên tuyến, tên agent, tên combo không phải `code`.
+- Catalog chỉ thêm và sửa mục; không xóa mục, vì bản ghi cũ còn trỏ tới `code` đó.
 
-## 2. Tier
+<!-- ANCHOR: ROUTE_CHECKS -->
+Mỗi lần kiểm một tuyến, LEAD ghi một dòng vào neo `ROUTE_CHECKS` ở thân catalog, mới nhất ở trên:
+
+`- <YYYY-MM-DDTHH:MMZ> | route: <tên tuyến đã gọi> | actual: <chuỗi model hệ thống trả về, hoặc none> | kind: chat|agent-tools | result: OK|FAIL | source: <công cụ hoặc API đã dùng> | note: <≤ 15 từ, hoặc none>`
+
+- `kind: chat`: một lượt hỏi đáp ngắn. `kind: agent-tools`: một phiên tác tử gọi được ít nhất một công cụ đọc và trả về model thực tế.
+- `actual` chép nguyên chuỗi nhận được, kể cả hậu tố. Không lấy từ tên tuyến. Không nhận được thì `none` và `result: FAIL`.
+- Dòng kiểm không chứa khóa API, tiêu đề xác thực, nội dung prompt hay câu trả lời.
+- Dòng kiểm được dùng ngay; nó vào `main` cùng PR `lead/` kế tiếp. Trước lúc đó LEAD giữ bản sao ở `<project>.local/logs/` và nêu trong báo cáo cho OWNER.
+<!-- END: ROUTE_CHECKS -->
+
+## 2. Model đủ điều kiện
+
+<!-- ANCHOR: ELIGIBILITY -->
+Một model được giao một vai khi đủ cả ba:
+
+1. Có dòng `ROUTE_CHECKS` với `result: OK` cho đúng tuyến sẽ gọi, và dòng mới nhất của tuyến đó không phải `FAIL`.
+2. Vai cần dùng công cụ (WORKER, REVIEWER, LEAD ở mọi loại phiên) thì dòng đó phải có `kind: agent-tools`, hoặc mục catalog đã `availability: confirmed`. Hỏi đáp ngắn không đủ.
+3. `actual` của dòng đó quy về đúng `code` của mục catalog theo mục 4.1.
+
+Tuyến trả về model khác với lần kiểm trước, hoặc tên tuyến khác model trả về: ghi dòng mới; model đủ điều kiện là model **thực tế trả về**, không phải model theo tên tuyến. Combo trên cổng model không được dùng để giao việc, trừ khi mọi thành phần của nó đều đủ điều kiện cho vai đó và đều thỏa mục 4.2 nếu là REVIEWER.
+<!-- END: ELIGIBILITY -->
 
 <!-- ANCHOR: TIERS -->
-| Tier | Điều kiện | Dùng cho |
-|---|---|---|
-| `T1` | Đủ cả bốn: (1) là một `code` cụ thể trong catalog; (2) `availability: confirmed`; (3) `capability_source` khác `none`, hoặc OWNER ghi rõ chấp nhận không có nguồn trong `DEC` duyệt; (4) nằm trong `tier1` của ma trận, kèm `DEC` duyệt ở `tier1_approved_by` | Mọi vai; bắt buộc cho `BRAINSTORM` |
-| `T2` | Điều kiện (1), (2) và nằm trong `tier2` của ma trận | `PLANNING`, `REVIEWER`, `WORKER` |
-| `T3` | Điều kiện (1), (2) và nằm trong `tier3` của ma trận | `WORKER` |
-| `UNRATED` | Có trong catalog nhưng không nằm trong tier nào | Không được giao vai nào theo ma trận |
+Tier (`T1`, `T2`, `T3`, `UNRATED`) không còn là điều kiện giao việc từ bản 1.0.2. Các khóa `status`, `tier1`, `tier2`, `tier3`, `tier1_candidate_families`, `tier1_approved_by`, `roles` trong `04_control/MODEL_MATRIX.md` giữ lại để bản ghi cũ còn hợp schema; chúng không có hiệu lực.
 <!-- END: TIERS -->
 
-- Xếp tier là quyết định của OWNER, ghi bằng `DEC`. LEAD chỉ đề xuất.
-- Ma trận có `status: PROPOSED` là đề xuất của LEAD: các danh sách tier và `order` trong đó chưa có hiệu lực, kể cả khi file đã ở trên `main`. Ma trận có hiệu lực khi `status: APPROVED` và `tier1_approved_by` trỏ một `DEC` do OWNER quyết.
-- Không mặc định mọi biến thể của một dòng là tương đương: biến thể nhỏ, nhanh, rẻ hoặc đời cũ của một dòng `T1` là `UNRATED` cho tới khi được duyệt riêng.
-- Các dòng OWNER nêu làm ứng viên `T1` (ghi ở `tier1_candidate_families` của ma trận) chỉ là định hướng tìm `code`; chúng không cấp tier.
-
-## 3. Thứ tự ưu tiên theo vai
+## 3. Chọn model
 
 <!-- ANCHOR: ROLE_ORDER -->
-| Vai | Phiên | Tier tối thiểu | Thứ tự | Fallback |
-|---|---|---|---|---|
-| `BRAINSTORM` | `DISCUSS`, phase `BRAINSTORM` | `T1` | Theo `order` của vai trong ma trận | Chỉ trong `T1`. Hết `T1` thì dừng |
-| `PLANNING` | LEAD lập plan, `CHANGE`, điều phối | `T2` | `T1` trước, rồi `T2` | Xuống `T2` được phép; LEAD nêu model thực tế trong khối cuối |
-| `REVIEWER` | Kiểm định chu kỳ, kiểm thử độc lập | `T2` | `T1` trước, rồi `T2`, sau khi loại các model vi phạm mục 4 | Chỉ sang model vẫn đạt mục 4. Hết thì dừng |
-| `WORKER` | `RUN` | `T3` | `T2` trước, rồi `T3` | Xuống `T3` được phép |
+- Mỗi lần giao một task, một lượt kiểm định, hoặc mở một phiên LEAD, LEAD chọn một model đủ điều kiện theo mục 2. Không có thứ tự chọn cố định và không có danh sách fallback cố định; áp cho mọi vai, kể cả phiên `DISCUSS`.
+- Căn cứ chọn: yêu cầu của công việc; khả năng thực tế đã thấy ở bản ghi của dự án; hạn mức còn lại. Căn cứ nào chưa xác minh được thì ghi `chưa xác minh`, không ước đoán; nếu điều chưa xác minh ảnh hưởng tới việc chọn thì báo OWNER bằng khối `QUESTION` trước khi giao.
+- LEAD ghi lựa chọn và lý do ngắn ở dòng phân công (mục 5) trước khi phiên bắt đầu.
+- Phiên lỗi vì model hoặc tuyến: LEAD được chọn model đủ điều kiện khác cho lần chạy tiếp. Đổi model không cấp thêm loop hay thêm vòng kiểm định.
+- Một `DEC` đang `ACTIVE` chỉ định hoặc cấm model cho một phạm vi thì LEAD chọn trong giới hạn đó.
 <!-- END: ROLE_ORDER -->
-
-`order` và `fallback` trong ma trận là danh sách `code` cụ thể. Combo trên cổng model (`harness/tools/INTEGRATION.md#MODEL_GROUPS`) chỉ được chứa các `code` mà ma trận cho phép đối với vai đó.
 
 ## 4. Tính độc lập của REVIEWER
 
-1. `reviewer_model` khác mọi giá trị `model` của các run trong chu kỳ, kể cả run `BLOCKED`.
-2. `group` của REVIEWER khác `group` của mọi WORKER đó. `group: unverified` được coi là trùng.
-3. REVIEWER đáp ứng mọi `DEC` đang `ACTIVE` về phân công model của chu kỳ.
-4. Kiểm cả ba điều trước khi giao kiểm định (`PREFLIGHT.md` mục 2, dòng 13) và khi LEAD review PR của REVIEWER. Bản kiểm định vi phạm thì không được merge; có tính là một vòng hay không do OWNER quyết bằng `DEC`.
+### 4.1. Thế nào là cùng một model
+
+<!-- ANCHOR: SAME_MODEL -->
+- So sánh trên **model thực tế** hệ thống trả về cho từng phiên, không trên tên tuyến, tên agent, tên combo hay model yêu cầu.
+- Mã gốc của một chuỗi model là chuỗi đó sau khi bỏ phần trong ngoặc vuông ở cuối. Ví dụ `gpt-5.6-luna[1m]` có mã gốc `gpt-5.6-luna`.
+- Hai chuỗi là cùng một model khi cùng mã gốc, hoặc khi một chuỗi nằm trong `aliases` của mục catalog của chuỗi kia.
+- Hai chuỗi khác mã gốc là hai model khác nhau, kể cả khi cùng nhà cung cấp hay cùng dòng. Ví dụ `gpt-5.6-luna` và `gpt-5.6-terra` là hai model.
+- Không chắc hai chuỗi có phải cùng một model hay không: coi là cùng, và hỏi OWNER.
+<!-- END: SAME_MODEL -->
+
+### 4.2. Điều kiện
+
+<!-- ANCHOR: REVIEWER_INDEPENDENCE -->
+1. Model thực tế của REVIEWER khác, theo mục 4.1, với model thực tế của mọi run có sản phẩm nằm trong phần được kiểm định. Không bắt buộc khác nhóm hay khác nhà cung cấp.
+2. Run không ghi được model thực tế thì không kiểm định được phần việc đó: dừng, báo OWNER.
+3. REVIEWER đáp ứng mọi `DEC` đang `ACTIVE` về phân công model của phần được kiểm định.
+4. Kiểm cả ba điều trước khi giao kiểm định (`PREFLIGHT.md` mục 2, dòng 13), lúc REVIEWER bắt đầu, và khi LEAD review PR của REVIEWER, mỗi lần đều theo model thực tế. Bản kiểm định vi phạm thì không được merge; có tính là một vòng hay không do OWNER quyết bằng `DEC`.
+<!-- END: REVIEWER_INDEPENDENCE -->
 
 ## 5. Model yêu cầu và model thực tế
 
 <!-- ANCHOR: REQUESTED_ACTUAL -->
 | Thứ | Ghi ở đâu | Ai ghi | Khi nào |
 |---|---|---|---|
-| Model yêu cầu | Neo `ASSIGNMENTS` của ma trận, khóa `requested` | LEAD | Khi giao việc |
-| Model thực tế | `model` của run và `DSC`, `reviewer_model` của `RVW`; lấy từ nhật ký công cụ | Phiên làm việc | Cuối phiên |
-| Đối chiếu | Neo `ASSIGNMENTS` của ma trận, khóa `actual` và `match` | LEAD | Khi review PR của phiên |
+| Model yêu cầu, tuyến, lý do chọn | Neo `ASSIGNMENTS` của `04_control/MODEL_MATRIX.md` | LEAD | Khi giao việc |
+| Model thực tế | `model` của run và `DSC`, `reviewer_model` của `RVW`; lấy từ công cụ hoặc API của phiên | Phiên làm việc | Cuối phiên |
+| Đối chiếu | Neo `ASSIGNMENTS`, khóa `actual` và `match` | LEAD | Khi review PR của phiên |
 <!-- END: REQUESTED_ACTUAL -->
 
-Dòng phân công: `- CYC-nn | <ROLE> | requested: <code hoặc nhóm> | actual: <code> | record: <con trỏ> | match: yes|no`.
+Dòng phân công: `- CYC-nn | <ROLE> | requested: <code> | actual: <chuỗi thực tế hoặc pending> | record: <con trỏ tới task, run hoặc RVW> | match: yes|no|pending | route: <tên tuyến> | basis: <lý do ≤ 15 từ; hạn mức: số liệu hoặc chưa xác minh>`. Hai khóa `route` và `basis` là tùy chọn với dòng lập trước bản 1.0.2.
 
-`match: no` chưa phải lỗi: cổng model có thể tự chuyển model. LEAD kiểm model thực tế có hợp lệ với vai theo mục 3 và mục 4 không. Hợp lệ thì tiếp tục. Không hợp lệ thì LEAD không xuất khối `MERGE` cho PR đó và đưa về OWNER bằng khối `QUESTION`.
+- `match` so theo mục 4.1. `match: no` chưa phải lỗi: cổng model có thể tự chuyển model. LEAD kiểm model thực tế có đủ điều kiện theo mục 2 và, với REVIEWER, mục 4.2. Đạt thì tiếp tục. Không đạt thì LEAD không xuất khối `MERGE` cho PR đó và đưa về OWNER bằng khối `QUESTION`.
+- Không xác định được model thực tế của một phiên: kết quả của phiên đó không được dùng; dừng và báo OWNER.
 
-## 6. Khi không có model hợp lệ
+## 6. Khi không có model phù hợp
 
-- Dừng. Xuất khối `QUESTION` nêu vai, tier yêu cầu, danh sách đã thử và lý do từng model không hợp lệ.
-- Không tự hạ tier, không tự dùng model `UNRATED`, không tự nới mục 4.
-- Danh sách fallback không bảo đảm hệ thống luôn vận hành được; nó chỉ nêu thứ tự thử. Hết danh sách là một blocker cần OWNER xử lý.
-- `tier1` rỗng thì chưa mở được phiên `BRAINSTORM` mới theo chính sách này; OWNER duyệt ít nhất một `code` trước.
+<!-- ANCHOR: NO_MODEL -->
+- Dừng. Xuất khối `QUESTION` nêu vai, việc cần giao, các model đã xét và lý do từng model không dùng được.
+- Không dùng model chưa đủ điều kiện ở mục 2, không nới mục 4.2, không dùng kết quả của phiên không rõ model thực tế.
+- Không có REVIEWER thỏa mục 4.2: dừng phần kiểm định, báo OWNER; không để WORKER tự kiểm.
+<!-- END: NO_MODEL -->
 
 ## 7. Điều còn mở
 
 | # | Điều | Trạng thái |
 |:---:|---|---|
-| 1 | Thêm trường tùy chọn `requested_model` vào schema của run, `DSC`, `RVW` (schema 2, mức MINOR theo `harness/schemas/EVOLUTION.md`) để model yêu cầu nằm ngay trong bản ghi | Chờ OWNER quyết; hiện ghi ở neo `ASSIGNMENTS` |
-| 2 | Ngưỡng 90 ngày ở mục 1 | Đề xuất; OWNER đổi được |
+| 1 | Thêm trường tùy chọn `requested_model` vào schema của run, `DSC`, `RVW` | Chờ OWNER quyết; hiện ghi ở neo `ASSIGNMENTS` |
+| 2 | Nguồn đọc hạn mức trên cổng model | Chưa xác nhận (`harness/tools/INTEGRATION.md#FEATURES` dòng 9); tới khi có thì ghi `chưa xác minh` |
+| 3 | Thời hạn hiệu lực của một dòng kiểm tuyến | Đề xuất: kiểm lại ở đầu mỗi phiên điều phối; OWNER đổi được |
+| 4 | Bỏ hẳn các khóa tier khỏi schema của ma trận | Mức MAJOR theo `harness/schemas/EVOLUTION.md`; chưa làm |
