@@ -20,6 +20,7 @@ Nguồn: DEC-0017, DEC-0018, `harness/MODEL_POLICY.md` (bản 1.0.2). Dữ kiệ
 - Hạn mức hoặc khả năng thực tế chưa xác minh: ghi `chưa xác minh`, không ước đoán. Nếu điều đó ảnh hưởng tới việc chọn (ví dụ tuyến vừa báo lỗi hạn mức, hoặc chỉ còn một model cho REVIEWER): hỏi OWNER trước khi giao.
 - Gọi tuyến của một model cụ thể; không giao việc qua combo. So sánh và ghi theo model thực tế, không theo tên tuyến, tên agent hay model yêu cầu.
 - `aliases` có thể chứa ID tuyến; tuyến chỉ là đầu vào API, không chứng minh định danh model. `actual` phải lấy từ công cụ hoặc phản hồi; giữ nguyên cả dấu `/` nếu hệ thống trả về và đối chiếu bằng chứng.
+- ID gửi 9Router phải khớp danh sách `/v1/models` hoặc là alias đã kiểm được chấp nhận. Tuyến được liệt kê chưa chứng minh gọi thành công hoặc hỗ trợ công cụ; code lịch sử không có tuyến đã xác minh không được tự gán tuyến thay thế.
 - Model thực tế khác model yêu cầu: nếu vẫn đủ điều kiện (và với REVIEWER vẫn thỏa mục 4) thì tiếp tục, ghi `match: no`; không thì dừng phiên đó, không dùng kết quả.
 - Phiên lỗi vì model hoặc tuyến: LEAD được chọn model đủ điều kiện khác cho loop kế. Đổi model không cấp thêm loop: mỗi task vẫn tối đa 3 loop, tính cả loop đầu.
 <!-- END: RULES -->

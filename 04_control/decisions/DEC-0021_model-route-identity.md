@@ -30,5 +30,5 @@ Giữ nguyên schema và dữ liệu catalog; route dùng để gọi, actual ch
 <!-- ANCHOR: CONSEQUENCES -->
 ## Consequences
 - Điều chỉnh phần diễn giải aliases của DEC-0018; phần còn lại giữ nguyên. Run và RVW lịch sử không bị sửa hay xét lại.
-- TK-0029 kiểm thử hồi quy các trường hợp tuyến đổi model và định danh chưa xác minh. Kiểm kê do OWNER nêu chưa có trong worktree; không coi danh sách tuyến là bằng chứng agent dùng được công cụ.
+- TK-0029 kiểm thử hồi quy các trường hợp tuyến đổi model và định danh chưa xác minh. Kiểm kê ngày 2026-11-14 tại `<project>.local/logs/orca-1.0.1/MODEL_NAME_AUDIT.md` đối chiếu 15 code và 78 ID được liệt kê; không coi danh sách tuyến là bằng chứng agent dùng được công cụ.
 <!-- END: CONSEQUENCES -->

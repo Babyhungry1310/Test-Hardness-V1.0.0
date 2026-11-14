@@ -30,6 +30,8 @@ Cả hai là sổ **dữ kiện**, không cấp quyền. Hai file thuộc vùng 
 
 - Không khẳng định năng lực, chi phí, cửa sổ ngữ cảnh hay thứ hạng của một model khi `capability_source` hoặc `price_source` là `none`.
 - Tên dòng model, tên tuyến, tên agent, tên combo không phải `code`.
+- Khi gọi 9Router, gửi ID tuyến chính xác từ `GET /v1/models` hoặc alias đã kiểm là được chấp nhận; không gửi `code` thay tuyến nếu chưa kiểm. Danh sách ID chỉ chứng minh tuyến được liệt kê, không chứng minh gọi thành công, hỗ trợ công cụ hay model thực tế.
+- Code lịch sử không có tuyến đã xác minh được giữ nguyên; không đoán tuyến hoặc thay bằng model khác trong bản ghi cũ.
 - Catalog chỉ thêm và sửa mục; không xóa mục, vì bản ghi cũ còn trỏ tới `code` đó.
 
 <!-- ANCHOR: ROUTE_CHECKS -->
