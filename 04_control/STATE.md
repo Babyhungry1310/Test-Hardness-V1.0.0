@@ -1,16 +1,23 @@
-PHASE: CLOSE
-CYCLE: CYC-02
+PHASE: EXECUTE
+CYCLE: CYC-03
 PROFILE: SHORT
 
-## Handover board (updated: 2026-11-14, main @ 36bafbe)
+## Handover board (updated: 2026-11-14, main @ 67a092f)
 ### 1. Progress
 - CYC-01 | PASS | TK-0001 DONE R2, TK-0002 DONE R1, TK-0004 DONE R1 | thẻ cycle/CYC-01 @ e2b7944
 - CYC-02 | PASS | TK-0003 DONE R1, TK-0005 DONE R1 | RVW-CYC-02 vòng 1 PASS | thẻ cycle/CYC-02 @ 36bafbe
-- Khung | V1.0.1 | DEC-0015 | đặc tả, chưa có script
+- CYC-03 | ASSIGNED | TK-0006, TK-0007, TK-0008, TK-0018 | bảo vệ main
+- CYC-04 | ASSIGNED | TK-0009, TK-0010, TK-0019 | model
+- CYC-05 | ASSIGNED | TK-0011, TK-0012, TK-0020, TK-0021 | chat, storage, Git, trace
+- CYC-06 | ASSIGNED | TK-0013, TK-0014, TK-0022, TK-0023 | scanner
+- CYC-07 | ASSIGNED | TK-0015, TK-0016, TK-0024, TK-0025, TK-0026, TK-0017 | batch, pytest, hồi quy
+- Khung | V1.0.1 | DEC-0015, DEC-0016 | plan version 4, chưa có script
 ### 2. Open risks
 - RSK-0004 | OPEN | level: HIGH | due: 2026-11-26 | owner: OWNER
+- RSK-0005 | OPEN | level: MEDIUM | due: 2026-12-12 | owner: LEAD
 - RSK-0001 | OPEN | level: MEDIUM | due: 2026-11-26 | owner: LEAD
 ### 3. Recent decisions
+- DEC-0016 | ACTIVE | Thử khung V1.0.1 trên repo này: nguồn chuẩn, nơi đặt code, duyệt ma trận model, ngoại lệ tạo task và nền tích hợp tạm
 - DEC-0015 | ACTIVE | Nâng khung lên V1.0.1: bảo vệ main, ma trận model, chat và storage, dọn nhánh, scanner
 - DEC-0014 | ACTIVE | Bản kiểm định CYC-02 do gpt-6.1-sol chạy không tính là một vòng kiểm định
 - DEC-0013 | ACTIVE | Handout kết thúc bằng đúng một LF và ghi file với newline LF
@@ -27,7 +34,7 @@ PROFILE: SHORT
 - DEC-0003 | SUPERSEDED_BY DEC-0007
 - DEC-0001 | SUPERSEDED_BY DEC-0002
 ### 4. Next action
-- OWNER merge PR upgrade/1.0.1 rồi thử khung V1.0.1 trên repo này. Việc OWNER cần chốt: mã model T1 và duyệt 04_control/MODEL_MATRIX.md (đang PROPOSED); phương án của harness/rfc/RFC-0001_trace-attribution.md; bật luật bảo vệ main và thẻ cycle/* trên GitHub (main hiện chưa được bảo vệ, RSK-0004); tự xóa nhánh nguồn; danh sách nhánh cũ được dọn. Đóng dự án vẫn còn: LEAD viết 05_memory/CORE.md, soạn 04_control/gates/CLOSED.md; trước đó xử lý RSK-0004 và RSK-0001. Pytest toàn repo trên main 36bafbe đạt 23/23.
+- OWNER dán prompt ở 01_plan/SPEC_ORCA_PROMPT.md#PROMPT vào một phiên Orca để chạy CYC-03 B1 (TK-0006, TK-0007, TK-0008); phiên đó dừng sau mỗi batch chờ OWNER squash-merge. Việc OWNER cần chốt: model của tuyến 9router/antigravity và 9router/grok chưa có trong catalog; mã model T1; phương án RFC-0001; bật luật bảo vệ main và thẻ cycle/* (RSK-0004); tài khoản riêng cho tác tử; tự xóa nhánh nguồn. Đóng dự án lùi sau CYC-07. Pytest toàn repo trên main 67a092f đạt 23/23.
 ### 5. Never do
 - Không xuất PDF
 - Không dùng tên học viên thật trong dữ liệu thử
