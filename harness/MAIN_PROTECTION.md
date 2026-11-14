@@ -84,12 +84,12 @@ Khi script `doctor` có, nó làm các dòng đầu phiên; ba dòng còn lại 
 | 1 | Luật cho nhánh `main`: bắt buộc qua PR | Bật | Lớp chính |
 | 2 | Luật cho nhánh `main`: cấm ép đẩy, cấm xóa nhánh | Bật | |
 | 3 | Luật cho nhánh `main`: không cho ai bỏ qua luật, kể cả quản trị | Bật | Nếu tắt, tài khoản quản trị vẫn đẩy thẳng được |
-| 4 | Luật cho nhánh `main`: bắt buộc duyệt của code owner | Bật khi tác tử dùng tài khoản riêng | Tài khoản không tự duyệt PR của chính nó; dùng chung tài khoản thì cài đặt này làm kẹt mọi PR |
+| 4 | Luật cho nhánh `main`: bắt buộc duyệt của code owner | OWNER kiểm tra tính khả thi | Tài khoản chung không tự duyệt PR do chính nó tạo; không đổi cài đặt nếu chưa được OWNER quyết |
 | 5 | Luật cho thẻ `cycle/*`: chỉ tài khoản OWNER tạo, sửa, xóa | Bật | |
 | 6 | Cách merge | Chỉ squash; tắt merge commit và rebase | |
 | 7 | Auto-merge | Tắt | |
 | 8 | Tự xóa nhánh nguồn sau merge | OWNER quyết | Phân tích ở `harness/GIT_CONVENTIONS.md` mục 8 |
-| 9 | Tài khoản hoặc token riêng cho tác tử, quyền ghi nhánh, không có quyền quản trị | Có | Thiếu mục này thì dòng 1–5 không phân biệt được tác tử với OWNER |
+| 9 | Tài khoản GitHub chung của OWNER và tác tử | Dùng tài khoản OWNER | Được đẩy nhánh làm việc, mở PR; không chứng minh ai thao tác, không ngăn tác tử dùng quyền merge hay thẻ của tài khoản (RSK-0004) |
 <!-- END: GITHUB_RULES -->
 
 Luật bảo vệ nhánh và thẻ có sẵn hay không tùy gói GitHub và loại repo: cần kiểm trên gói đang dùng. Tác tử không tự bật, tắt hay sửa các cài đặt này; LEAD chỉ đọc trạng thái và ghi vào khối `MERGE` hoặc một `RSK`.

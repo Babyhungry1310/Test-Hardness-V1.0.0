@@ -10,4 +10,5 @@ origin: "01_plan/PLAN.md#CYC_03"
 - TK-0007 | run: none | outcome: ASSIGNED
 - TK-0008 | run: none | outcome: ASSIGNED
 - TK-0018 | run: none | outcome: ASSIGNED
+- TK-0027 | run: none | outcome: ASSIGNED
 <!-- END: TASKS -->

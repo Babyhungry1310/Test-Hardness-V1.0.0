@@ -4,9 +4,9 @@ Nguồn: DEC-0016 (ngoại lệ E1, E2), DEC-0017, DEC-0018, RSK-0005, RSK-0006,
 
 <!-- ANCHOR: ORDER -->
 ## 1. Thứ tự, song song, phụ thuộc
-- Thứ tự chu kỳ: CYC-03, CYC-04, CYC-05, CYC-06, CYC-07; trong chu kỳ theo neo `CYC_nn_BATCHES` của plan. Tổng cộng 21 task, 11 batch.
+- Thứ tự chu kỳ: CYC-03, CYC-04, CYC-05, CYC-06, CYC-07; trong chu kỳ theo neo `CYC_nn_BATCHES` của plan. Tổng cộng 22 task, 11 batch.
 - Task độc lập, nhánh dựng từ `origin/main`, chạy song song trong batch: TK-0006, TK-0007, TK-0008 (CYC-03 B1); TK-0009 (CYC-04 B1); TK-0011, TK-0012, TK-0020, TK-0021 (CYC-05 B1); TK-0013 (CYC-06 B1); TK-0016, TK-0024, TK-0025 (CYC-07 B1).
-- Task cần kết quả đã merge của batch trước: TK-0018 (TK-0006, TK-0007); TK-0010, TK-0019 (TK-0009); TK-0014, TK-0022 (TK-0013); TK-0023 (TK-0014, TK-0022); TK-0015 (TK-0009, khác chu kỳ); TK-0026 (mọi task trước); TK-0017 (mọi task trước và TK-0026).
+- Task cần kết quả đã merge của batch trước: TK-0018 (TK-0006, TK-0007); TK-0027 (TK-0008); TK-0010, TK-0019 (TK-0009); TK-0014, TK-0022 (TK-0013); TK-0023 (TK-0014, TK-0022); TK-0015 (TK-0009, khác chu kỳ); TK-0026 (mọi task trước); TK-0017 (mọi task trước và TK-0026).
 - Số task chạy cùng lúc không vượt ba chỗ, không vượt số model đủ điều kiện còn lại sau khi để dành cho REVIEWER, không vượt giới hạn của Orca và 9Router. Mỗi chỗ một task tại một thời điểm; một chỗ có hai task trong batch thì chạy lần lượt.
 - Mỗi task một worktree, một nhánh `task/TK-nnnn-Rn` dựng từ cùng một commit của `origin/main` ghi lúc mở batch, một phiên, một PR.
 - Orca: khi `harness/tools/INTEGRATION.md#FEATURES` dòng 1, 2, 4, 5 đã được OWNER xác nhận trên bản đang cài thì giao task bằng `orca worktree create`; chưa xác nhận thì tạo worktree bằng `git worktree add` và OWNER mở phiên WORKER trong từng worktree.
