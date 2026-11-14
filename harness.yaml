@@ -1,6 +1,6 @@
 schema: 1
 kind: code
-product_paths: ["src/", "tests/", "data/", "pytest.ini"]
+product_paths: ["src/", "tests/", "data/", "pytest.ini", "tools/"]
 verify_default: "python -m pytest -q --tb=line"
 log_level: LOOP
 max_loops: 3
