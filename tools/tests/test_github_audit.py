@@ -45,7 +45,7 @@ def fill(directory, **over):
         "allow_rebase_merge": False,
         "allow_auto_merge": False,
         "delete_branch_on_merge": False,
-        "owner": {"login": "owner", "id": 7},
+        "owner": {"login": "owner", "id": 7, "type": "User"},
     }
     repo.update(over.get("repo", {}))
     dump(directory / "repo.json", repo)
@@ -173,6 +173,141 @@ def run_cli(args):
         encoding="utf-8",
         errors="strict",
     )
+
+
+def branch_rule(**over):
+    detail = {
+        "id": 3,
+        "target": "branch",
+        "enforcement": "active",
+        "bypass_actors": [],
+        "conditions": {"ref_name": {"include": ["refs/heads/main"], "exclude": []}},
+        "rules": [{"type": "pull_request", "parameters": {"require_code_owner_review": True}}],
+    }
+    detail.update(over)
+    return detail
+
+
+def test_prefix_and_subset_do_not_pass(tmp_path):
+    directory = tmp_path / "prefix"
+    prot = protection()
+    prot["required_pull_request_reviews"] = None
+    fill(
+        directory,
+        protection=prot,
+        rulesets=[{"id": 3}, {"id": 9}],
+        ruleset=tag_rule(),
+    )
+    dump(directory / "ruleset_3.json", branch_rule(conditions={"ref_name": {"include": ["refs/heads/main-other"], "exclude": []}}))
+    dump(
+        directory / "ruleset_9.json",
+        tag_rule() | {"conditions": {"ref_name": {"include": ["refs/tags/cycle/private/*"], "exclude": []}}},
+    )
+    got = rows(directory)
+    assert got[1][0] != "PASS"
+    assert got[5][0] != "PASS"
+
+
+def test_exclude_and_default_branch(tmp_path):
+    directory = tmp_path / "exclude"
+    prot = protection()
+    prot["required_pull_request_reviews"] = None
+    fill(directory, protection=prot, rulesets=[{"id": 3}])
+    dump(
+        directory / "ruleset_3.json",
+        branch_rule(conditions={"ref_name": {"include": ["~ALL"], "exclude": ["refs/heads/*"]}}),
+    )
+    assert rows(directory)[1][0] != "PASS"
+    dump(
+        directory / "ruleset_3.json",
+        branch_rule(conditions={"ref_name": {"include": ["~DEFAULT_BRANCH"], "exclude": []}}),
+    )
+    assert rows(directory)[1][0] == "PASS"
+    dump(
+        directory / "ruleset_9.json",
+        tag_rule() | {"conditions": {"ref_name": {"include": ["~ALL"], "exclude": ["refs/tags/cycle/private/*"]}}},
+    )
+    dump(directory / "rulesets.json", [{"id": 3}, {"id": 9}])
+    assert rows(directory)[5][0] != "PASS"
+
+
+def test_integration_same_id_not_owner(tmp_path):
+    directory = tmp_path / "app"
+    rule = tag_rule()
+    rule["bypass_actors"] = [{"actor_id": 7, "actor_type": "Integration", "bypass_mode": "always"}]
+    fill(directory, ruleset=rule)
+    got = rows(directory)
+    assert got[5][0] == "FAIL"
+    assert "Integration" in got[5][1]
+
+
+def test_repository_role_not_proven_owner(tmp_path):
+    directory = tmp_path / "role"
+    rule = tag_rule()
+    rule["bypass_actors"] = [{"actor_id": 5, "actor_type": "RepositoryRole", "bypass_mode": "always"}]
+    fill(directory, ruleset=rule)
+    got = rows(directory)
+    assert got[5][0] == "UNKNOWN"
+    assert "RepositoryRole" in got[5][1]
+
+
+def test_protected_true_missing_protection_unknown(tmp_path):
+    directory = tmp_path / "hidden"
+    fill(
+        directory,
+        branch={"name": "main", "protected": True},
+        protection={"http_status": 403, "message": "Resource not accessible by integration"},
+        rulesets=[],
+    )
+    got = rows(directory)
+    assert got[3][0] == "UNKNOWN"
+    assert "enforce_admins" in got[3][1]
+    assert "quản trị" in got[3][1]
+
+
+def test_pull_request_bypass_counts(tmp_path):
+    directory = tmp_path / "prbypass"
+    fill(directory, rulesets=[{"id": 3}])
+    dump(
+        directory / "ruleset_3.json",
+        branch_rule(bypass_actors=[{"actor_id": 5, "actor_type": "RepositoryRole", "bypass_mode": "pull_request"}]),
+    )
+    assert rows(directory)[3][0] == "FAIL"
+    assert "pull_request" in rows(directory)[3][1]
+
+
+def test_missing_bypass_actors_unknown(tmp_path):
+    directory = tmp_path / "partial"
+    fill(
+        directory,
+        branch={"name": "main", "protected": True},
+        protection={"http_status": 403, "message": "forbidden"},
+        rulesets=[{"id": 3}],
+    )
+    dump(
+        directory / "ruleset_3.json",
+        {
+            "id": 3,
+            "target": "branch",
+            "enforcement": "active",
+            "conditions": {"ref_name": {"include": ["refs/heads/main"], "exclude": []}},
+        },
+    )
+    got = rows(directory)
+    assert got[3][0] == "UNKNOWN"
+    assert "bypass_actors" in got[3][1]
+
+
+def test_codeowners_comment_and_override(tmp_path):
+    directory = tmp_path / "owners"
+    fill(directory, codeowners="* @owner # @fake\n")
+    assert rows(directory)[9][0] == "PASS"
+    fill(directory, user={"login": "fake", "id": 8}, codeowners="* @owner # @fake\n")
+    assert rows(directory)[9][0] == "FAIL"
+    fill(directory, codeowners="# * @owner\n")
+    assert rows(directory)[9][0] != "PASS"
+    fill(directory, codeowners="* @owner\n* @other\n")
+    assert rows(directory)[9][0] != "PASS"
 
 
 def test_cli_exit_codes(tmp_path):

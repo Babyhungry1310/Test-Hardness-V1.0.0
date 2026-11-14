@@ -1,6 +1,7 @@
 verify: python -m pytest -q --tb=line tools/tests/test_github_audit.py
 L01 | FAIL | passed=9 failed=1
 L02 | PASS | passed=10 failed=0
+L03 | PASS | passed=18 failed=0
 baseline: python -m pytest -q --tb=line
 passed=23 failed=0
 platform: Windows
