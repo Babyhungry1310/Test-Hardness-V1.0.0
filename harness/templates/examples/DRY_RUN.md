@@ -155,7 +155,7 @@ Nhánh `task/TK-0001-R1` · model nhóm WORKER.
 | Làm | Kết quả mong đợi |
 |---|---|
 | Phiên LEAD trên nhánh `lead/verify-cyc-01`: `Giao kiểm định CYC-01.` | LEAD kiểm mọi task của `CYC-01` đã khép; PR chỉ sửa `STATE.md`: `PHASE: VERIFY`, mục 4 ghi việc kiểm định. Merge |
-| Nhánh `review/CYC-01` · model nhóm REVIEWER (khác mọi model WORKER đã dùng). Gõ: `Kiểm định CYC-01` | REVIEWER kiểm `PREFLIGHT.md` mục 2, dòng 13; chỉ ghi `03_output/CYC-01/checks/RVW-CYC-01.md`: `items` hai dòng `TK-0001 \| done …/… \| PASS`, `TK-0002 \| done …/… \| PASS`, `verdict: PASS`. Khối `REVIEW`. Đối chiếu `03_output/CYC-01/checks/RVW-CYC-01.md` |
+| Nhánh `review/CYC-01-R1-xxxx` (`xxxx` = 4 ký tự đầu mã phiên) · model nhóm REVIEWER (khác mọi model WORKER đã dùng). Gõ: `Kiểm định CYC-01` | REVIEWER kiểm `PREFLIGHT.md` mục 2, dòng 13; chỉ ghi `03_output/CYC-01/checks/RVW-CYC-01.md`: `items` hai dòng `TK-0001 \| done …/… \| PASS`, `TK-0002 \| done …/… \| PASS`, `verdict: PASS`. Khối `REVIEW`. Đối chiếu `03_output/CYC-01/checks/RVW-CYC-01.md` |
 | Dùng nhầm model đã làm WORKER | REVIEWER dừng và xuất khối `QUESTION`, không ghi `RVW` |
 | LEAD review PR của REVIEWER, merge | `RVW-CYC-01` có trên `main`; `STATE.md` không đổi vì REVIEWER không ghi `STATE.md` |
 

@@ -161,7 +161,7 @@
 |---|---|
 | `phieu/Vxx-Ln` | `task/TK-nnnn-Rn` |
 | `dieu-phoi/<mo-ta>` | `lead/<slug>` |
-| `kiem-dinh/Dnn` | `review/CYC-nn` |
+| `kiem-dinh/Dnn` | `review/CYC-nn-Rk-xxxx` |
 | `nang-cap/<mo-ta>` | `upgrade/<version>` |
 | `doi-chung/Vxx-<model>` | không có |
 
