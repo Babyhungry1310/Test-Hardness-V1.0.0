@@ -6,7 +6,7 @@ Nguồn: DEC-0017, DEC-0018, `harness/MODEL_POLICY.md` (bản 1.0.2). Dữ kiệ
 ## 1. Chỗ và loại việc
 - W1, W2, W3 ở trường `assignee` của task là chỗ chạy song song. Mỗi chỗ một task tại một thời điểm.
 - W1: logic, thuật toán, công cụ, unit test. Task: TK-0006, TK-0009, TK-0010, TK-0011, TK-0013, TK-0014, TK-0015.
-- W2: triển khai, tích hợp, tài liệu. Task: TK-0007, TK-0012, TK-0016, TK-0021, TK-0022, TK-0025, TK-0026, TK-0027, TK-0028.
+- W2: triển khai, tích hợp, tài liệu. Task: TK-0007, TK-0012, TK-0016, TK-0021, TK-0022, TK-0025, TK-0026, TK-0027, TK-0028, TK-0029.
 - W3: ca biên, stress, bảo mật, phản biện. Task: TK-0008, TK-0017, TK-0018, TK-0019, TK-0020, TK-0023, TK-0024.
 - REVIEWER: kiểm định từng chu kỳ và hồi quy toàn bộ sau CYC-07. LEAD: điều phối, phản biện đặc tả.
 <!-- END: SLOTS -->
@@ -19,6 +19,7 @@ Nguồn: DEC-0017, DEC-0018, `harness/MODEL_POLICY.md` (bản 1.0.2). Dữ kiệ
 - Trước khi phiên bắt đầu, LEAD ghi dòng phân công: model yêu cầu, tuyến, lý do chọn, hạn mức (số liệu hoặc `chưa xác minh`). Cuối phiên ghi model thực tế và `match`.
 - Hạn mức hoặc khả năng thực tế chưa xác minh: ghi `chưa xác minh`, không ước đoán. Nếu điều đó ảnh hưởng tới việc chọn (ví dụ tuyến vừa báo lỗi hạn mức, hoặc chỉ còn một model cho REVIEWER): hỏi OWNER trước khi giao.
 - Gọi tuyến của một model cụ thể; không giao việc qua combo. So sánh và ghi theo model thực tế, không theo tên tuyến, tên agent hay model yêu cầu.
+- `aliases` có thể chứa ID tuyến; tuyến chỉ là đầu vào API, không chứng minh định danh model. `actual` phải lấy từ công cụ hoặc phản hồi; giữ nguyên cả dấu `/` nếu hệ thống trả về và đối chiếu bằng chứng.
 - Model thực tế khác model yêu cầu: nếu vẫn đủ điều kiện (và với REVIEWER vẫn thỏa mục 4) thì tiếp tục, ghi `match: no`; không thì dừng phiên đó, không dùng kết quả.
 - Phiên lỗi vì model hoặc tuyến: LEAD được chọn model đủ điều kiện khác cho loop kế. Đổi model không cấp thêm loop: mỗi task vẫn tối đa 3 loop, tính cả loop đầu.
 <!-- END: RULES -->

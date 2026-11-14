@@ -7,7 +7,7 @@ PROFILE: SHORT
 - CYC-01 | PASS | TK-0001 DONE R2, TK-0002 DONE R1, TK-0004 DONE R1 | thẻ cycle/CYC-01 @ e2b7944
 - CYC-02 | PASS | TK-0003 DONE R1, TK-0005 DONE R1 | RVW-CYC-02 vòng 1 PASS | thẻ cycle/CYC-02 @ 36bafbe
 - CYC-03 | ASSIGNED | TK-0006, TK-0007, TK-0008, TK-0018, TK-0027 | bảo vệ main
-- CYC-04 | ASSIGNED | TK-0009, TK-0010, TK-0019 | model
+- CYC-04 | ASSIGNED | TK-0009, TK-0010, TK-0019, TK-0029 | model
 - CYC-05 | ASSIGNED | TK-0011, TK-0012, TK-0020, TK-0021 | chat, storage, Git, trace
 - CYC-06 | ASSIGNED | TK-0013, TK-0014, TK-0022, TK-0023 | scanner
 - CYC-07 | ASSIGNED | TK-0015, TK-0016, TK-0024, TK-0025, TK-0026, TK-0028, TK-0017 | batch, pytest, hồi quy
@@ -17,6 +17,7 @@ PROFILE: SHORT
 - RSK-0006 | OPEN | level: MEDIUM | due: 2026-12-12 | owner: LEAD
 - RSK-0001 | OPEN | level: MEDIUM | due: 2026-11-26 | owner: LEAD
 ### 3. Recent decisions
+- DEC-0021 | ACTIVE | Phân biệt tuyến 9Router và model thực tế khi so sánh định danh
 - DEC-0020 | ACTIVE | Kiểm kê đầy đủ thay đổi dry run trước khi đề xuất chuyển về repo mẹ
 - DEC-0019 | ACTIVE | OWNER và tác tử dùng chung tài khoản GitHub
 - DEC-0018 | ACTIVE | Khung 1.0.2: LEAD chọn model theo từng lần giao việc; REVIEWER khác model thực tế với WORKER của phần được kiểm
