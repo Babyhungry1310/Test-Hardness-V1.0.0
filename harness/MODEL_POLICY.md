@@ -19,7 +19,7 @@ Cả hai là sổ **dữ kiện**, không cấp quyền. Hai file thuộc vùng 
 | `provider_source` | Con trỏ, URL, hoặc `none` | |
 | `group` | Nhóm model, hoặc `unverified` | Chỉ để tham khảo; không dùng để xét tính độc lập |
 | `group_source` | Con trỏ hoặc `none` | |
-| `aliases` | Tên tuyến trên cổng model và các chuỗi biến thể được coi là cùng model | Bí danh không dùng thay `code` trong bản ghi |
+| `aliases` | Tên tuyến và các chuỗi biến thể model đã ghi nhận | Tuyến chỉ gợi ý cách gọi; không chứng minh định danh model. Bí danh không dùng thay `code` trong bản ghi |
 | `recommended_roles` | Tập con của `BRAINSTORM`, `PLANNING`, `REVIEWER`, `WORKER` | Là ghi nhận của LEAD; không cấp và không cấm vai nào |
 | `capability_source` | Con trỏ, URL, hoặc `none` | `none` nghĩa là chưa có căn cứ để khẳng định năng lực |
 | `price_source` | URL, hoặc `none` | Không chép con số giá vào catalog |
@@ -30,6 +30,8 @@ Cả hai là sổ **dữ kiện**, không cấp quyền. Hai file thuộc vùng 
 
 - Không khẳng định năng lực, chi phí, cửa sổ ngữ cảnh hay thứ hạng của một model khi `capability_source` hoặc `price_source` là `none`.
 - Tên dòng model, tên tuyến, tên agent, tên combo không phải `code`.
+- Khi gọi 9Router, gửi ID tuyến chính xác từ `GET /v1/models` hoặc alias đã kiểm là được chấp nhận; không gửi `code` thay tuyến nếu chưa kiểm. Danh sách ID chỉ chứng minh tuyến được liệt kê, không chứng minh gọi thành công, hỗ trợ công cụ hay model thực tế.
+- Code lịch sử không có tuyến đã xác minh được giữ nguyên; không đoán tuyến hoặc thay bằng model khác trong bản ghi cũ.
 - Catalog chỉ thêm và sửa mục; không xóa mục, vì bản ghi cũ còn trỏ tới `code` đó.
 
 <!-- ANCHOR: ROUTE_CHECKS -->
@@ -39,6 +41,7 @@ Mỗi lần kiểm một tuyến, LEAD ghi một dòng vào neo `ROUTE_CHECKS` �
 
 - `kind: chat`: một lượt hỏi đáp ngắn. `kind: agent-tools`: một phiên tác tử gọi được ít nhất một công cụ đọc và trả về model thực tế.
 - `actual` chép nguyên chuỗi nhận được, kể cả hậu tố. Không lấy từ tên tuyến. Không nhận được thì `none` và `result: FAIL`.
+- `route` là ID gửi tới API; `code` là model kỳ vọng; `actual` là chuỗi phản hồi. Một route trong `aliases` không chứng minh model nó trả về ở lần gọi khác.
 - Dòng kiểm không chứa khóa API, tiêu đề xác thực, nội dung prompt hay câu trả lời.
 - Dòng kiểm được dùng ngay; nó vào `main` cùng PR `lead/` kế tiếp. Trước lúc đó LEAD giữ bản sao ở `<project>.local/logs/` và nêu trong báo cáo cho OWNER.
 <!-- END: ROUTE_CHECKS -->
@@ -76,9 +79,10 @@ Tier (`T1`, `T2`, `T3`, `UNRATED`) không còn là điều kiện giao việc t�
 <!-- ANCHOR: SAME_MODEL -->
 - So sánh trên **model thực tế** hệ thống trả về cho từng phiên, không trên tên tuyến, tên agent, tên combo hay model yêu cầu.
 - Mã gốc của một chuỗi model là chuỗi đó sau khi bỏ phần trong ngoặc vuông ở cuối. Ví dụ `gpt-5.6-luna[1m]` có mã gốc `gpt-5.6-luna`.
-- Hai chuỗi là cùng một model khi cùng mã gốc, hoặc khi một chuỗi nằm trong `aliases` của mục catalog của chuỗi kia.
+- Hai chuỗi model thực tế là cùng một model khi cùng mã gốc, hoặc có bằng chứng độc lập rằng hai chuỗi model thực tế là bí danh cùng model. Tên tuyến trong `aliases` hoặc `ROUTE_CHECKS` không tự chứng minh hai model là cùng hay khác.
 - Hai chuỗi khác mã gốc là hai model khác nhau, kể cả khi cùng nhà cung cấp hay cùng dòng. Ví dụ `gpt-5.6-luna` và `gpt-5.6-terra` là hai model.
 - Không chắc hai chuỗi có phải cùng một model hay không: coi là cùng, và hỏi OWNER.
+- Khi đầu vào chỉ là tên tuyến, tên agent hoặc combo mà không có model thực tế do hệ thống trả về: không suy ra định danh; coi là chưa xác minh, không kết luận `different` hay cho qua kiểm độc lập. Nếu hệ thống thực sự trả một chuỗi có dấu `/`, giữ nguyên và xác minh bằng chứng; không tự loại hoặc bỏ tiền tố.
 <!-- END: SAME_MODEL -->
 
 ### 4.2. Điều kiện
