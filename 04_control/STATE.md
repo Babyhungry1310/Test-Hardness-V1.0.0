@@ -11,12 +11,12 @@ PROFILE: SHORT
 - CYC-05 | ASSIGNED | TK-0011, TK-0012, TK-0020, TK-0021 | chat, storage, Git, trace
 - CYC-06 | ASSIGNED | TK-0013, TK-0014, TK-0022, TK-0023 | scanner
 - CYC-07 | ASSIGNED | TK-0015, TK-0016, TK-0024, TK-0025, TK-0026, TK-0017 | batch, pytest, hồi quy
-- Khung | V1.0.1 | DEC-0015, DEC-0016 | plan version 4, chưa có script
 ### 2. Open risks
 - RSK-0004 | OPEN | level: HIGH | due: 2026-11-26 | owner: OWNER
 - RSK-0005 | OPEN | level: MEDIUM | due: 2026-12-12 | owner: LEAD
 - RSK-0001 | OPEN | level: MEDIUM | due: 2026-11-26 | owner: LEAD
 ### 3. Recent decisions
+- DEC-0017 | ACTIVE | Bổ sung catalog và ma trận model theo kết quả kiểm tuyến 9Router; phân công CYC-03 tới CYC-07 theo thế mạnh
 - DEC-0016 | ACTIVE | Thử khung V1.0.1 trên repo này: nguồn chuẩn, nơi đặt code, duyệt ma trận model, ngoại lệ tạo task và nền tích hợp tạm
 - DEC-0015 | ACTIVE | Nâng khung lên V1.0.1: bảo vệ main, ma trận model, chat và storage, dọn nhánh, scanner
 - DEC-0014 | ACTIVE | Bản kiểm định CYC-02 do gpt-6.1-sol chạy không tính là một vòng kiểm định
@@ -34,7 +34,7 @@ PROFILE: SHORT
 - DEC-0003 | SUPERSEDED_BY DEC-0007
 - DEC-0001 | SUPERSEDED_BY DEC-0002
 ### 4. Next action
-- OWNER dán prompt ở 01_plan/SPEC_ORCA_PROMPT.md#PROMPT vào một phiên Orca để chạy CYC-03 B1 (TK-0006, TK-0007, TK-0008); phiên đó dừng sau mỗi batch chờ OWNER squash-merge. W2, W3 tạm dùng model đã hợp lệ (DEC-0016); phiên Orca báo model thực tế của tuyến 9router/antigravity và 9router/grok, LEAD đề xuất DEC bổ sung. Việc OWNER cần chốt: DEC bổ sung hai tuyến; mã model T1; phương án RFC-0001; bật luật bảo vệ main và thẻ cycle/* (RSK-0004); tài khoản riêng cho tác tử; tự xóa nhánh nguồn. Đóng dự án lùi sau CYC-07. Pytest toàn repo trên main 67a092f đạt 23/23.
+- OWNER dán prompt ở 01_plan/SPEC_ORCA_PROMPT.md#PROMPT vào một phiên Orca để chạy CYC-03 B1 (TK-0006, TK-0007, TK-0008); phiên đó dừng sau mỗi batch chờ OWNER squash-merge. Phân công model theo 01_plan/SPEC_MODELS.md (DEC-0017): W1 gpt-5.6-luna, W2 claude-sonnet-4-6, W3 grok-4.7, REVIEWER gemini-3.8-flash-n; phiên Orca kiểm lại từng tuyến trước khi giao. Việc OWNER cần chốt: mã model T1; phương án RFC-0001; bật luật bảo vệ main và thẻ cycle/* (RSK-0004); tài khoản riêng cho tác tử; tự xóa nhánh nguồn. Đóng dự án lùi sau CYC-07. Pytest toàn repo trên main 67a092f đạt 23/23.
 ### 5. Never do
 - Không xuất PDF
 - Không dùng tên học viên thật trong dữ liệu thử

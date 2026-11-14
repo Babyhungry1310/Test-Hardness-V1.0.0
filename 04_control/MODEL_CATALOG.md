@@ -15,6 +15,30 @@ models:
     availability: confirmed
     availability_evidence: DSC-20261112-012x
     updated: 2026-11-14
+  - code: "claude-opus-4-6-thinking"
+    provider: unverified
+    provider_source: none
+    group: claude
+    group_source: "DEC-0017#RATIONALE"
+    aliases: ["ag/claude-opus-4-6-thinking"]
+    recommended_roles: [PLANNING, REVIEWER]
+    capability_source: none
+    price_source: none
+    availability: confirmed
+    availability_evidence: "DEC-0017#CONTEXT"
+    updated: 2026-11-14
+  - code: "claude-sonnet-4-6"
+    provider: unverified
+    provider_source: none
+    group: claude
+    group_source: "DEC-0017#RATIONALE"
+    aliases: ["ag/claude-sonnet-4-6"]
+    recommended_roles: [WORKER]
+    capability_source: none
+    price_source: none
+    availability: confirmed
+    availability_evidence: "DEC-0017#CONTEXT"
+    updated: 2026-11-14
   - code: "claude-sonnet-5-5"
     provider: unverified
     provider_source: none
@@ -44,7 +68,7 @@ models:
     provider_source: none
     group: gemini
     group_source: "DEC-0012#CONTEXT"
-    aliases: []
+    aliases: ["ag/gemini-3.8-flash"]
     recommended_roles: [REVIEWER]
     capability_source: none
     price_source: none
@@ -56,7 +80,7 @@ models:
     provider_source: none
     group: codex
     group_source: "DEC-0012#CONTEXT"
-    aliases: []
+    aliases: ["cx/gpt-5.6-luna"]
     recommended_roles: [WORKER]
     capability_source: none
     price_source: none
@@ -68,7 +92,7 @@ models:
     provider_source: none
     group: codex
     group_source: "DEC-0014#CONTEXT"
-    aliases: []
+    aliases: ["cx/gpt-6.1-sol"]
     recommended_roles: [WORKER]
     capability_source: none
     price_source: none
@@ -80,11 +104,35 @@ models:
     provider_source: none
     group: unverified
     group_source: none
-    aliases: []
+    aliases: ["cx/gpt-6.1-terra"]
     recommended_roles: [WORKER]
     capability_source: none
     price_source: none
     availability: confirmed
     availability_evidence: 02_work/runs/TK-0005_R1_DONE.md
+    updated: 2026-11-14
+  - code: "grok-4.6"
+    provider: unverified
+    provider_source: none
+    group: grok
+    group_source: "DEC-0017#RATIONALE"
+    aliases: ["xai/grok-4.6"]
+    recommended_roles: [WORKER]
+    capability_source: none
+    price_source: none
+    availability: confirmed
+    availability_evidence: "DEC-0017#CONTEXT"
+    updated: 2026-11-14
+  - code: "grok-4.7"
+    provider: unverified
+    provider_source: none
+    group: grok
+    group_source: "DEC-0017#RATIONALE"
+    aliases: ["xai/grok-4.7"]
+    recommended_roles: [WORKER]
+    capability_source: none
+    price_source: none
+    availability: confirmed
+    availability_evidence: "DEC-0017#CONTEXT"
     updated: 2026-11-14
 ---
