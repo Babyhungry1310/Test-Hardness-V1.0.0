@@ -6,7 +6,7 @@ Nguồn: DEC-0017, DEC-0018, `harness/MODEL_POLICY.md` (bản 1.0.2). Dữ kiệ
 ## 1. Chỗ và loại việc
 - W1, W2, W3 ở trường `assignee` của task là chỗ chạy song song. Mỗi chỗ một task tại một thời điểm.
 - W1: logic, thuật toán, công cụ, unit test. Task: TK-0006, TK-0009, TK-0010, TK-0011, TK-0013, TK-0014, TK-0015.
-- W2: triển khai, tích hợp, tài liệu. Task: TK-0007, TK-0012, TK-0016, TK-0021, TK-0022, TK-0025, TK-0026, TK-0027.
+- W2: triển khai, tích hợp, tài liệu. Task: TK-0007, TK-0012, TK-0016, TK-0021, TK-0022, TK-0025, TK-0026, TK-0027, TK-0028.
 - W3: ca biên, stress, bảo mật, phản biện. Task: TK-0008, TK-0017, TK-0018, TK-0019, TK-0020, TK-0023, TK-0024.
 - REVIEWER: kiểm định từng chu kỳ và hồi quy toàn bộ sau CYC-07. LEAD: điều phối, phản biện đặc tả.
 <!-- END: SLOTS -->

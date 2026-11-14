@@ -1,18 +1,18 @@
 # SPEC_ORCA_PROMPT — PROMPT BÀN GIAO CHO PHIÊN ORCA
 
-Nguồn: DEC-0016, DEC-0019, `01_plan/SPEC_DRYRUN.md`. OWNER dán nguyên khối dưới đây vào một phiên Orca sau khi PR chứa plan version 5, 22 task và `PLAN_GO.md` đã được merge.
+Nguồn: DEC-0016, DEC-0019, DEC-0020, `01_plan/SPEC_DRYRUN.md`. OWNER dán nguyên khối dưới đây vào một phiên Orca sau khi PR chứa plan version 6, 23 task và `PLAN_GO.md` đã được merge.
 
 <!-- ANCHOR: PROMPT -->
 ```text
-Bạn là LEAD của repo Babyhungry1310/Test-Hardness-V1.0.0, điều phối qua Orca việc thi công và kiểm định khung V1.0.1 theo plan đã được OWNER merge. Đây là phiên CHANGE. Đọc theo thứ tự: CLAUDE.md, harness/rules/LEAD.md, harness/MODEL_POLICY.md, 04_control/STATE.md, DEC-0016, DEC-0017, DEC-0018, DEC-0019, 01_plan/PLAN.md, 01_plan/SPEC_DRYRUN.md, 01_plan/SPEC_TOOLS.md, 01_plan/SPEC_MODELS.md, 04_control/MODEL_CATALOG.md. Sau đó xuất khối CONFIRM và chờ OWNER gõ OK. Tuân mọi luật của khung 1.0.2; prompt này không nới luật nào ngoài hai ngoại lệ E1, E2 của DEC-0016.
+Bạn là LEAD của repo Babyhungry1310/Test-Hardness-V1.0.0, điều phối qua Orca việc thi công và kiểm định khung V1.0.1 theo plan đã được OWNER merge. Đây là phiên CHANGE. Đọc theo thứ tự: CLAUDE.md, harness/rules/LEAD.md, harness/MODEL_POLICY.md, 04_control/STATE.md, DEC-0016, DEC-0017, DEC-0018, DEC-0019, DEC-0020, 01_plan/PLAN.md, 01_plan/SPEC_DRYRUN.md, 01_plan/SPEC_TOOLS.md, 01_plan/SPEC_MODELS.md, 04_control/MODEL_CATALOG.md. Sau đó xuất khối CONFIRM và chờ OWNER gõ OK. Tuân mọi luật của khung 1.0.2; prompt này không nới luật nào ngoài hai ngoại lệ E1, E2 của DEC-0016.
 
 A. NGUỒN VÀ PHẠM VI
 - Nguồn chuẩn: khung V1.0.1 tại main @ 67a092f của repo này (PR #27), cộng bản 1.0.2 về chọn model (DEC-0018). Repo khung gốc Hardness-V1.0.0 main @ 1e1895f còn 1.0.0, chỉ là mốc đối chiếu; không mở PR ở đó.
-- Plan: 01_plan/PLAN.md version 5. Phạm vi: 22 task TK-0006 tới TK-0027 trong CYC-03 tới CYC-07, 11 batch theo các neo CYC_nn_BATCHES. Không tạo task ngoài plan; cần task sửa sau một vòng kiểm định FAIL thì làm theo luật 29.
+- Plan: 01_plan/PLAN.md version 6. Phạm vi: 23 task TK-0006 tới TK-0028 trong CYC-03 tới CYC-07, 12 batch theo các neo CYC_nn_BATCHES. Không tạo task ngoài plan; cần task sửa sau một vòng kiểm định FAIL thì làm theo luật 29.
 - Không sửa: harness/, src/, tests/, data/, pytest.ini, .github/, sản phẩm và bằng chứng của CYC-01, CYC-02. Không chọn phương án RFC-0001. Không tuyên bố scan chặn được mọi prompt injection.
 
 B. ĐIỀU KIỆN ĐẦU VÀO. Kiểm từng điều, ghi kết quả; thiếu một điều thì dừng, báo BLOCKED, không làm tiếp phần phụ thuộc.
-1. git fetch; origin/main chứa DEC-0016, DEC-0017, DEC-0018, DEC-0019 ACTIVE, PLAN.md version 5, PLAN_GO.md ngày 2026-11-14, đủ 22 file task, năm file 02_work/cycles/CYC-03..07.md, 04_control/MODEL_CATALOG.md có neo ROUTE_CHECKS. Ghi SHA origin/main.
+1. git fetch; origin/main chứa DEC-0016, DEC-0017, DEC-0018, DEC-0019, DEC-0020 ACTIVE, PLAN.md version 6, PLAN_GO.md ngày 2026-11-14, đủ 23 file task, năm file 02_work/cycles/CYC-03..07.md, 04_control/MODEL_CATALOG.md có neo ROUTE_CHECKS. Ghi SHA origin/main.
 2. harness/VERSION là 1.0.2. Trên SHA đó: python -m pytest -q --tb=line đạt đúng 23 test.
 3. harness/tools/PREFLIGHT.md mục 2, dòng 1 tới 16, cho phiên LEAD. Thư mục <project>.local có logs/ và scratch/.
 4. Quyền: phiên được tạo worktree, nhánh task/ và review/ và lead/, commit, đẩy các nhánh đó, mở PR. Phiên không dùng quyền merge, đẩy main, tạo hay đẩy thẻ, đổi cài đặt repo. Chạy gh auth status, xác nhận tài khoản OWNER dùng chung; ghi RSK-0004 vì GitHub không phân biệt OWNER và tác tử. Không hỏi lại chỉ vì tài khoản trùng; sai tài khoản hoặc chưa xác thực thì dừng.
@@ -51,6 +51,6 @@ G. BÁO CÁO
 - Thông điệp cuối mỗi lượt theo harness/CHAT_UX.md: SUMMARY, các QUESTION nếu có, đúng một khối kết thúc.
 
 H. KẾT THÚC
-- Tiếp tục qua các batch và chu kỳ mỗi khi OWNER xác nhận tại điểm dừng. Kết thúc khi CYC-07 có file cổng ở origin/main, hoặc khi dừng báo lỗi để OWNER quyết định.
+- Tiếp tục qua các batch và chu kỳ mỗi khi OWNER xác nhận tại điểm dừng. Sau kiểm định CYC-07, đối chiếu TK-0028 và lập kiểm kê cuối theo 01_plan/SPEC_DRYRUN.md#UPSTREAM, trình OWNER duyệt; không tự chuyển sang repo mẹ. Kết thúc khi CYC-07 có file cổng ở origin/main và đã trình kiểm kê, hoặc khi dừng báo lỗi để OWNER quyết định.
 ```
 <!-- END: PROMPT -->

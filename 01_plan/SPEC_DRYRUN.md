@@ -4,9 +4,9 @@ Nguồn: DEC-0016 (ngoại lệ E1, E2), DEC-0017, DEC-0018, RSK-0005, RSK-0006,
 
 <!-- ANCHOR: ORDER -->
 ## 1. Thứ tự, song song, phụ thuộc
-- Thứ tự chu kỳ: CYC-03, CYC-04, CYC-05, CYC-06, CYC-07; trong chu kỳ theo neo `CYC_nn_BATCHES` của plan. Tổng cộng 22 task, 11 batch.
+- Thứ tự chu kỳ: CYC-03, CYC-04, CYC-05, CYC-06, CYC-07; trong chu kỳ theo neo `CYC_nn_BATCHES` của plan. Tổng cộng 23 task, 12 batch.
 - Task độc lập, nhánh dựng từ `origin/main`, chạy song song trong batch: TK-0006, TK-0007, TK-0008 (CYC-03 B1); TK-0009 (CYC-04 B1); TK-0011, TK-0012, TK-0020, TK-0021 (CYC-05 B1); TK-0013 (CYC-06 B1); TK-0016, TK-0024, TK-0025 (CYC-07 B1).
-- Task cần kết quả đã merge của batch trước: TK-0018 (TK-0006, TK-0007); TK-0027 (TK-0008); TK-0010, TK-0019 (TK-0009); TK-0014, TK-0022 (TK-0013); TK-0023 (TK-0014, TK-0022); TK-0015 (TK-0009, khác chu kỳ); TK-0026 (mọi task trước); TK-0017 (mọi task trước và TK-0026).
+- Task cần kết quả đã merge của batch trước: TK-0018 (TK-0006, TK-0007); TK-0027 (TK-0008); TK-0010, TK-0019 (TK-0009); TK-0014, TK-0022 (TK-0013); TK-0023 (TK-0014, TK-0022); TK-0015 (TK-0009, khác chu kỳ); TK-0026 (mọi task trước); TK-0028 (TK-0026, TK-0027); TK-0017 (mọi task trước).
 - Số task chạy cùng lúc không vượt ba chỗ, không vượt số model đủ điều kiện còn lại sau khi để dành cho REVIEWER, không vượt giới hạn của Orca và 9Router. Mỗi chỗ một task tại một thời điểm; một chỗ có hai task trong batch thì chạy lần lượt.
 - Mỗi task một worktree, một nhánh `task/TK-nnnn-Rn` dựng từ cùng một commit của `origin/main` ghi lúc mở batch, một phiên, một PR.
 - Orca: khi `harness/tools/INTEGRATION.md#FEATURES` dòng 1, 2, 4, 5 đã được OWNER xác nhận trên bản đang cài thì giao task bằng `orca worktree create`; chưa xác nhận thì tạo worktree bằng `git worktree add` và OWNER mở phiên WORKER trong từng worktree.
@@ -66,3 +66,11 @@ Nguồn: DEC-0016 (ngoại lệ E1, E2), DEC-0017, DEC-0018, RSK-0005, RSK-0006,
 - Mức chi tiết, file `<project>.local/logs/orca-1.0.1/CYC-nn_Bk_REPORT.md`: lệnh đã chạy, SHA nền và nền tạm, từng loop, dòng lỗi liên quan, đường dẫn bằng chứng, đường dẫn log đầy đủ trên máy, phần còn lại.
 - Không đưa bí mật hay log thô vào Git, PR, chat; che bí mật khi trích. Không cắt dòng lỗi cần cho chẩn đoán.
 <!-- END: REPORT -->
+
+<!-- ANCHOR: UPSTREAM -->
+## 8. Kiểm kê đề xuất chuyển về repo mẹ
+- TK-0028 lập kiểm kê ban đầu từ mốc `67a092f` đến SHA đang kiểm; đối chiếu diff từng file với PR, task, run, quyết định và các PR chưa merge hoặc bị đóng. Nêu phạm vi nguồn và mọi phần chưa truy cập được; thiếu bằng chứng ghi chưa xác minh.
+- Mỗi thay đổi có nguồn, SHA, file, trạng thái, bằng chứng kiểm thử hoặc kiểm định, rủi ro và đề xuất chuyển, điều chỉnh hoặc không chuyển. Bao gồm cả thay đổi riêng của dự án và thay đổi không đề xuất chuyển để OWNER quyết.
+- Sau kiểm định CYC-07, LEAD lập bản đối chiếu cuối tại `03_output/CYC-07/checks/UPSTREAM_PROPOSALS.md`, bổ sung mọi thay đổi và bằng chứng phát sinh sau TK-0028; đối chiếu lại diff đến SHA cuối, PR, task và kiểm định. Nếu không chứng minh được phạm vi đầy đủ, nêu khoảng trống và không báo danh sách hoàn chỉnh.
+- Trình bản kiểm kê và phiên bản đích để OWNER duyệt từng đề xuất. Không tự chuyển sang repo mẹ, không mở PR ở repo mẹ khi chưa có chỉ dẫn OWNER; chạy thử thành công không phải phê duyệt.
+<!-- END: UPSTREAM -->
