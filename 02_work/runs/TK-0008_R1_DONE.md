@@ -24,8 +24,7 @@ loops:
 deviations:
   assumptions:
     - "Dòng 8 PASS khi đọc được boolean vì GITHUB_RULES ghi OWNER quyết, không phải bật hay tắt."
-  differences:
-    - "Script và test vượt line_budget 150 để đủ chín dòng và các ca done_when."
+  differences: []
   unverified: []
 escalate: no
 escalation:
