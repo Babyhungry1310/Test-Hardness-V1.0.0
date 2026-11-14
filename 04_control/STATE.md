@@ -34,7 +34,7 @@ PROFILE: SHORT
 - DEC-0003 | SUPERSEDED_BY DEC-0007
 - DEC-0001 | SUPERSEDED_BY DEC-0002
 ### 4. Next action
-- OWNER dán prompt ở 01_plan/SPEC_ORCA_PROMPT.md#PROMPT vào một phiên Orca để chạy CYC-03 B1 (TK-0006, TK-0007, TK-0008); phiên đó dừng sau mỗi batch chờ OWNER squash-merge. Việc OWNER cần chốt: model của tuyến 9router/antigravity và 9router/grok chưa có trong catalog; mã model T1; phương án RFC-0001; bật luật bảo vệ main và thẻ cycle/* (RSK-0004); tài khoản riêng cho tác tử; tự xóa nhánh nguồn. Đóng dự án lùi sau CYC-07. Pytest toàn repo trên main 67a092f đạt 23/23.
+- OWNER dán prompt ở 01_plan/SPEC_ORCA_PROMPT.md#PROMPT vào một phiên Orca để chạy CYC-03 B1 (TK-0006, TK-0007, TK-0008); phiên đó dừng sau mỗi batch chờ OWNER squash-merge. W2, W3 tạm dùng model đã hợp lệ (DEC-0016); phiên Orca báo model thực tế của tuyến 9router/antigravity và 9router/grok, LEAD đề xuất DEC bổ sung. Việc OWNER cần chốt: DEC bổ sung hai tuyến; mã model T1; phương án RFC-0001; bật luật bảo vệ main và thẻ cycle/* (RSK-0004); tài khoản riêng cho tác tử; tự xóa nhánh nguồn. Đóng dự án lùi sau CYC-07. Pytest toàn repo trên main 67a092f đạt 23/23.
 ### 5. Never do
 - Không xuất PDF
 - Không dùng tên học viên thật trong dữ liệu thử

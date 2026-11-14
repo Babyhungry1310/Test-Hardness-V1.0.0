@@ -18,9 +18,10 @@ Nguồn: DEC-0015, DEC-0016. Nền: `main` @ 67a092f.
 
 <!-- ANCHOR: MODELS -->
 ## 2. Model và nhóm 9Router
-- Ba chỗ WORKER mang nhãn tham khảo: W1 `9router/codex` (logic, thuật toán, unit test); W2 `9router/antigravity` (tích hợp, ngữ cảnh rộng, tài liệu); W3 `9router/grok` (ca biên, stress, bảo mật, phản biện). Nhãn không phải mã model; `antigravity` không mặc định là tên model.
-- Trước khi giao, LEAD kiểm agent, tuyến 9Router và model thực tế của từng chỗ bằng công cụ hoặc API. Model thực tế phải có trong `04_control/MODEL_CATALOG.md` và hợp lệ cho WORKER theo `04_control/MODEL_MATRIX.md`.
-- Model yêu cầu của mỗi chỗ lấy theo `order` của WORKER: `gpt-5.6-luna`, rồi `gpt-6.1-sol`. Tuyến không khả dụng hoặc model thực tế không hợp lệ: báo OWNER, đề xuất cho chỗ đó chạy bằng tuyến có model hợp lệ; không tự thêm model vào catalog hay ma trận.
+- Model yêu cầu: W1 `gpt-5.6-luna`; W2 `gpt-6.1-sol`; W3 `gpt-5.6-luna`. Dự phòng của mỗi chỗ là mã còn lại trong `order` của WORKER. Phân công W2, W3 là tạm thời (DEC-0016).
+- Nhóm việc dự kiến khi đủ tuyến: W1 logic, thuật toán, unit test; W2 tích hợp, ngữ cảnh rộng, tài liệu; W3 ca biên, stress, bảo mật, phản biện.
+- Hai tuyến `9router/antigravity` và `9router/grok` chưa được dùng cho vai nào. Phiên Orca chỉ kiểm kết nối và báo mã model thực tế của hai tuyến; LEAD đề xuất `DEC` bổ sung catalog và ma trận; OWNER duyệt xong mới dùng. Không ghi nhãn Antigravity hay Grok cho một phiên khi tuyến và model thực tế chưa được xác nhận; `antigravity` không mặc định là tên model.
+- Trước khi giao, LEAD lấy agent, tuyến và model thực tế của từng chỗ bằng công cụ hoặc API. Model thực tế phải có trong `04_control/MODEL_CATALOG.md` và hợp lệ cho WORKER theo `04_control/MODEL_MATRIX.md`; không thì báo OWNER, không tự thêm model vào catalog hay ma trận.
 - REVIEWER yêu cầu `gemini-3.8-flash-n`; dự phòng `claude-sonnet-5-5`. Model thực tế của REVIEWER khác mã và khác nhóm với model thực tế của mọi WORKER trong chu kỳ. Tên agent khác nhau không chứng minh model khác nhau.
 - Model thực tế ghi vào `model` của run và `reviewer_model` của `RVW`; LEAD ghi dòng `ASSIGNMENTS` khi review PR. Không xác nhận được model thực tế: `BLOCKED`.
 - Không có model hợp lệ: dừng phần đó, trạng thái `BLOCKED`, xuất `QUESTION`. Không tự hạ tier, không dùng model `group: unverified`.
