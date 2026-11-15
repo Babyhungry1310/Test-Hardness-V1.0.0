@@ -61,7 +61,8 @@ def co_match(pattern, path):
     left = pattern[1:] if pattern.startswith("/") else pattern
     right = path[1:] if path.startswith("/") else path
     if left.endswith("/"):
-        return right.startswith(left) or right.startswith(left.rstrip("/"))
+        base = left.rstrip("/")
+        return right == base or right.startswith(base + "/")
     if "*" not in left and "?" not in left:
         return left == right
     return glob_match(left, right)
@@ -128,6 +129,8 @@ def pattern_hit(pattern, ref, default_branch, target):
 
 
 def glob_covers(pattern, required):
+    if not isinstance(pattern, str):
+        return "unknown"
     if pattern == "~ALL":
         return "yes"
     if pattern == "~DEFAULT_BRANCH" or pattern.startswith("~"):
@@ -135,7 +138,9 @@ def glob_covers(pattern, required):
     if any(char in pattern for char in "[]{}\\"):
         return "unknown"
     if "**" in pattern:
-        prefix = pattern.split("**", 1)[0]
+        prefix, suffix = pattern.split("**", 1)
+        if suffix:
+            return "unknown"
         return "yes" if required.startswith(prefix) else "no"
     pseg = pattern.split("/")
     rseg = required.split("/")
@@ -154,10 +159,9 @@ def exclude_hits_prefix(pattern, prefix):
         return "yes"
     if not isinstance(pattern, str) or pattern.startswith("~") or any(char in pattern for char in "[]{}\\"):
         return "unknown"
-    if pattern.startswith(prefix) or prefix.startswith(pattern.rstrip("*")):
-        return "yes"
-    witness = prefix + "probe"
-    if glob_match(pattern, witness) or glob_match(pattern, prefix + "a/b"):
+    if "**" in pattern or "*" in pattern or "?" in pattern:
+        return "unknown"
+    if pattern.startswith(prefix):
         return "yes"
     return "no"
 
@@ -165,20 +169,43 @@ def exclude_hits_prefix(pattern, prefix):
 def ref_name(detail):
     if not isinstance(detail, dict) or "conditions" not in detail:
         return None
-    conditions = detail.get("conditions") or {}
-    if "ref_name" not in conditions:
+    conditions = detail.get("conditions")
+    if not isinstance(conditions, dict) or "ref_name" not in conditions:
         return None
-    return conditions.get("ref_name") or {}
+    node = conditions.get("ref_name")
+    if not isinstance(node, dict):
+        return None
+    return node
+
+
+def pattern_lists(node):
+    if not isinstance(node, dict) or not isinstance(node.get("include"), list):
+        return None
+    if "exclude" in node and not isinstance(node.get("exclude"), list):
+        return None
+    exclude = node.get("exclude", [])
+    if not isinstance(exclude, list):
+        return None
+    if any(not isinstance(item, str) for item in node["include"]) or any(not isinstance(item, str) for item in exclude):
+        return None
+    return node["include"], exclude
 
 
 def applies_exact(detail, kind, ref, default_branch):
-    if not isinstance(detail, dict) or detail.get("enforcement") != "active" or detail.get("target") != kind:
-        return "no"
-    node = ref_name(detail)
-    if node is None or "include" not in node:
+    if not isinstance(detail, dict):
         return "unknown"
-    include = node.get("include") or []
-    exclude = node.get("exclude") or []
+    target, enforcement = detail.get("target"), detail.get("enforcement")
+    if not isinstance(target, str) or not isinstance(enforcement, str):
+        return "unknown"
+    if target != kind:
+        return "no"
+    if enforcement != "active":
+        return "no" if enforcement in ("disabled", "evaluate") else "unknown"
+    node = ref_name(detail)
+    lists = pattern_lists(node)
+    if lists is None:
+        return "unknown"
+    include, exclude = lists
     seen = "no"
     for pattern in include:
         hit = pattern_hit(pattern, ref, default_branch, kind)
@@ -199,13 +226,20 @@ def applies_exact(detail, kind, ref, default_branch):
 
 
 def covers_cycle(detail):
-    if not isinstance(detail, dict) or detail.get("enforcement") != "active" or detail.get("target") != "tag":
-        return "no"
-    node = ref_name(detail)
-    if node is None or "include" not in node:
+    if not isinstance(detail, dict):
         return "unknown"
-    include = node.get("include") or []
-    exclude = node.get("exclude") or []
+    target, enforcement = detail.get("target"), detail.get("enforcement")
+    if not isinstance(target, str) or not isinstance(enforcement, str):
+        return "unknown"
+    if target != "tag":
+        return "no"
+    if enforcement != "active":
+        return "no" if enforcement in ("disabled", "evaluate") else "unknown"
+    node = ref_name(detail)
+    lists = pattern_lists(node)
+    if lists is None:
+        return "unknown"
+    include, exclude = lists
     covered = "no"
     for pattern in include:
         hit = glob_covers(pattern, "refs/tags/cycle/*")
@@ -228,15 +262,43 @@ def covers_cycle(detail):
 def rule_map(detail):
     if not isinstance(detail, dict) or "rules" not in detail:
         return None
+    rules = detail.get("rules")
+    if not isinstance(rules, list):
+        return None
     found = {}
-    for rule in detail.get("rules") or []:
-        if isinstance(rule, dict) and isinstance(rule.get("type"), str):
-            found[rule["type"]] = rule
+    for rule in rules:
+        if not isinstance(rule, dict) or not isinstance(rule.get("type"), str):
+            return None
+        found[rule["type"]] = rule
     return found
 
 
 def fields_known(detail):
     return isinstance(detail, dict) and "rules" in detail and "bypass_actors" in detail
+
+
+def detail_structure_bad(detail):
+    if not isinstance(detail, dict):
+        return True
+    conditions = detail.get("conditions")
+    if "conditions" in detail and not isinstance(conditions, dict):
+        return True
+    node = conditions.get("ref_name") if isinstance(conditions, dict) else None
+    if isinstance(conditions, dict) and "ref_name" in conditions and not isinstance(node, dict):
+        return True
+    if isinstance(node, dict):
+        if "include" in node and not isinstance(node.get("include"), list):
+            return True
+        if "exclude" in node and not isinstance(node.get("exclude"), list):
+            return True
+    rules = detail.get("rules")
+    if "rules" in detail and not isinstance(rules, list):
+        return True
+    if isinstance(rules, list) and any(not isinstance(rule, dict) or not isinstance(rule.get("type"), str) for rule in rules):
+        return True
+    if "bypass_actors" in detail and not isinstance(detail.get("bypass_actors"), list):
+        return True
+    return False
 
 
 def load(directory):
@@ -270,12 +332,15 @@ def load(directory):
     details, missing = [], False
     if isinstance(data["rulesets"], list):
         for item in data["rulesets"]:
-            if not isinstance(item, dict) or "id" not in item:
-                continue
-            detail, detail_state = read_json(root / f"ruleset_{item['id']}.json")
-            if detail_state != "ok":
+            if not isinstance(item, dict) or not isinstance(item.get("id"), (int, str)):
                 missing = True
                 continue
+            detail, detail_state = read_json(root / f"ruleset_{item['id']}.json")
+            if detail_state != "ok" or not isinstance(detail, dict):
+                missing = True
+                continue
+            if detail_structure_bad(detail):
+                missing = True
             details.append(detail)
         state["ruleset_details"] = "incomplete" if missing else "ok"
     else:
@@ -313,28 +378,22 @@ def effective_owners(text, protected_paths):
     rules = parse_codeowners(text)
     if not rules:
         return set(), "empty"
-    paths = protected_paths
-    if not paths:
-        if any(pattern in ("*", "/*") for pattern, _owners in rules):
-            paths = ["/"]
-        else:
-            paths = [pattern for pattern, _owners in rules if pattern.startswith("/")]
-    if not paths:
-        return None, "no-protected-path"
+    if any(any(char in pattern for char in "[]\\") for pattern, _owners in rules):
+        return None, "uncertain"
+    if not protected_paths:
+        if all(pattern in ("*", "/*") for pattern, _owners in rules):
+            return set(rules[-1][1]), "ok"
+        return None, "need-protected-paths"
     chosen_sets = []
-    for path in paths:
+    for path in protected_paths:
         chosen = None
-        uncertain = False
         for pattern, owners in rules:
             hit = co_match(pattern, path)
             if hit is None:
-                uncertain = True
-                continue
+                return None, "uncertain"
             if hit:
                 chosen = owners
         if chosen is None:
-            if uncertain:
-                return None, "uncertain"
             return set(), "uncovered"
         chosen_sets.append(set(chosen))
     if not chosen_sets:
@@ -431,14 +490,41 @@ def line2(data, state):
 def bypasses(detail):
     if not fields_known(detail):
         return "unknown"
-    for actor in detail.get("bypass_actors") or []:
+    actors = detail.get("bypass_actors")
+    if not isinstance(actors, list):
+        return "unknown"
+    for actor in actors:
         if not isinstance(actor, dict):
             return "unknown"
+        if "actor_id" in actor and type(actor.get("actor_id")) is not int:
+            return "unknown"
+        if "actor_type" in actor and not isinstance(actor.get("actor_type"), str):
+            return "unknown"
         mode = actor.get("bypass_mode", "always")
-        if mode in BRANCH_MODES:
-            return "yes"
-        return "unknown"
+        if not isinstance(mode, str) or mode not in BRANCH_MODES:
+            return "unknown"
+    if actors:
+        return "yes"
     return "no"
+
+
+def classic_bypass_status(prot):
+    if prot is None or not isinstance(prot.get("required_pull_request_reviews"), dict):
+        return "skip"
+    reviews = prot["required_pull_request_reviews"]
+    if "bypass_pull_request_allowances" not in reviews:
+        return "unknown"
+    bypass = reviews.get("bypass_pull_request_allowances")
+    if not isinstance(bypass, dict):
+        return "unknown"
+    found = []
+    for key in ("users", "teams", "apps"):
+        if key not in bypass or not isinstance(bypass.get(key), list):
+            return "unknown"
+        found.extend(bypass[key])
+    if found:
+        return "fail"
+    return "ok"
 
 
 def line3(data, state):
@@ -446,6 +532,11 @@ def line3(data, state):
     enforced = None if prot is None else flag(prot.get("enforce_admins"))
     if enforced is False:
         return "FAIL", "quản trị được bỏ qua luật"
+    classic_ba = classic_bypass_status(prot)
+    if classic_ba == "fail":
+        return "FAIL", "classic bypass_pull_request_allowances có actors"
+    if classic_ba == "unknown":
+        return "UNKNOWN", NEED_PROTECTION + " trường bypass_pull_request_allowances.users/teams/apps phải là list"
     uncertain = not known_rules(state)
     applicable = False
     for detail, status in main_status(data):
@@ -462,9 +553,15 @@ def line3(data, state):
             return "FAIL", "ruleset cho phép bỏ qua luật, kể cả bypass_mode pull_request"
         if found == "unknown":
             return "UNKNOWN", NEED_RULESET + "; bypass_actors không đủ actor_type hoặc bypass_mode"
+    if state.get("ruleset_details") == "incomplete":
+        return "UNKNOWN", NEED_RULESET + "; rulesets thiếu id hoặc detail sai cấu trúc"
     protected = branch_flag(data, state)
     if known_rules(state) and not uncertain and applicable:
-        return "PASS", "ruleset không cho bỏ qua"
+        if enforced is True:
+            return "PASS", "ruleset không cho bỏ qua; enforce_admins bật"
+        if protected is False:
+            return "PASS", "ruleset không cho bỏ qua; main không bảo vệ classic"
+        return "UNKNOWN", NEED_PROTECTION + " trường enforce_admins"
     if known_rules(state) and not uncertain and not applicable and enforced is True:
         return "PASS", "không cho bỏ qua, kể cả quản trị"
     if known_rules(state) and not uncertain and not applicable and protected is False:
@@ -494,9 +591,14 @@ def line4(data, state):
         if rules is None:
             uncertain = True
             continue
-        params = (rules.get("pull_request") or {}).get("parameters") or {}
-        if params.get("require_code_owner_review") is True:
-            return "PASS", "ruleset bắt buộc duyệt của code owner"
+        pull = rules.get("pull_request")
+        if isinstance(pull, dict) and "parameters" in pull:
+            params = pull.get("parameters")
+            if not isinstance(params, dict):
+                uncertain = True
+                continue
+            if params.get("require_code_owner_review") is True:
+                return "PASS", "ruleset bắt buộc duyệt của code owner"
     if known_rules(state) and not uncertain and (classic_no or branch_flag(data, state) is False or (
         prot is not None and not isinstance(prot.get("required_pull_request_reviews"), dict)
     )):
@@ -514,11 +616,11 @@ def owner_bypass(detail, ident):
         return "no", "bypass_actors không phải đúng một actor"
     actor = actors[0]
     kind = actor.get("actor_type")
-    if kind not in ACTOR_TYPES:
-        return "unknown", "cần actor_type thuộc schema GitHub: " + ", ".join(sorted(ACTOR_TYPES))
+    if not isinstance(kind, str) or kind not in ACTOR_TYPES:
+        return "unknown", "cần actor_type là str thuộc schema GitHub: " + ", ".join(sorted(ACTOR_TYPES))
     mode = actor.get("bypass_mode", "always")
-    if mode not in TAG_MODES:
-        return "unknown", "cần bypass_mode always hoặc exempt cho thẻ; pull_request chỉ áp dụng branch ruleset"
+    if not isinstance(mode, str) or mode not in TAG_MODES:
+        return "unknown", "cần bypass_mode là str always hoặc exempt cho thẻ; pull_request chỉ áp dụng branch ruleset"
     if kind != "User":
         if kind == "RepositoryRole":
             return "unknown", "schema GitHub GET không xác nhận RepositoryRole id là chỉ OWNER; cần actor_type User và actor_id trùng owner.id"
@@ -605,6 +707,8 @@ def line9(ident, state):
     if state["codeowners"] != "ok":
         return "UNKNOWN", "cần nội dung .github/CODEOWNERS để xác nhận tài khoản chung"
     if ident["in_codeowners"] is None:
+        if ident.get("codeowners_how") == "need-protected-paths":
+            return "UNKNOWN", "cần protected_paths để xác nhận CODEOWNERS hữu hiệu; không suy từ '/'"
         return "UNKNOWN", "cần CODEOWNERS hữu hiệu cho đường dẫn bảo vệ; mention trong comment hoặc bị ghi đè không tính"
     if ident["same"] and ident["in_codeowners"]:
         return "PASS", "đang dùng tài khoản OWNER; trùng CODEOWNERS hữu hiệu; không phân biệt được OWNER với tác tử"

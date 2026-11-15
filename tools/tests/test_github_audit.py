@@ -18,6 +18,7 @@ def protection():
         "required_pull_request_reviews": {
             "required_approving_review_count": 1,
             "require_code_owner_reviews": True,
+            "bypass_pull_request_allowances": {"users": [], "teams": [], "apps": []},
         },
         "enforce_admins": {"enabled": True},
         "allow_force_pushes": {"enabled": False},
@@ -321,3 +322,226 @@ def test_cli_exit_codes(tmp_path):
     fill(directory, repo={"allow_auto_merge": True})
     failed = run_cli([str(directory)])
     assert failed.returncode == 1
+
+
+def test_glob_covers_suffix_after_doublestar(tmp_path):
+    directory = tmp_path / "dstar"
+    rule = tag_rule()
+    rule["conditions"] = {"ref_name": {"include": ["refs/tags/**/private"], "exclude": []}}
+    fill(directory, ruleset=rule)
+    got = rows(directory)
+    assert got[5][0] != "PASS"
+
+
+def test_glob_covers_trailing_slash_after_doublestar_unknown(tmp_path):
+    directory = tmp_path / "dslash"
+    rule = tag_rule()
+    rule["conditions"] = {"ref_name": {"include": ["refs/tags/**/"], "exclude": []}}
+    fill(directory, ruleset=rule)
+    assert rows(directory)[5][0] != "PASS"
+    bare = tag_rule()
+    bare["conditions"] = {"ref_name": {"include": ["refs/tags/**"], "exclude": []}}
+    fill(directory, ruleset=bare)
+    assert rows(directory)[5][0] == "PASS"
+
+
+def test_exclude_exact_ancestor_not_prefix_wildcard(tmp_path):
+    directory = tmp_path / "exactanc"
+    rule = tag_rule()
+    rule["conditions"] = {"ref_name": {"include": ["refs/tags/**"], "exclude": ["refs/tags/cycle"]}}
+    fill(directory, ruleset=rule)
+    assert rows(directory)[5][0] == "PASS"
+    child = tag_rule()
+    child["conditions"] = {"ref_name": {"include": ["refs/tags/**"], "exclude": ["refs/tags/cycle/private"]}}
+    fill(directory, ruleset=child)
+    assert rows(directory)[5][0] != "PASS"
+
+
+def test_exclude_hits_prefix_wildcard_unknown(tmp_path):
+    directory = tmp_path / "exwild"
+    fill(directory, rulesets=[{  "id": 3}, {"id": 9}])
+    dump(directory / "ruleset_3.json", branch_rule())
+    rule = tag_rule()
+    rule["conditions"] = {"ref_name": {"include": ["refs/tags/**"], "exclude": ["refs/tags/*/private"]}}
+    dump(directory / "ruleset_9.json", rule)
+    got = rows(directory)
+    assert got[5][0] != "PASS"
+
+
+def test_classic_bypass_pr_allowances_nonempty(tmp_path):
+    directory = tmp_path / "bpa"
+    prot = protection()
+    prot["required_pull_request_reviews"]["bypass_pull_request_allowances"] = {
+        "users": [{"login": "bot", "id": 99}],
+        "teams": [],
+        "apps": [],
+    }
+    fill(directory, protection=prot)
+    got = rows(directory)
+    assert got[3][0] == "FAIL"
+    assert "bypass_pull_request_allowances" in got[3][1]
+
+
+def test_classic_bypass_pr_allowances_missing_unknown(tmp_path):
+    directory = tmp_path / "bpam"
+    prot = protection()
+    del prot["required_pull_request_reviews"]["bypass_pull_request_allowances"]
+    fill(directory, protection=prot, rulesets=[])
+    got = rows(directory)
+    assert got[3][0] == "UNKNOWN"
+    assert "bypass_pull_request_allowances" in got[3][1]
+
+
+def test_classic_bypass_null_or_wrong_type_unknown(tmp_path):
+    directory = tmp_path / "bpad"
+    prot = protection()
+    prot["required_pull_request_reviews"]["bypass_pull_request_allowances"] = None
+    fill(directory, protection=prot, rulesets=[])
+    got = rows(directory)
+    assert got[3][0] == "UNKNOWN"
+    prot["required_pull_request_reviews"]["bypass_pull_request_allowances"] = "users"
+    fill(directory, protection=prot, rulesets=[])
+    assert rows(directory)[3][0] == "UNKNOWN"
+    prot["required_pull_request_reviews"]["bypass_pull_request_allowances"] = {"teams": [], "apps": []}
+    fill(directory, protection=prot, rulesets=[])
+    assert rows(directory)[3][0] == "UNKNOWN"
+    prot["required_pull_request_reviews"]["bypass_pull_request_allowances"] = {
+        "users": {"login": "bot"},
+        "teams": [],
+        "apps": [],
+    }
+    fill(directory, protection=prot, rulesets=[])
+    assert rows(directory)[3][0] == "UNKNOWN"
+
+
+def test_classic_bypass_nonempty_team_fails(tmp_path):
+    directory = tmp_path / "bpat"
+    prot = protection()
+    prot["required_pull_request_reviews"]["bypass_pull_request_allowances"] = {
+        "users": [],
+        "teams": [{"slug": "release"}],
+        "apps": [],
+    }
+    fill(directory, protection=prot, rulesets=[])
+    got = rows(directory)
+    assert got[3][0] == "FAIL"
+    assert "bypass_pull_request_allowances" in got[3][1]
+
+
+def test_bypass_actors_non_list_unknown(tmp_path):
+    directory = tmp_path / "banull"
+    for bad in (None, {}, "", 0, 1):
+        fill(directory, rulesets=[{"id": 3}])
+        dump(directory / "ruleset_3.json", branch_rule(bypass_actors=bad))
+        assert rows(directory)[3][0] == "UNKNOWN"
+    dump(directory / "ruleset_3.json", branch_rule(bypass_actors=["not-actor"]))
+    assert rows(directory)[3][0] == "UNKNOWN"
+    dump(directory / "ruleset_3.json", branch_rule(bypass_actors=[{"actor_id": "5", "actor_type": "User", "bypass_mode": "always"}]))
+    assert rows(directory)[3][0] == "UNKNOWN"
+    dump(directory / "ruleset_3.json", branch_rule(bypass_actors=[{"actor_id": 5, "actor_type": 1, "bypass_mode": "always"}]))
+    assert rows(directory)[3][0] == "UNKNOWN"
+    dump(directory / "ruleset_3.json", branch_rule(bypass_actors=[{"actor_id": 5, "actor_type": "User", "bypass_mode": []}]))
+    assert rows(directory)[3][0] == "UNKNOWN"
+    dump(directory / "ruleset_3.json", branch_rule(bypass_actors=[{"actor_id": 5, "actor_type": "User", "bypass_mode": {}}]))
+    assert rows(directory)[3][0] == "UNKNOWN"
+    dump(directory / "ruleset_3.json", branch_rule(bypass_actors=[]))
+    assert rows(directory)[3][0] == "PASS"
+
+
+def test_owner_bypass_unhashable_fields_unknown(tmp_path):
+    directory = tmp_path / "obypass"
+    rule = tag_rule()
+    rule["bypass_actors"] = [{"actor_id": 7, "actor_type": [], "bypass_mode": "always"}]
+    fill(directory, ruleset=rule)
+    assert rows(directory)[5][0] == "UNKNOWN"
+    rule = tag_rule()
+    rule["bypass_actors"] = [{"actor_id": 7, "actor_type": {}, "bypass_mode": "always"}]
+    fill(directory, ruleset=rule)
+    assert rows(directory)[5][0] == "UNKNOWN"
+    rule = tag_rule()
+    rule["bypass_actors"] = [{"actor_id": 7, "actor_type": "User", "bypass_mode": []}]
+    fill(directory, ruleset=rule)
+    assert rows(directory)[5][0] == "UNKNOWN"
+    rule = tag_rule()
+    rule["bypass_actors"] = [{"actor_id": 7, "actor_type": "User", "bypass_mode": {}}]
+    fill(directory, ruleset=rule)
+    assert rows(directory)[5][0] == "UNKNOWN"
+
+
+def test_tag_include_non_string_unknown(tmp_path):
+    directory = tmp_path / "badinc"
+    rule = tag_rule()
+    rule["conditions"] = {"ref_name": {"include": [None], "exclude": []}}
+    fill(directory, ruleset=rule)
+    assert rows(directory)[5][0] == "UNKNOWN"
+    rule = tag_rule()
+    rule["conditions"] = {"ref_name": {"include": [{}], "exclude": []}}
+    fill(directory, ruleset=rule)
+    assert rows(directory)[5][0] == "UNKNOWN"
+
+
+def test_line4_parameters_wrong_type_unknown(tmp_path):
+    directory = tmp_path / "l4param"
+    prot = protection()
+    prot["required_pull_request_reviews"]["require_code_owner_reviews"] = False
+    for bad in ([], {}, "yes", None):
+        fill(directory, protection=prot, rulesets=[{"id": 3}])
+        rule = branch_rule()
+        rule["rules"] = [{"type": "pull_request", "parameters": bad}]
+        dump(directory / "ruleset_3.json", rule)
+        assert rows(directory)[4][0] == "UNKNOWN"
+
+
+def test_ruleset_missing_id_or_malformed_detail_unknown(tmp_path):
+    directory = tmp_path / "badrs"
+    fill(directory, rulesets=[{}])
+    assert rows(directory)[3][0] == "UNKNOWN"
+    fill(directory, rulesets=[{"name": "no-id"}])
+    assert rows(directory)[3][0] == "UNKNOWN"
+    fill(directory, rulesets=[{"id": 3}])
+    dump(directory / "ruleset_3.json", ["not", "dict"])
+    assert rows(directory)[3][0] == "UNKNOWN"
+    dump(
+        directory / "ruleset_3.json",
+        {
+            "id": 3,
+            "target": "branch",
+            "enforcement": "active",
+            "conditions": "refs/heads/main",
+            "rules": "pull_request",
+            "bypass_actors": [],
+        },
+    )
+    assert rows(directory)[3][0] == "UNKNOWN"
+    dump(directory / "ruleset_3.json", branch_rule())
+    assert rows(directory)[3][0] == "PASS"
+
+
+def test_codeowners_override_not_proven_from_root(tmp_path):
+    directory = tmp_path / "coover"
+    fill(directory, codeowners="* @owner\n/tools/ @other\n")
+    got = rows(directory)
+    assert got[9][0] == "UNKNOWN"
+    assert "protected_paths" in got[9][1]
+    (directory / "protected_paths.txt").write_text("/tools/github_audit.py\n", encoding="utf-8", newline="\n")
+    assert rows(directory)[9][0] != "PASS"
+    (directory / "protected_paths.txt").write_text("/tools-extra/file.py\n", encoding="utf-8", newline="\n")
+    assert rows(directory)[9][0] == "PASS"
+    fill(directory, codeowners="* @owner\n/src/[ab] @other\n")
+    path_file = directory / "protected_paths.txt"
+    if path_file.exists():
+        path_file.unlink()
+    assert rows(directory)[9][0] != "PASS"
+
+
+def test_multiple_bypass_actors_fail(tmp_path):
+    directory = tmp_path / "multi"
+    fill(directory, rulesets=[{"id": 3}])
+    dump(
+        directory / "ruleset_3.json",
+        branch_rule(bypass_actors=[
+            {"actor_id": 5, "actor_type": "RepositoryRole", "bypass_mode": "always"},
+            {"actor_id": 7, "actor_type": "User", "bypass_mode": "always"},
+        ]),
+    )
+    assert rows(directory)[3][0] == "FAIL"
