@@ -12,12 +12,12 @@ results:
 1 FAIL không bắt buộc qua PR cho main
 2 FAIL chưa cấm ép đẩy hoặc chưa cấm xóa main
 3 FAIL chưa bật luật chặn quản trị bỏ qua
-4 FAIL chưa bắt buộc duyệt của code owner; cảnh báo: tự duyệt PR cùng tài khoản không khả thi
+4 FAIL chưa bắt buộc duyệt của code owner
 5 FAIL không có luật thẻ cycle/*
 6 FAIL squash=True merge_commit=True rebase=False
 7 PASS auto-merge tắt
 8 PASS giá trị quan sát tắt; OWNER quyết; không đổi cài đặt
-9 PASS đang dùng tài khoản OWNER; trùng CODEOWNERS hữu hiệu; không phân biệt được OWNER với tác tử
+9 UNKNOWN cần protected_paths để xác nhận CODEOWNERS hữu hiệu; không suy từ '/'
 limits:
 - Chỉ đọc cấu hình, không chứng minh máy chủ từ chối một lượt đẩy thật.
 - Tác tử không đẩy thử vào main hay thẻ. Phần máy chủ từ chối lượt đẩy thật: chưa kiểm, do OWNER tự kiểm.

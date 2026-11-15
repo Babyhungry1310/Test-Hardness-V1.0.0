@@ -591,13 +591,16 @@ def line4(data, state):
         if rules is None:
             uncertain = True
             continue
-        pull = rules.get("pull_request")
-        if isinstance(pull, dict) and "parameters" in pull:
-            params = pull.get("parameters")
-            if not isinstance(params, dict):
+        if "pull_request" in rules:
+            pull = rules.get("pull_request")
+            params = pull.get("parameters") if isinstance(pull, dict) else None
+            if not isinstance(pull, dict) or "parameters" not in pull or not isinstance(params, dict):
                 uncertain = True
                 continue
-            if params.get("require_code_owner_review") is True:
+            if "require_code_owner_review" not in params or type(params.get("require_code_owner_review")) is not bool:
+                uncertain = True
+                continue
+            if params["require_code_owner_review"] is True:
                 return "PASS", "ruleset bắt buộc duyệt của code owner"
     if known_rules(state) and not uncertain and (classic_no or branch_flag(data, state) is False or (
         prot is not None and not isinstance(prot.get("required_pull_request_reviews"), dict)

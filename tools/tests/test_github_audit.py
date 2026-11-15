@@ -492,6 +492,30 @@ def test_line4_parameters_wrong_type_unknown(tmp_path):
         assert rows(directory)[4][0] == "UNKNOWN"
 
 
+def test_line4_required_bool_only(tmp_path):
+    directory = tmp_path / "l4bool"
+    prot = protection()
+    prot["required_pull_request_reviews"]["require_code_owner_reviews"] = False
+    fill(directory, protection=prot, rulesets=[{"id": 3}])
+    missing = branch_rule()
+    missing["rules"] = [{"type": "pull_request"}]
+    dump(directory / "ruleset_3.json", missing)
+    assert rows(directory)[4][0] == "UNKNOWN"
+    for bad in ([], {}, "yes", None, 1):
+        rule = branch_rule()
+        rule["rules"] = [{"type": "pull_request", "parameters": {"require_code_owner_review": bad}}]
+        dump(directory / "ruleset_3.json", rule)
+        assert rows(directory)[4][0] == "UNKNOWN"
+    yes = branch_rule()
+    yes["rules"] = [{"type": "pull_request", "parameters": {"require_code_owner_review": True}}]
+    dump(directory / "ruleset_3.json", yes)
+    assert rows(directory)[4][0] == "PASS"
+    no = branch_rule()
+    no["rules"] = [{"type": "pull_request", "parameters": {"require_code_owner_review": False}}]
+    dump(directory / "ruleset_3.json", no)
+    assert rows(directory)[4][0] == "FAIL"
+
+
 def test_ruleset_missing_id_or_malformed_detail_unknown(tmp_path):
     directory = tmp_path / "badrs"
     fill(directory, rulesets=[{}])
