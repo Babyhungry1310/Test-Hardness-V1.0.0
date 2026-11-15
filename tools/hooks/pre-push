@@ -1,0 +1,11 @@
+#!/bin/sh
+while read -r local_ref local_sha remote_ref remote_sha
+do
+  case "$remote_ref" in
+    refs/heads/main|refs/tags/*)
+      printf '%s\n' "refused: destination ref $remote_ref"
+      exit 1
+      ;;
+  esac
+done
+exit 0
