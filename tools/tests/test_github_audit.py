@@ -492,6 +492,81 @@ def test_line4_parameters_wrong_type_unknown(tmp_path):
         assert rows(directory)[4][0] == "UNKNOWN"
 
 
+def test_question_mark_include_not_false_pass(tmp_path):
+    directory = tmp_path / "qmark"
+    fill(directory, rulesets=[{"id": 3}])
+    dump(
+        directory / "ruleset_3.json",
+        branch_rule(
+            conditions={"ref_name": {"include": ["refs/heads/ma?n"], "exclude": []}},
+            bypass_actors=[{"actor_id": 5, "actor_type": "User", "bypass_mode": "always"}],
+        ),
+    )
+    assert rows(directory)[3][0] != "PASS"
+
+
+def test_unanchored_directory_override(tmp_path):
+    directory = tmp_path / "appsdir"
+    fill(directory, codeowners="* @owner\napps/ @other\n")
+    (directory / "protected_paths.txt").write_text("/src/apps/file.py\n", encoding="utf-8", newline="\n")
+    assert rows(directory)[9][0] != "PASS"
+    (directory / "protected_paths.txt").write_text("/src/apps-extra/file.py\n", encoding="utf-8", newline="\n")
+    assert rows(directory)[9][0] == "PASS"
+    fill(directory, codeowners="* @owner\n/apps/github @other\n")
+    (directory / "protected_paths.txt").write_text("/apps/github/file.py\n", encoding="utf-8", newline="\n")
+    assert rows(directory)[9][0] != "PASS"
+    (directory / "protected_paths.txt").write_text("/apps/github-extra/file.py\n", encoding="utf-8", newline="\n")
+    assert rows(directory)[9][0] == "PASS"
+
+
+def test_internal_slash_codeowners_root_relative(tmp_path):
+    directory = tmp_path / "rootrel"
+    fill(directory, codeowners="* @owner\napps/github @other\n")
+    (directory / "protected_paths.txt").write_text("/apps/github/file.py\n", encoding="utf-8", newline="\n")
+    assert rows(directory)[9][0] != "PASS"
+    fill(directory, codeowners="* @other\napps/github @owner\n")
+    (directory / "protected_paths.txt").write_text("/apps/github/file.py\n", encoding="utf-8", newline="\n")
+    assert rows(directory)[9][0] == "PASS"
+    (directory / "protected_paths.txt").write_text("/src/apps/github/file.py\n", encoding="utf-8", newline="\n")
+    assert rows(directory)[9][0] != "PASS"
+    (directory / "protected_paths.txt").write_text("/apps/github-extra/file.py\n", encoding="utf-8", newline="\n")
+    assert rows(directory)[9][0] != "PASS"
+    (directory / "protected_paths.txt").write_text("/apps-extra/github/file.py\n", encoding="utf-8", newline="\n")
+    assert rows(directory)[9][0] != "PASS"
+    fill(directory, codeowners="* @other\napps/github/ @owner\n")
+    (directory / "protected_paths.txt").write_text("/apps/github/file.py\n", encoding="utf-8", newline="\n")
+    assert rows(directory)[9][0] == "PASS"
+    (directory / "protected_paths.txt").write_text("/src/apps/github/file.py\n", encoding="utf-8", newline="\n")
+    assert rows(directory)[9][0] != "PASS"
+
+
+def test_wildcard_directory_and_ambiguous_leaf_not_pass(tmp_path):
+    directory = tmp_path / "dirguard"
+    fill(directory, codeowners="* @owner\n/apps*/ @other\n")
+    (directory / "protected_paths.txt").write_text("/apps42/file.py\n", encoding="utf-8", newline="\n")
+    assert rows(directory)[9][0] != "PASS"
+    fill(directory, codeowners="* @other\napps/ @owner\n")
+    (directory / "protected_paths.txt").write_text("/src/apps\n", encoding="utf-8", newline="\n")
+    assert rows(directory)[9][0] != "PASS"
+    (directory / "protected_paths.txt").write_text("/src/apps/file.py\n", encoding="utf-8", newline="\n")
+    assert rows(directory)[9][0] == "PASS"
+    (directory / "protected_paths.txt").write_text("/src/apps-extra/file.py\n", encoding="utf-8", newline="\n")
+    assert rows(directory)[9][0] != "PASS"
+    fill(directory, codeowners="* @other\n/apps/ @owner\n")
+    (directory / "protected_paths.txt").write_text("/apps\n", encoding="utf-8", newline="\n")
+    assert rows(directory)[9][0] != "PASS"
+
+
+def test_login_mismatch_before_codeowners_unknown(tmp_path):
+    directory = tmp_path / "mismatch"
+    fill(directory, user={"login": "other", "id": 8}, codeowners="/tools/ @owner\n")
+    got = rows(directory)
+    assert got[9][0] == "FAIL"
+    assert "khác OWNER" in got[9][1]
+    (directory / "codeowners.txt").unlink()
+    assert rows(directory)[9][0] == "FAIL"
+
+
 def test_line4_required_bool_only(tmp_path):
     directory = tmp_path / "l4bool"
     prot = protection()

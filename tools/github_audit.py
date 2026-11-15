@@ -53,19 +53,56 @@ def parse_codeowners(text):
     return rules
 
 
+def dir_status(base, right, anywhere):
+    base_parts = [part for part in base.strip("/").split("/") if part]
+    right_parts = [part for part in right.strip("/").split("/") if part]
+    if not base_parts:
+        return None
+    width = len(base_parts)
+    if not anywhere:
+        if right_parts[:width] != base_parts:
+            return False
+        if len(right_parts) > width or right.endswith("/"):
+            return True
+        return None
+    proven = False
+    ambiguous = False
+    for index in range(len(right_parts) - width + 1):
+        if right_parts[index:index + width] != base_parts:
+            continue
+        if index + width < len(right_parts) or right.endswith("/"):
+            proven = True
+        else:
+            ambiguous = True
+    if proven:
+        return True
+    if ambiguous:
+        return None
+    return False
+
+
 def co_match(pattern, path):
-    if any(char in pattern for char in "[]\\"):
+    if any(char in pattern for char in "[]\\?") or "**" in pattern:
         return None
     if pattern in ("*", "/*"):
         return True
-    left = pattern[1:] if pattern.startswith("/") else pattern
+    anchored = pattern.startswith("/")
+    left = pattern[1:] if anchored else pattern
     right = path[1:] if path.startswith("/") else path
+    body = left[:-1] if left.endswith("/") else left
+    root_relative = anchored or "/" in body
+    if "*" in left:
+        if left.endswith("/") or not anchored:
+            return None
+        return glob_match(left, right)
     if left.endswith("/"):
         base = left.rstrip("/")
-        return right == base or right.startswith(base + "/")
-    if "*" not in left and "?" not in left:
-        return left == right
-    return glob_match(left, right)
+        if not base:
+            return None
+        return dir_status(base, right, anywhere=not root_relative)
+    if root_relative:
+        return right == left or right.startswith(left + "/")
+    return left in right.split("/")
 
 
 def glob_match(pattern, text):
@@ -121,7 +158,7 @@ def pattern_hit(pattern, ref, default_branch, target):
         if target != "branch" or not default_branch:
             return "no" if target != "branch" else "unknown"
         return "yes" if ref == f"refs/heads/{default_branch}" else "no"
-    if pattern.startswith("~") or any(char in pattern for char in "[]{}\\"):
+    if pattern.startswith("~") or any(char in pattern for char in "[]{}\\?"):
         return "unknown"
     if glob_match(pattern, ref):
         return "yes"
@@ -707,16 +744,16 @@ def line8(data, state):
 def line9(ident, state):
     if ident is None:
         return "UNKNOWN", "cần user.json từ GET user và repo.json owner.login từ GET repos/{owner}/{repo}"
+    if not ident["same"]:
+        return "FAIL", f"tài khoản đang dùng {ident['login']} khác OWNER {ident['owner']}"
     if state["codeowners"] != "ok":
         return "UNKNOWN", "cần nội dung .github/CODEOWNERS để xác nhận tài khoản chung"
     if ident["in_codeowners"] is None:
         if ident.get("codeowners_how") == "need-protected-paths":
             return "UNKNOWN", "cần protected_paths để xác nhận CODEOWNERS hữu hiệu; không suy từ '/'"
         return "UNKNOWN", "cần CODEOWNERS hữu hiệu cho đường dẫn bảo vệ; mention trong comment hoặc bị ghi đè không tính"
-    if ident["same"] and ident["in_codeowners"]:
+    if ident["in_codeowners"]:
         return "PASS", "đang dùng tài khoản OWNER; trùng CODEOWNERS hữu hiệu; không phân biệt được OWNER với tác tử"
-    if not ident["same"]:
-        return "FAIL", f"tài khoản đang dùng {ident['login']} khác OWNER {ident['owner']}"
     return "FAIL", f"tài khoản {ident['login']} không có trong CODEOWNERS hữu hiệu"
 
 
