@@ -186,6 +186,8 @@ models:
 ---
 <!-- ANCHOR: ROUTE_CHECKS -->
 ## Route checks (newest first)
+- 2026-11-15T02:08Z | route: xai/grok-4.7 | actual: grok-4.7 | kind: agent-tools | result: OK | source: native Claude Code assistant.message.model; session 4ff5f318-423d-464c-ae3f-296f1fa1b76f sau đổi model | note: Read VERSION đạt; giữ lịch sử Opus, Grok; L01 đã dùng 1/3
+- 2026-11-14T10:51Z | route: ag/gemini-3.8-flash | actual: gemini-3.8-flash-n | kind: agent-tools | result: OK | source: native Claude Code assistant.message.model; session 11fb173d-a42a-4924-b17c-3bea58870015 | note: TK-0007 phase zero; Read harness/VERSION đạt
 - 2026-11-14T06:32Z | route: Hardeness | actual: gpt-5.6-luna[1m] | kind: chat | result: OK | source: POST /v1/chat/completions tại http://localhost:20128, gọi từ trình duyệt của ứng dụng trên máy OWNER | note: combo; không dùng để giao việc
 - 2026-11-14T06:32Z | route: xai/grok-4 | actual: grok-4.3 | kind: chat | result: OK | source: POST /v1/chat/completions tại http://localhost:20128, gọi từ trình duyệt của ứng dụng trên máy OWNER | note: tên tuyến khác model trả về
 - 2026-11-14T06:32Z | route: xai/grok-4.6 | actual: grok-4.6 | kind: chat | result: OK | source: POST /v1/chat/completions tại http://localhost:20128, gọi từ trình duyệt của ứng dụng trên máy OWNER | note: none
