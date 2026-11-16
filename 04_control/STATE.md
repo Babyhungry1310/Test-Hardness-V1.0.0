@@ -11,12 +11,14 @@ PROFILE: SHORT
 - CYC-05 | ASSIGNED | TK-0011, TK-0012, TK-0020, TK-0021 | chat, storage, Git, trace
 - CYC-06 | ASSIGNED | TK-0013, TK-0014, TK-0022, TK-0023 | scanner
 - CYC-07 | ASSIGNED | TK-0015, TK-0016, TK-0024, TK-0025, TK-0026, TK-0028, TK-0017 | batch, pytest, hồi quy
+- CYC-08 | ASSIGNED | TK-0031 | dự kiến sau CYC-07 PASS; chưa mở chu kỳ
 ### 2. Open risks
 - RSK-0004 | OPEN | level: HIGH | due: 2026-11-26 | owner: OWNER
 - RSK-0005 | OPEN | level: MEDIUM | due: 2026-12-12 | owner: LEAD
 - RSK-0006 | OPEN | level: MEDIUM | due: 2026-12-12 | owner: LEAD
 - RSK-0001 | OPEN | level: MEDIUM | due: 2026-11-26 | owner: LEAD
 ### 3. Recent decisions
+- DEC-0027 | ACTIVE | Kiểm kê quyền WORKER sau CYC-07; supervised trước, sandbox thử sau
 - DEC-0026 | ACTIVE | TK-0030 fixes TK-0007; Grok, Gemini; task merged PR36; product HOLD
 - DEC-0021 | ACTIVE | Phân biệt tuyến 9Router và model thực tế khi so sánh định danh
 - DEC-0020 | ACTIVE | Kiểm kê đầy đủ thay đổi dry run trước khi đề xuất chuyển về repo mẹ
@@ -38,8 +40,9 @@ PROFILE: SHORT
 - DEC-0009 | SUPERSEDED_BY DEC-0012
 - DEC-0005 | RETIRED
 ### 4. Next action
+- REQ-0010 | RESOLVED_BY DEC-0027 trong PR dự thảo | CYC-08 chỉ dự kiến sau CYC-07 PASS; chưa mở, chưa cấp quyền mới. PR31 đã merge; không tự gỡ HOLD CYC-03.
 - TK-0030 fixes TK-0007: Windows cp1252 reproduction on clean main 8dcf58b failed expected exit 2, got 1; UTF-8 control tools/tests passed 54. Evidence: 03_output/CYC-03/checks/TK-0030_main_reproduction.md.
-- Task TK-0030 and DEC-0026 merged in PR36; product activation remains suspended by OWNER pending PR31 resolution/merge and fresh coordinator confirmation. Grok xai/grok-4.7 implements, Gemini ag/gemini-3.8-flash reviews only new delta at fixed SHA after actual-model checks. R1 max_loops=3; no historical loop changes.
+- Task TK-0030 and DEC-0026 merged in PR36; PR31 merged; product activation remains suspended by OWNER pending fresh coordinator confirmation. Grok xai/grok-4.7 implements, Gemini ag/gemini-3.8-flash reviews only new delta at fixed SHA after actual-model checks. R1 max_loops=3; no historical loop changes.
 - Hold B2 until this repair is merged and main verification passes; TK-0018 overlaps preflight, TK-0027 not launched. No cycle gate or next cycle opened.
 - PR31 includes DEC-0021 and TK-0029; use plan version 7 only after OWNER merges PR31. Local DEC-0022..0025 and collision migration remain in lead-cyc02, not copied or overwritten by this PR.
 - GitHub audit configuration remains FAIL1-6/PASS7-8/UNKNOWN9 per merged TK-0008 snapshot; OWNER handles RSK-0004. No main/tag push probes.

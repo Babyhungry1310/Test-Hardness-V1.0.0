@@ -65,3 +65,10 @@
 - Hồi quy: `python -m pytest -q --tb=line` đạt đúng 23 test; `python -m pytest -q --tb=line tools/tests` đạt; trên Windows và Linux.
 - Sản phẩm và bằng chứng của CYC-02 không đổi.
 <!-- END: CYC_07 -->
+
+<!-- ANCHOR: CYC_08 -->
+## CYC-08
+- Kiểm kê có SHA, nguồn, quyền, hành vi và bằng chứng thực tế; phân loại tái dùng, sửa, tạo hoặc chưa xác minh.
+- Đề xuất profile có giám sát trước và thử sandbox sau; nêu điều kiện OWNER quyết, rủi ro còn lại và các phép kiểm được phép/bị cấm từ nguồn có sẵn; không chạy probe trong CYC-08.
+- Không đổi policy runtime, quyền Git/mạng, schema hoặc lịch sử loop; rule loop hiện hành giữ nguyên.
+<!-- END: CYC_08 -->

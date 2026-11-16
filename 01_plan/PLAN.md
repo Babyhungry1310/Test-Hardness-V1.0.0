@@ -2,9 +2,10 @@
 schema: 1
 id: PLAN
 date: 2026-11-12
-based_on: [DEC-0002, DEC-0006, DEC-0007, DEC-0010, DEC-0013, DEC-0015, DEC-0016, DEC-0017, DEC-0018, DEC-0019, DEC-0020, DEC-0021]
+based_on: [DEC-0002, DEC-0006, DEC-0007, DEC-0010, DEC-0013, DEC-0015, DEC-0016, DEC-0017, DEC-0018, DEC-0019, DEC-0020, DEC-0021, DEC-0027]
 ---
 ## Status (newest first)
+- 2026-11-16 | ACTIVE | version: 8
 - 2026-11-14 | ACTIVE | version: 7
 - 2026-11-14 | ACTIVE | version: 6
 - 2026-11-14 | ACTIVE | version: 5
@@ -90,6 +91,10 @@ based_on: [DEC-0002, DEC-0006, DEC-0007, DEC-0010, DEC-0013, DEC-0015, DEC-0016,
 - B3 | tasks: TK-0028 | after: B2
 - B4 | tasks: TK-0017 | after: B3
 <!-- END: CYC_07_BATCHES -->
+<!-- ANCHOR: CYC_08 -->
+## CYC-08
+- TK-0031 | Kiểm kê công cụ, quyền và bằng chứng cho Planning quyền WORKER | depends: TK-0017, TK-0028 | assignee: W2
+<!-- END: CYC_08 -->
 <!-- ANCHOR: RISKS -->
 ## Risks
 - RSK-0001
