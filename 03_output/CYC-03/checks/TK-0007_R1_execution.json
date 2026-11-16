@@ -1,0 +1,40 @@
+﻿{
+  "task": "TK-0007",
+  "run": 1,
+  "environment": {
+    "os": "Microsoft Windows NT 10.0.26300.0",
+    "python": "3.14.5",
+    "git": "git version 2.55.0.windows.5",
+    "gh": "gh version 2.102.0"
+  },
+  "verify_command": "python -m pytest -q --tb=line tools/tests/test_preflight_main.py",
+  "loops": [
+    {
+      "loop": "L01",
+      "status": "FAIL",
+      "summary": "3 failed, 8 passed in 11.73s",
+      "evidence": "03_output/CYC-03/checks/TK-0007_R1_L01_verify.txt"
+    },
+    {
+      "loop": "L02",
+      "status": "PASS",
+      "summary": "11 passed in 12.84s",
+      "evidence": "03_output/CYC-03/checks/TK-0007_R1_L02_verify.txt"
+    },
+    {
+      "loop": "L03",
+      "status": "PASS",
+      "summary": "11 passed in 12.91s",
+      "evidence": "03_output/CYC-03/checks/TK-0007_R1_L03_verify.txt"
+    }
+  ],
+  "baseline_command": "python -m pytest -q --tb=line",
+  "baseline_result": "23 passed in 0.43s",
+  "limits_and_boundaries": {
+    "local_check_only": "Read-only inspection of git repository state; cannot prevent external out-of-session modifications",
+    "worktree_detection": "Detects worktree via .git file type or git-dir != git-common-dir",
+    "hook_status": "Checked only via core.hooksPath git config without relying on specific hook files",
+    "branch_patterns": "Enforces worker task/TK-nnnn-Rn, lead lead/<slug> or upgrade/<version>, reviewer review/CYC-nn-Rk-xxxx or legacy patterns",
+    "push_targets": "Rejects refs/heads/main, refs/tags/*, and destination refs differing from current working branch"
+  }
+}

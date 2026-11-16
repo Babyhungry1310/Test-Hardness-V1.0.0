@@ -1,0 +1,27 @@
+TK-0008 github audit
+fetched_at: 2026-11-14T15:08:32Z
+platform: Windows
+git_version: git version 2.55.0.windows.5
+commands:
+- gh api --method GET repos/Babyhungry1310/Test-Hardness-V1.0.0
+- gh api --method GET repos/Babyhungry1310/Test-Hardness-V1.0.0/branches/main
+- gh api --method GET repos/Babyhungry1310/Test-Hardness-V1.0.0/branches/main/protection
+- gh api --method GET repos/Babyhungry1310/Test-Hardness-V1.0.0/rulesets
+- gh api --method GET user
+results:
+1 FAIL không bắt buộc qua PR cho main
+2 FAIL chưa cấm ép đẩy hoặc chưa cấm xóa main
+3 FAIL chưa bật luật chặn quản trị bỏ qua
+4 FAIL chưa bắt buộc duyệt của code owner
+5 FAIL không có luật thẻ cycle/*
+6 FAIL squash=True merge_commit=True rebase=False
+7 PASS auto-merge tắt
+8 PASS giá trị quan sát tắt; OWNER quyết; không đổi cài đặt
+9 UNKNOWN cần protected_paths để xác nhận CODEOWNERS hữu hiệu; không suy từ '/'
+limits:
+- Chỉ đọc cấu hình, không chứng minh máy chủ từ chối một lượt đẩy thật.
+- Tác tử không đẩy thử vào main hay thẻ. Phần máy chủ từ chối lượt đẩy thật: chưa kiểm, do OWNER tự kiểm.
+- Dùng chung tài khoản với OWNER thì luật không phân biệt được hai bên.
+- Quyền cần: đọc repo; đọc chi tiết luật nhánh có thể cần quyền quản trị, thiếu thì dòng đó là UNKNOWN.
+- Bật luật: quyền quản trị, chỉ OWNER. Lần kiểm này không đổi cài đặt.
+- Không lớp nào được mô tả là chặn tuyệt đối.

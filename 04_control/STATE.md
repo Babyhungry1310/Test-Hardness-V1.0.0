@@ -2,11 +2,11 @@ PHASE: EXECUTE
 CYCLE: CYC-03
 PROFILE: SHORT
 
-## Handover board (updated: 2026-11-16, main @ 8dcf58b)
+## Handover board (updated: 2026-11-16, main @ a096ad2)
 ### 1. Progress
 - CYC-01 | PASS | TK-0001 DONE R2, TK-0002 DONE R1, TK-0004 DONE R1 | thẻ cycle/CYC-01 @ e2b7944
 - CYC-02 | PASS | TK-0003 DONE R1, TK-0005 DONE R1 | RVW-CYC-02 vòng 1 PASS | thẻ cycle/CYC-02 @ 36bafbe
-- CYC-03 | ASSIGNED | TK-0006 DONE R1, TK-0007 DONE R1, TK-0008 DONE R4; còn TK-0018, TK-0027 | bảo vệ main
+- CYC-03 | EXECUTE | B1 DONE: TK-0006, TK-0007, TK-0008 đã merge; TK-0030 task merged (PR36), product HOLD; B2 HOLD: TK-0018, TK-0027 | bảo vệ main
 - CYC-04 | ASSIGNED | TK-0009, TK-0010, TK-0019, TK-0029 | model
 - CYC-05 | ASSIGNED | TK-0011, TK-0012, TK-0020, TK-0021 | chat, storage, Git, trace
 - CYC-06 | ASSIGNED | TK-0013, TK-0014, TK-0022, TK-0023 | scanner
@@ -17,6 +17,7 @@ PROFILE: SHORT
 - RSK-0006 | OPEN | level: MEDIUM | due: 2026-12-12 | owner: LEAD
 - RSK-0001 | OPEN | level: MEDIUM | due: 2026-11-26 | owner: LEAD
 ### 3. Recent decisions
+- DEC-0026 | ACTIVE | TK-0030 fixes TK-0007; Grok, Gemini; task merged PR36; product HOLD
 - DEC-0021 | ACTIVE | Phân biệt tuyến 9Router và model thực tế khi so sánh định danh
 - DEC-0020 | ACTIVE | Kiểm kê đầy đủ thay đổi dry run trước khi đề xuất chuyển về repo mẹ
 - DEC-0019 | ACTIVE | OWNER và tác tử dùng chung tài khoản GitHub
@@ -37,7 +38,11 @@ PROFILE: SHORT
 - DEC-0009 | SUPERSEDED_BY DEC-0012
 - DEC-0005 | RETIRED
 ### 4. Next action
-- OWNER merge PR lead/model-route-clarity trước khi dùng plan version 7. CYC-03 B1 đã có run DONE trên main 8dcf58b: TK-0006 R1, TK-0007 R1, TK-0008 R4. Không giao lại B1. Việc kế sau merge là CYC-03 B2, TK-0018 và TK-0027. LEAD chọn model theo DEC-0018; hạn mức chưa xác minh. OWNER còn chốt RFC-0001, bật luật bảo vệ main và thẻ cycle/*, tự xóa nhánh nguồn.
+- TK-0030 fixes TK-0007: Windows cp1252 reproduction on clean main 8dcf58b failed expected exit 2, got 1; UTF-8 control tools/tests passed 54. Evidence: 03_output/CYC-03/checks/TK-0030_main_reproduction.md.
+- Task TK-0030 and DEC-0026 merged in PR36; product activation remains suspended by OWNER pending PR31 resolution/merge and fresh coordinator confirmation. Grok xai/grok-4.7 implements, Gemini ag/gemini-3.8-flash reviews only new delta at fixed SHA after actual-model checks. R1 max_loops=3; no historical loop changes.
+- Hold B2 until this repair is merged and main verification passes; TK-0018 overlaps preflight, TK-0027 not launched. No cycle gate or next cycle opened.
+- PR31 includes DEC-0021 and TK-0029; use plan version 7 only after OWNER merges PR31. Local DEC-0022..0025 and collision migration remain in lead-cyc02, not copied or overwritten by this PR.
+- GitHub audit configuration remains FAIL1-6/PASS7-8/UNKNOWN9 per merged TK-0008 snapshot; OWNER handles RSK-0004. No main/tag push probes.
 ### 5. Never do
 - Không xuất PDF
 - Không dùng tên học viên thật trong dữ liệu thử

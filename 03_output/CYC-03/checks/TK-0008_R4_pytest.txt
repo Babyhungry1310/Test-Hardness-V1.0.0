@@ -1,0 +1,15 @@
+verify: python -m pytest -q --tb=line tools/tests/test_github_audit.py
+R4 L01 | PASS | exit=0 | passed=39 failed=0 | executor=grok-4.7
+baseline: python -m pytest -q --tb=line
+R4 L01 | PASS | exit=0 | passed=23 failed=0
+cwd: C:/Users/linhdh/orca/workspaces/Test-Hardness-V1.0.0/TK-0008-R2
+branch: task/TK-0008-R3
+head_before: 9f961eb79f0006637337243809a12ba196ef3a31
+platform: Windows
+git_version: git version 2.55.0.windows.5
+model_source: assistant.message.model native session 4ff5f318-423d-464c-ae3f-296f1fa1b76f
+models: claude-opus-4-6-thinking, grok-4.7
+actual_now: grok-4.7
+excluded: synthetic isApiErrorMessage quota placeholder, not an inference model
+report: not regenerated; no probe after verify
+logs: C:/Users/linhdh/orca/Test-Hardness-V1.0.0.local/logs/orca-1.0.1/TK-0008_R4_L01_COMMANDS/execution.json

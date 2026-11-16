@@ -1,0 +1,10 @@
+﻿..F..FF....                                                              [100%]
+================================== FAILURES ===================================
+E   subprocess.CalledProcessError: Command '['git', 'worktree', 'add', '...\\wt', 'main']' returned non-zero exit status 128.
+E   assert 'Hook chưa cài' in "Cáº£nh bÃ¡o: Hook chÆ°a cÃ\xa0i..."
+E   assert 'Worktree có thay đổi chưa commit' in "Cáº£nh bÃ¡o: Hook chÆ°a cÃ\xa0i\nCáº£nh bÃ¡o: Worktree cÃ³ thay Ä‘á»•i chÆ°a commit..."
+=========================== short test summary info ===========================
+FAILED tools/tests/test_preflight_main.py::test_session_on_main_branch_fails
+FAILED tools/tests/test_preflight_main.py::test_session_missing_hook_warning
+FAILED tools/tests/test_preflight_main.py::test_session_dirty_worktree_reports_warning
+3 failed, 8 passed in 11.73s
