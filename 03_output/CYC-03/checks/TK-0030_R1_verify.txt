@@ -1,0 +1,33 @@
+TK-0030 R1 verify
+loop: L01
+outcome: PASS
+started_at: 2026-11-16T14:47:16Z
+os: Windows-11-10.0.26300-SP0
+python: 3.14.5 (tags/v3.14.5:5607950, May 10 2026, 10:43:50) [MSC v.1944 64 bit (AMD64)]
+platform: win32
+child_utf8_mode: 0
+child_stdout: cp1252
+child_stderr: cp1252
+child_preferred: cp1252
+child_PYTHONUTF8: unset
+child_PYTHONIOENCODING: unset
+env_scope: child process only; no global UTF-8 change; no Git config change
+not_verify:
+- smoke python -m pytest -q --tb=line tools/tests/test_preflight_main.py; child vars removed; exit 0; 19 passed. Not a loop: not both required suites.
+- launcher python -c SyntaxError before pytest start. Not a loop. Not PASS.
+suite: tools/tests
+argv: python -m pytest -q --tb=line tools/tests
+exit: 0
+stdout_tail: 62 passed in 50.41s
+stderr: empty
+suite: baseline
+argv: python -m pytest -q --tb=line
+exit: 0
+stdout_tail: 23 passed in 1.21s
+stderr: empty
+full_log: C:\Users\linhdh\orca\Test-Hardness-V1.0.0.local\logs\TK-0030_R1_L01.json
+start_record: C:\Users\linhdh\orca\Test-Hardness-V1.0.0.local\logs\TK-0030_R1_L01_started.json
+model_source: session 4aa3e4c0-92eb-4b24-9a74-af334b1d0649 assistant message.model grok-4.7; route xai/grok-4.7 is not actual proof
+diff_stat: tools/preflight_main.py +23 -1; tools/tests/test_preflight_main.py +79 -1
+commit: not done; waiting for LEAD review
+push: not done

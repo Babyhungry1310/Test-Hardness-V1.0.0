@@ -1,4 +1,4 @@
-﻿import argparse, json, re, subprocess, sys
+﻿import argparse, io, json, re, subprocess, sys
 from pathlib import Path
 
 
@@ -80,6 +80,27 @@ def run_preflight(role, stage, ref=None, cwd=None):
     return (0 if ok else 1), data
 
 
+def configure_text_streams():
+    for name in ("stdout", "stderr"):
+        stream = getattr(sys, name)
+        if stream is None:
+            continue
+        encoding = (getattr(stream, "encoding", None) or "").lower().replace("-", "").replace("_", "")
+        if encoding == "utf8":
+            continue
+        reconfigure = getattr(stream, "reconfigure", None)
+        if reconfigure is not None:
+            try:
+                reconfigure(encoding="utf-8", errors="strict")
+                continue
+            except (OSError, ValueError):
+                pass
+        buffer = getattr(stream, "buffer", None)
+        if buffer is None:
+            continue
+        setattr(sys, name, io.TextIOWrapper(buffer, encoding="utf-8", errors="strict"))
+
+
 def main(argv=None):
     p = argparse.ArgumentParser()
     p.add_argument("--role", required=True, choices=["worker", "lead", "reviewer"])
@@ -90,6 +111,7 @@ def main(argv=None):
         args = p.parse_args(argv)
     except SystemExit:
         sys.exit(2)
+    configure_text_streams()
     code, data = run_preflight(args.role, args.stage, ref=args.ref)
     if args.json_output:
         print(json.dumps(data, indent=2))
