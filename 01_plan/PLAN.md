@@ -2,9 +2,10 @@
 schema: 1
 id: PLAN
 date: 2026-11-12
-based_on: [DEC-0002, DEC-0006, DEC-0007, DEC-0010, DEC-0013, DEC-0015, DEC-0016, DEC-0017, DEC-0018, DEC-0019, DEC-0020]
+based_on: [DEC-0002, DEC-0006, DEC-0007, DEC-0010, DEC-0013, DEC-0015, DEC-0016, DEC-0017, DEC-0018, DEC-0019, DEC-0020, DEC-0021]
 ---
 ## Status (newest first)
+- 2026-11-14 | ACTIVE | version: 7
 - 2026-11-14 | ACTIVE | version: 6
 - 2026-11-14 | ACTIVE | version: 5
 - 2026-11-14 | ACTIVE | version: 4
@@ -40,11 +41,13 @@ based_on: [DEC-0002, DEC-0006, DEC-0007, DEC-0010, DEC-0013, DEC-0015, DEC-0016,
 - TK-0009 | Kiểm schema và ràng buộc chéo của catalog và ma trận model | depends: none | assignee: W1
 - TK-0010 | Model đủ điều kiện, so cùng model, REVIEWER khác model thực tế | depends: TK-0009 | assignee: W1
 - TK-0019 | Đối chiếu model yêu cầu và thực tế trên bản ghi | depends: TK-0009 | assignee: W3
+- TK-0029 | Kiểm hồi quy phân biệt tuyến 9Router và model thực tế | depends: TK-0010, TK-0019 | assignee: W2
 <!-- END: CYC_04 -->
 <!-- ANCHOR: CYC_04_BATCHES -->
 ## CYC-04 batches
 - B1 | tasks: TK-0009 | after: none
 - B2 | tasks: TK-0010, TK-0019 | after: B1
+- B3 | tasks: TK-0029 | after: B2
 <!-- END: CYC_04_BATCHES -->
 <!-- ANCHOR: CYC_05 -->
 ## CYC-05
@@ -76,9 +79,9 @@ based_on: [DEC-0002, DEC-0006, DEC-0007, DEC-0010, DEC-0013, DEC-0015, DEC-0016,
 - TK-0016 | Chứng minh mẫu pytest.ini chỉ thu thập tests/ | depends: none | assignee: W2
 - TK-0024 | Kiểm tương thích cấu hình pytest hiện có, không ghi đè | depends: none | assignee: W3
 - TK-0025 | Kiểm thử worktree và nền tích hợp tạm | depends: none | assignee: W2
-- TK-0026 | Tài liệu sử dụng tools/README.md | depends: TK-0006, TK-0007, TK-0008, TK-0009, TK-0010, TK-0011, TK-0012, TK-0013, TK-0014, TK-0015, TK-0016, TK-0018, TK-0019, TK-0020, TK-0021, TK-0022, TK-0023, TK-0024, TK-0025, TK-0027 | assignee: W2
+- TK-0026 | Tài liệu sử dụng tools/README.md | depends: TK-0006, TK-0007, TK-0008, TK-0009, TK-0010, TK-0011, TK-0012, TK-0013, TK-0014, TK-0015, TK-0016, TK-0018, TK-0019, TK-0020, TK-0021, TK-0022, TK-0023, TK-0024, TK-0025, TK-0027, TK-0029 | assignee: W2
 - TK-0028 | Kiểm kê thay đổi dry run để đề xuất chuyển về repo mẹ | depends: TK-0026, TK-0027 | assignee: W2
-- TK-0017 | Hồi quy toàn bộ trên Windows | depends: TK-0006, TK-0007, TK-0008, TK-0009, TK-0010, TK-0011, TK-0012, TK-0013, TK-0014, TK-0015, TK-0016, TK-0018, TK-0019, TK-0020, TK-0021, TK-0022, TK-0023, TK-0024, TK-0025, TK-0026, TK-0027, TK-0028 | assignee: W3
+- TK-0017 | Hồi quy toàn bộ trên Windows | depends: TK-0006, TK-0007, TK-0008, TK-0009, TK-0010, TK-0011, TK-0012, TK-0013, TK-0014, TK-0015, TK-0016, TK-0018, TK-0019, TK-0020, TK-0021, TK-0022, TK-0023, TK-0024, TK-0025, TK-0026, TK-0027, TK-0028, TK-0029 | assignee: W3
 <!-- END: CYC_07 -->
 <!-- ANCHOR: CYC_07_BATCHES -->
 ## CYC-07 batches

@@ -19,7 +19,7 @@ Cả hai là sổ **dữ kiện**, không cấp quyền. Hai file thuộc vùng 
 | `provider_source` | Con trỏ, URL, hoặc `none` | |
 | `group` | Nhóm model, hoặc `unverified` | Chỉ để tham khảo; không dùng để xét tính độc lập |
 | `group_source` | Con trỏ hoặc `none` | |
-| `aliases` | Tên tuyến trên cổng model và các chuỗi biến thể được coi là cùng model | Bí danh không dùng thay `code` trong bản ghi |
+| `aliases` | Tên tuyến và chuỗi biến thể đã ghi nhận | Không có alias khác mã. Hậu tố ngoặc vuông không phải alias mới. Chuỗi trong `aliases` không chứng minh định danh. Không dùng alias thay `code` trong bản ghi |
 | `recommended_roles` | Tập con của `BRAINSTORM`, `PLANNING`, `REVIEWER`, `WORKER` | Là ghi nhận của LEAD; không cấp và không cấm vai nào |
 | `capability_source` | Con trỏ, URL, hoặc `none` | `none` nghĩa là chưa có căn cứ để khẳng định năng lực |
 | `price_source` | URL, hoặc `none` | Không chép con số giá vào catalog |
@@ -30,6 +30,8 @@ Cả hai là sổ **dữ kiện**, không cấp quyền. Hai file thuộc vùng 
 
 - Không khẳng định năng lực, chi phí, cửa sổ ngữ cảnh hay thứ hạng của một model khi `capability_source` hoặc `price_source` là `none`.
 - Tên dòng model, tên tuyến, tên agent, tên combo không phải `code`.
+- Khi gọi 9Router, gửi ID tuyến chính xác từ `GET /v1/models` hoặc alias đã kiểm là được chấp nhận; không gửi `code` thay tuyến nếu chưa kiểm. Danh sách ID chỉ chứng minh tuyến được liệt kê, không chứng minh gọi thành công, hỗ trợ công cụ hay model thực tế.
+- Code lịch sử không có tuyến đã xác minh được giữ nguyên; không đoán tuyến hoặc thay bằng model khác trong bản ghi cũ.
 - Catalog chỉ thêm và sửa mục; không xóa mục, vì bản ghi cũ còn trỏ tới `code` đó.
 
 <!-- ANCHOR: ROUTE_CHECKS -->
@@ -39,6 +41,7 @@ Mỗi lần kiểm một tuyến, LEAD ghi một dòng vào neo `ROUTE_CHECKS` �
 
 - `kind: chat`: một lượt hỏi đáp ngắn. `kind: agent-tools`: một phiên tác tử gọi được ít nhất một công cụ đọc và trả về model thực tế.
 - `actual` chép nguyên chuỗi nhận được, kể cả hậu tố. Không lấy từ tên tuyến. Không nhận được thì `none` và `result: FAIL`.
+- `route` là ID gửi tới API; `code` là model kỳ vọng; `actual` là chuỗi phản hồi. Một route trong `aliases` không chứng minh model nó trả về ở lần gọi khác.
 - Dòng kiểm không chứa khóa API, tiêu đề xác thực, nội dung prompt hay câu trả lời.
 - Dòng kiểm được dùng ngay; nó vào `main` cùng PR `lead/` kế tiếp. Trước lúc đó LEAD giữ bản sao ở `<project>.local/logs/` và nêu trong báo cáo cho OWNER.
 <!-- END: ROUTE_CHECKS -->
@@ -74,11 +77,16 @@ Tier (`T1`, `T2`, `T3`, `UNRATED`) không còn là điều kiện giao việc t�
 ### 4.1. Thế nào là cùng một model
 
 <!-- ANCHOR: SAME_MODEL -->
-- So sánh trên **model thực tế** hệ thống trả về cho từng phiên, không trên tên tuyến, tên agent, tên combo hay model yêu cầu.
-- Mã gốc của một chuỗi model là chuỗi đó sau khi bỏ phần trong ngoặc vuông ở cuối. Ví dụ `gpt-5.6-luna[1m]` có mã gốc `gpt-5.6-luna`.
-- Hai chuỗi là cùng một model khi cùng mã gốc, hoặc khi một chuỗi nằm trong `aliases` của mục catalog của chuỗi kia.
-- Hai chuỗi khác mã gốc là hai model khác nhau, kể cả khi cùng nhà cung cấp hay cùng dòng. Ví dụ `gpt-5.6-luna` và `gpt-5.6-terra` là hai model.
-- Không chắc hai chuỗi có phải cùng một model hay không: coi là cùng, và hỏi OWNER.
+- So sánh trên **model thực tế** hệ thống trả về cho từng phiên sản phẩm, không trên tên tuyến, tên agent, tên combo, model yêu cầu hay nhãn do người gọi tự gắn.
+- Actual của một phiên là chuỗi nhật ký công cụ của chính phiên đó. Sau phiên, chuỗi ấy được chép vào `model` của run hoặc `reviewer_model` của RVW cùng phiên. Run của phiên khác không phải actual của phiên sắp mở. Không tạo file RVW giả.
+- Một dòng `ROUTE_CHECKS` chỉ chứng minh `actual` của lần probe đó. Probe không chứng minh actual của phiên sản phẩm. Dòng mới hơn của cùng tuyến thắng cho lần probe sau. Dòng cũ không biến tên tuyến thành bí danh.
+- Không có alias khác mã. Hai actual khác mã gốc không được gom bằng `aliases`, dù một tuyến từng trả mã kia. Hậu tố ngoặc vuông là biến thể cùng mã gốc, không phải alias mới. Ví dụ `gpt-5.6-luna[1m]` có mã gốc `gpt-5.6-luna`.
+- Khớp pattern `code` không phải nguồn. Tên combo không có `/`, ví dụ `Hardeness` và `hardeness`, không phải actual chỉ vì khớp regex.
+- Kết quả actual chỉ là `same`, `different` hoặc `UNKNOWN`. `same` và `different` chỉ khi từng chuỗi được đọc từ nhật ký, run hoặc RVW của chính phiên đó. Model yêu cầu không phải actual, nên bước chọn không in `same` hay `different`.
+- `same`: cùng mã gốc. `different`: khác mã gốc. Thiếu nguồn đúng thời điểm, chỉ có probe, tên tuyến, tên agent hoặc tên combo: `UNKNOWN`, không in `different`. Hỏi OWNER. Không cho qua kiểm độc lập.
+- Mã thực tế hợp lệ là một phần khớp pattern `code` của `model_catalog.schema.json`, hoặc phần đó cộng đúng một hậu tố ngoặc vuông ở cuối. Pattern là `^[a-z0-9][a-z0-9._-]*$`. Phần có `/` không phải mã.
+- Trường `model` giữ là một chuỗi. Tách theo dấu phẩy, cắt khoảng trắng từng phần. Chuỗi ghép không phải một model mới. Không bỏ phần nào. Phần rỗng, ví dụ `a, , b`, hoặc phần không phải mã hợp lệ, làm cả trường `UNKNOWN`. Không bỏ phần rỗng rồi xét phần còn lại.
+- Actual có `/` và có nguồn phiên được giữ nguyên trong stdout. Không cắt tiền tố. Vì không quy được về mã hợp lệ nên kết quả là `UNKNOWN`, không phải `different`. Probe có `/` cũng không phải actual phiên.
 <!-- END: SAME_MODEL -->
 
 ### 4.2. Điều kiện
@@ -87,7 +95,7 @@ Tier (`T1`, `T2`, `T3`, `UNRATED`) không còn là điều kiện giao việc t�
 1. Model thực tế của REVIEWER khác, theo mục 4.1, với model thực tế của mọi run có sản phẩm nằm trong phần được kiểm định. Không bắt buộc khác nhóm hay khác nhà cung cấp.
 2. Run không ghi được model thực tế thì không kiểm định được phần việc đó: dừng, báo OWNER.
 3. REVIEWER đáp ứng mọi `DEC` đang `ACTIVE` về phân công model của phần được kiểm định.
-4. Kiểm cả ba điều trước khi giao kiểm định (`PREFLIGHT.md` mục 2, dòng 13), lúc REVIEWER bắt đầu, và khi LEAD review PR của REVIEWER, mỗi lần đều theo model thực tế. Bản kiểm định vi phạm thì không được merge; có tính là một vòng hay không do OWNER quyết bằng `DEC`.
+4. Kiểm cả ba thời điểm bằng nguồn của thời điểm đó. Không bắt REVIEWER từng có run sản phẩm. Không lấy run phiên khác làm actual phiên sắp mở. Không tạo RVW giả. Probe không phải actual phiên. Trước khi giao: so model yêu cầu với từng model trong file run worker, và chỉ xét tuyến đủ điều kiện. In `planned`, không khẳng định actual. Trùng mã gốc với một worker thì không giao. Lúc phiên bắt đầu: đọc actual từ nhật ký công cụ của chính phiên mới, so từng model worker. Chưa khác hết thì không được review. Lúc review PR: đọc file RVW đã có và đối chiếu lại. Bản kiểm định vi phạm thì không được merge; có tính là một vòng hay không do OWNER quyết bằng `DEC`.
 <!-- END: REVIEWER_INDEPENDENCE -->
 
 ## 5. Model yêu cầu và model thực tế
