@@ -25,10 +25,11 @@ Catalog có tên tuyến trong aliases; luật so sánh cũ coi mọi alias là 
 <!-- END: OPTIONS -->
 <!-- ANCHOR: RATIONALE -->
 ## Decision and rationale
-Giữ nguyên schema và dữ liệu catalog; route dùng để gọi, actual chép từ hệ thống, code là mã model. Không suy định danh từ tuyến hoặc combo; thiếu bằng chứng thì không kết luận model khác và hỏi OWNER.
+Giữ nguyên schema và dữ liệu catalog; route dùng để gọi, actual chép từ hệ thống, code là mã model. Không suy định danh từ tuyến hoặc combo; thiếu bằng chứng thì không kết luận same hay different, hỏi OWNER.
 <!-- END: RATIONALE -->
 <!-- ANCHOR: CONSEQUENCES -->
 ## Consequences
 - Điều chỉnh phần diễn giải aliases của DEC-0018; phần còn lại giữ nguyên. Run và RVW lịch sử không bị sửa hay xét lại.
+- Không thêm khóa schema và không có alias khác mã. Probe không chứng minh actual của phiên sản phẩm. Bước chọn không khẳng định actual. Thiếu nguồn đúng thời điểm thì UNKNOWN, không kết luận different.
 - TK-0029 kiểm thử hồi quy các trường hợp tuyến đổi model và định danh chưa xác minh. Kiểm kê ngày 2026-11-14 tại `<project>.local/logs/orca-1.0.1/MODEL_NAME_AUDIT.md` đối chiếu 15 code và 78 ID được liệt kê; không coi danh sách tuyến là bằng chứng agent dùng được công cụ.
 <!-- END: CONSEQUENCES -->

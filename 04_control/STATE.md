@@ -2,11 +2,11 @@ PHASE: EXECUTE
 CYCLE: CYC-03
 PROFILE: SHORT
 
-## Handover board (updated: 2026-11-14, main @ 67a092f)
+## Handover board (updated: 2026-11-16, main @ 8dcf58b)
 ### 1. Progress
 - CYC-01 | PASS | TK-0001 DONE R2, TK-0002 DONE R1, TK-0004 DONE R1 | thẻ cycle/CYC-01 @ e2b7944
 - CYC-02 | PASS | TK-0003 DONE R1, TK-0005 DONE R1 | RVW-CYC-02 vòng 1 PASS | thẻ cycle/CYC-02 @ 36bafbe
-- CYC-03 | ASSIGNED | TK-0006, TK-0007, TK-0008, TK-0018, TK-0027 | bảo vệ main
+- CYC-03 | ASSIGNED | TK-0006 DONE R1, TK-0007 DONE R1, TK-0008 DONE R4; còn TK-0018, TK-0027 | bảo vệ main
 - CYC-04 | ASSIGNED | TK-0009, TK-0010, TK-0019, TK-0029 | model
 - CYC-05 | ASSIGNED | TK-0011, TK-0012, TK-0020, TK-0021 | chat, storage, Git, trace
 - CYC-06 | ASSIGNED | TK-0013, TK-0014, TK-0022, TK-0023 | scanner
@@ -37,7 +37,7 @@ PROFILE: SHORT
 - DEC-0009 | SUPERSEDED_BY DEC-0012
 - DEC-0005 | RETIRED
 ### 4. Next action
-- OWNER dán prompt ở 01_plan/SPEC_ORCA_PROMPT.md#PROMPT vào một phiên Orca để chạy CYC-03 B1 (TK-0006, TK-0007, TK-0008); phiên đó dừng sau mỗi batch chờ OWNER squash-merge. LEAD chọn model theo từng lần giao (DEC-0018, DEC-0017, 01_plan/SPEC_MODELS.md) và kiểm tuyến bằng phiên tác tử có công cụ trước lần giao đầu của mỗi model; hạn mức chưa xác minh. Việc OWNER cần chốt: phương án RFC-0001; bật luật bảo vệ main và thẻ cycle/* (RSK-0004); tự xóa nhánh nguồn. Đóng dự án lùi sau CYC-07. Pytest toàn repo trên main 67a092f đạt 23/23.
+- OWNER merge PR lead/model-route-clarity trước khi dùng plan version 7. CYC-03 B1 đã có run DONE trên main 8dcf58b: TK-0006 R1, TK-0007 R1, TK-0008 R4. Không giao lại B1. Việc kế sau merge là CYC-03 B2, TK-0018 và TK-0027. LEAD chọn model theo DEC-0018; hạn mức chưa xác minh. OWNER còn chốt RFC-0001, bật luật bảo vệ main và thẻ cycle/*, tự xóa nhánh nguồn.
 ### 5. Never do
 - Không xuất PDF
 - Không dùng tên học viên thật trong dữ liệu thử
