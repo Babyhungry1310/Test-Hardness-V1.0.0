@@ -1,7 +1,7 @@
 ---
 schema: 1
 id: MODEL_MATRIX
-updated: 2026-11-14
+updated: 2026-11-18
 status: PROPOSED
 tier1_candidate_families: ["Claude Opus", "GPT-Series mạnh", "Gemini Pro"]
 tier1: []
@@ -32,6 +32,8 @@ roles:
 ---
 <!-- ANCHOR: ASSIGNMENTS -->
 ## Assignments
+- CYC-03 | WORKER | requested: gpt-6.1-sol | actual: pending | record: TK-0018 R1 | match: pending | route: cx/gpt-6.1-sol | basis: OWNER selects GPT; confirmed tools; B2 zero-overlap; quota unverified
+- CYC-03 | WORKER | requested: gpt-6.1-sol | actual: pending | record: TK-0027 R1 | match: pending | route: cx/gpt-6.1-sol | basis: OWNER selects GPT; confirmed tools; B2 zero-overlap; quota unverified
 - CYC-03 | WORKER | requested: grok-4.7 | actual: pending | record: TK-0030 R1; DEC-0026 | match: pending | route: xai/grok-4.7 | basis: OWNER requests Grok; prior agent-tools OK; phase-zero pending; quota unverified
 - CYC-03 | REVIEWER | requested: gemini-3.8-flash-n | actual: pending | record: TK-0030 delta review; not dispatched | match: pending | route: ag/gemini-3.8-flash | basis: OWNER requests Gemini; new Grok delta only; eligibility recheck before assignment; quota unverified
 - CYC-02 | REVIEWER | requested: nhóm Gemini (DEC-0012) | actual: gemini-3.8-flash-n | record: RVW-CYC-02 | match: yes

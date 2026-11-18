@@ -1,7 +1,7 @@
 ---
 schema: 1
 id: MODEL_CATALOG
-updated: 2026-11-14
+updated: 2026-11-18
 models:
   - code: "claude-fable-5-2"
     provider: unverified
@@ -186,6 +186,7 @@ models:
 ---
 <!-- ANCHOR: ROUTE_CHECKS -->
 ## Route checks (newest first)
+- 2026-11-18T06:28Z | route: cx/gpt-6.1-sol | actual: gpt-6.1-sol | kind: agent-tools | result: OK | source: own-session response.completed.model; launch ed8f9ead-c03b-4d7b-aba9-07fbd456a2ed; PR38_B2_OWNER_ACCEPTANCE.md | note: Read VERSION/WORKER succeeded; new worker actual remains pending
 - 2026-11-15T02:08Z | route: xai/grok-4.7 | actual: grok-4.7 | kind: agent-tools | result: OK | source: native Claude Code assistant.message.model; session 4ff5f318-423d-464c-ae3f-296f1fa1b76f sau đổi model | note: Read VERSION đạt; giữ lịch sử Opus, Grok; L01 đã dùng 1/3
 - 2026-11-14T10:51Z | route: ag/gemini-3.8-flash | actual: gemini-3.8-flash-n | kind: agent-tools | result: OK | source: native Claude Code assistant.message.model; session 11fb173d-a42a-4924-b17c-3bea58870015 | note: TK-0007 phase zero; Read harness/VERSION đạt
 - 2026-11-14T06:32Z | route: Hardeness | actual: gpt-5.6-luna[1m] | kind: chat | result: OK | source: POST /v1/chat/completions tại http://localhost:20128, gọi từ trình duyệt của ứng dụng trên máy OWNER | note: combo; không dùng để giao việc
