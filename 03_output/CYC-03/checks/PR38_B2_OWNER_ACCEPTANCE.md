@@ -34,3 +34,11 @@ Date: 2026-11-18. Source: OWNER confirmation in LEAD session codex_171d9aeb_2b11
 - Both first request x-client-request-id values match the respective native session IDs; native session_meta cwd and launcher workspace match each assigned worktree. Both workers report successful reads and exact clean base SHA before product work.
 - Initial structured readiness sessions were stopped and released with confirmed exited liveness before replacement, on the same orchestration Tasks. No product loop was consumed. The new transports record response metadata only, without prompts, credentials or output bodies.
 - Effective danger-full-access/never matches the initial Orca-managed worker policy; no permission widening or global settings change was performed. These facts describe effective policy and do not claim workspace sandbox confinement.
+
+## B2 first-loop checkpoint
+
+- TK-0018 R1 worker_done outcome failed: L01 verify 44 passed, 3 failed, exit 1; same-loop baseline 23 passed, exit 0. No publication. Two unused loops remain. The task remains BLOCKED.
+- Failure evidence: merge creating a commit on temporary main bypasses the installed pre-commit hook; copied CRLF hooks execute under Git for Windows. Native CRLF execution failure is not a portable installation check. No source edit or acceptance waiver has been authorized.
+- TK-0027 R1 prepublication evidence reports 18 task tests and 23 baseline tests passed, both exit 0, one loop used. Test review accepts the JSON-only load adapter boundary already supplied by LEAD; publication awaits run metadata corrections and static recheck.
+- LEAD schema review found malformed done_check entries in both run files and uppercase keywords in TK-0018; TK-0018 also has literal question-mark substitutions in explanatory text. Original artifacts and hashes are preserved locally before metadata-only repair. Original test outputs, test files and L01 outcomes must remain unchanged. No pytest rerun is needed for metadata repair.
+- B2 remains blocked by TK-0018; this checkpoint neither closes CYC-03 nor opens the next batch.
