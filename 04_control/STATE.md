@@ -6,7 +6,7 @@ PROFILE: SHORT
 ### 1. Progress
 - CYC-01 | PASS | TK-0001 DONE R2, TK-0002 DONE R1, TK-0004 DONE R1 | thẻ cycle/CYC-01 @ e2b7944
 - CYC-02 | PASS | TK-0003 DONE R1, TK-0005 DONE R1 | RVW-CYC-02 vòng 1 PASS | thẻ cycle/CYC-02 @ 36bafbe
-- CYC-03 | EXECUTE | B1 DONE: TK-0006, TK-0007, TK-0008 đã merge; TK-0030 DONE (PR38); B2 BLOCKED: TK-0018 R1 L01 FAIL; TK-0027 R1 L01 PASS awaiting metadata repair/publication | bảo vệ main
+- CYC-03 | EXECUTE | B1 DONE; TK-0030 DONE (PR38); B2 BLOCKED: TK-0018 R1 BLOCKED; TK-0027 task/TK-0027-R1 pushed, PR40 OPEN, Grok static PASS @ 3a6be09a5cb06ac321ea8cbf1fb3a91bd8b96b51, chờ OWNER quyết định merge; chưa DONE
 - CYC-04 | ASSIGNED | TK-0009, TK-0010, TK-0019, TK-0029 | model
 - CYC-05 | ASSIGNED | TK-0011, TK-0012, TK-0020, TK-0021 | chat, storage, Git, trace
 - CYC-06 | ASSIGNED | TK-0013, TK-0014, TK-0022, TK-0023 | scanner
@@ -26,19 +26,9 @@ PROFILE: SHORT
 - DEC-0016 | ACTIVE | Thử khung V1.0.1 trên repo này: nguồn chuẩn, nơi đặt code, duyệt ma trận model, ngoại lệ tạo task và nền tích hợp tạm
 - DEC-0015 | ACTIVE | Nâng khung lên V1.0.1: bảo vệ main, ma trận model, chat và storage, dọn nhánh, scanner
 - DEC-0014 | ACTIVE | Bản kiểm định CYC-02 do gpt-6.1-sol chạy không tính là một vòng kiểm định
-- DEC-0013 | ACTIVE | Handout kết thúc bằng đúng một LF và ghi file với newline LF
-- DEC-0012 | ACTIVE | Phân công model CYC-02: WORKER dùng Codex, REVIEWER dùng nhóm Gemini; không gắn cứng Claude
-- DEC-0011 | ACTIVE | Thẻ git chỉ do OWNER tạo và đẩy
-- DEC-0010 | ACTIVE | Định dạng handout Markdown và giao diện dòng lệnh
-- DEC-0008 | ACTIVE | Kiểm định vòng 3 của CYC-01 chạy Claude Code trực tiếp, ngoài 9Router
-- DEC-0007 | ACTIVE | Phân công model CYC-01: WORKER dùng Codex, REVIEWER dùng Claude
-- DEC-0006 | ACTIVE | Khắc phục thu thập test bằng cách giới hạn pytest về tests/
-- DEC-0004 | ACTIVE | So khớp id câu hỏi không phân biệt hoa thường
-- DEC-0002 | ACTIVE | Lưu ngân hàng câu hỏi dạng JSON và xuất handout Markdown
-- DEC-0009 | SUPERSEDED_BY DEC-0012
-- DEC-0005 | RETIRED
+- Quyết định cũ: DEC-0013, DEC-0012, DEC-0011, DEC-0010, DEC-0008, DEC-0007, DEC-0006, DEC-0004, DEC-0002 ACTIVE; DEC-0009 SUPERSEDED_BY DEC-0012; DEC-0005 RETIRED. Chi tiết trong sổ gốc.
 ### 4. Next action
-- B2 status: TK-0018 R1 BLOCKED, L01 verify 44 passed/3 failed (exit 1), same-loop baseline 23 passed (exit 0). No commit/push; merge-on-main hook gap and CRLF installation-check ambiguity require separate source/spec remedy. Two loops remain unused; no rerun for known blockers. TK-0027 L01 verify 18 passed and baseline 23 passed, exits 0; prepublication metadata repair pending. Neither task is merged; batch advancement remains held.
+- B2: TK-0018 R1 BLOCKED, L01 44 passed/3 failed; hai loop chưa dùng, không chạy lại blocker đã biết. TK-0027 PR40 OPEN, static PASS, chờ OWNER merge; không batch/cycle PASS. Checkpoint lịch sử và giới hạn bằng chứng: 03_output/CYC-03/checks/PR38_B2_OWNER_ACCEPTANCE.md.
 - PR38 merged at main 9cfe9434bfde66e1da6caf4a518fc50abf3dfc9a. TK-0030 R1 DONE; B1 DONE. OWNER confirms independent Gemini delta PASS, C1-C14 acceptance and post-merge tools 62/baseline 23 PASS, exits 0. Source and limits: 03_output/CYC-03/checks/PR38_B2_OWNER_ACCEPTANCE.md; no historical run changes.
 - OWNER accepts pre-L01 smoke/launcher probes as not_verify and L01 as the sole official loop. Preserve original evidence; do not relabel failed launcher probes as PASS. Grok implementation and GPT grammar repair retain their actual-model history.
 - OWNER explicitly activates CYC-03 B2 at main 9cfe943: TK-0018 and TK-0027 may run concurrently under PLAN#CYC_03_BATCHES; distinct write_scope and independent tasks. WORKER requested gpt-6.1-sol through cx/gpt-6.1-sol; both own-session actuals verified gpt-6.1-sol at phase zero. No repeated Go required. Reviewers use separate Gemini or DeepSeek sessions.
