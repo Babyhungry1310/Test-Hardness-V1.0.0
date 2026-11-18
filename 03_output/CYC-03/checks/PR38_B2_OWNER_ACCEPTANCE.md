@@ -26,3 +26,11 @@ Date: 2026-11-18. Source: OWNER confirmation in LEAD session codex_171d9aeb_2b11
 - Installed Python: C:/Users/linhdh/AppData/Local/Python/pythoncore-3.14-64/python.exe. Bare python previously invoked PyManager; provide interpreter context, do not change global settings.
 - Use current Orca-managed agent settings; no new permission grant or reuse of the retired temporary PR38 launcher. If sandbox/IPC blocks readiness, report the exact boundary instead of changing permissions.
 - Preserve the dirty lead-cyc02 workspace, original model history, permissions telemetry, closed-run evidence, and draft PR37. No main writes, merges, tags, auto-merge or GitHub settings changes.
+
+## B2 phase-zero actual-model verification
+
+- TK-0018: native session 01a1ee15-2a43-7df2-a314-c94e24a42525; launch 4481162e-bfc9-4968-89df-1db364946f47; response.completed.response.model = gpt-6.1-sol; response resp_066b6a6423a220d8016afd76531ef087d0826362f49af75b7b at 2026-11-18T09:56:45.100178+00:00.
+- TK-0027: native session 01a1ee15-2a43-71f0-b67d-7acf55038a5d; launch 47e62a58-ed5e-446f-bae2-fd3eb314ad0a; response.completed.response.model = gpt-6.1-sol; response resp_0077eb0bfa43a601016afd765f363c87d080582657104cf6c0 at 2026-11-18T09:56:58.943599+00:00.
+- Both first request x-client-request-id values match the respective native session IDs; native session_meta cwd and launcher workspace match each assigned worktree. Both workers report successful reads and exact clean base SHA before product work.
+- Initial structured readiness sessions were stopped and released with confirmed exited liveness before replacement, on the same orchestration Tasks. No product loop was consumed. The new transports record response metadata only, without prompts, credentials or output bodies.
+- Effective danger-full-access/never matches the initial Orca-managed worker policy; no permission widening or global settings change was performed. These facts describe effective policy and do not claim workspace sandbox confinement.
