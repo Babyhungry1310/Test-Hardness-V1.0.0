@@ -1,4 +1,5 @@
 ﻿import json
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -22,6 +23,31 @@ def add_worktree(repo_dir, wt_dir, branch_name):
 def run_cli(args, cwd):
     script = Path(__file__).resolve().parent.parent / "preflight_main.py"
     return subprocess.run([sys.executable, str(script)] + args, cwd=cwd, capture_output=True, text=True, encoding="utf-8")
+
+
+def child_env(narrow):
+    env = os.environ.copy()
+    env.pop("PYTHONUTF8", None)
+    env.pop("PYTHONIOENCODING", None)
+    if narrow:
+        env["PYTHONUTF8"] = "0"
+        env["PYTHONIOENCODING"] = "cp1252:strict"
+    return env
+
+
+def run_cli_child(args, cwd, narrow=False):
+    script = Path(__file__).resolve().parent.parent / "preflight_main.py"
+    cmd = [sys.executable]
+    if narrow:
+        cmd.extend(["-X", "utf8=0"])
+    cmd.append(str(script))
+    cmd.extend(args)
+    return subprocess.run(cmd, cwd=cwd, capture_output=True, env=child_env(narrow))
+
+
+def utf8_text(res):
+    assert b"UnicodeEncodeError" not in res.stderr
+    return res.stdout.decode("utf-8")
 
 
 def test_branch_patterns():
@@ -228,3 +254,55 @@ def test_preflight_does_not_modify_repo(tmp_path):
 
     assert snap_repo_before == snap_repo_after
     assert snap_wt_before == snap_wt_after
+
+
+@pytest.mark.parametrize("narrow", [False, True])
+def test_encoding_outside_repo_exits_2(tmp_path, narrow):
+    empty = tmp_path / "empty"
+    empty.mkdir()
+    res = run_cli_child(["--role", "worker", "--stage", "session"], empty, narrow=narrow)
+    assert res.returncode == 2
+    text = utf8_text(res)
+    assert "Lỗi: Not a git repo" in text
+    assert "L?i" not in text
+
+
+@pytest.mark.parametrize("narrow", [False, True])
+def test_encoding_usage_exits_2(tmp_path, narrow):
+    empty = tmp_path / "empty"
+    empty.mkdir()
+    res = run_cli_child(["--role", "unknown", "--stage", "session"], empty, narrow=narrow)
+    assert res.returncode == 2
+    utf8_text(res)
+
+
+@pytest.mark.parametrize("narrow", [False, True])
+def test_encoding_main_checkout_exits_1(tmp_path, narrow):
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    init_repo(repo)
+    res = run_cli_child(["--role", "worker", "--stage", "session"], repo, narrow=narrow)
+    assert res.returncode == 1
+    text = utf8_text(res)
+    assert "Preflight FAILED" in text
+
+
+@pytest.mark.parametrize("narrow", [False, True])
+def test_encoding_warnings_and_json(tmp_path, narrow):
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    init_repo(repo)
+    wt = tmp_path / "wt"
+    add_worktree(repo, wt, "task/TK-0007-R1")
+    (wt / "dirty.txt").write_text("changes", encoding="utf-8")
+    res = run_cli_child(["--role", "worker", "--stage", "session"], wt, narrow=narrow)
+    assert res.returncode == 0
+    text = utf8_text(res)
+    assert "Cảnh báo: Hook chưa cài" in text
+    assert "Cảnh báo: Worktree có thay đổi chưa commit" in text
+    assert "Preflight PASSED" in text
+    js = run_cli_child(["--role", "worker", "--stage", "session", "--json"], wt, narrow=narrow)
+    assert js.returncode == 0
+    data = json.loads(utf8_text(js))
+    assert data["ok"] is True
+    assert data["warnings"] == ["Hook chưa cài", "Worktree có thay đổi chưa commit"]
