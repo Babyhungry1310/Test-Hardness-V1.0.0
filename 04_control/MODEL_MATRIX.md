@@ -1,7 +1,7 @@
 ---
 schema: 1
 id: MODEL_MATRIX
-updated: 2026-11-14
+updated: 2026-11-18
 status: PROPOSED
 tier1_candidate_families: ["Claude Opus", "GPT-Series mạnh", "Gemini Pro"]
 tier1: []
@@ -32,8 +32,10 @@ roles:
 ---
 <!-- ANCHOR: ASSIGNMENTS -->
 ## Assignments
-- CYC-03 | WORKER | requested: grok-4.7 | actual: pending | record: TK-0030 R1; DEC-0026 | match: pending | route: xai/grok-4.7 | basis: OWNER requests Grok; prior agent-tools OK; phase-zero pending; quota unverified
-- CYC-03 | REVIEWER | requested: gemini-3.8-flash-n | actual: pending | record: TK-0030 delta review; not dispatched | match: pending | route: ag/gemini-3.8-flash | basis: OWNER requests Gemini; new Grok delta only; eligibility recheck before assignment; quota unverified
+- CYC-03 | WORKER | requested: gpt-6.1-sol | actual: gpt-6.1-sol | record: TK-0018 R1 | match: yes | route: cx/gpt-6.1-sol | basis: OWNER selects GPT; confirmed tools; B2 zero-overlap; quota unverified
+- CYC-03 | WORKER | requested: gpt-6.1-sol | actual: gpt-6.1-sol | record: TK-0027 R1 | match: yes | route: cx/gpt-6.1-sol | basis: OWNER selects GPT; confirmed tools; B2 zero-overlap; quota unverified
+- CYC-03 | WORKER | requested: grok-4.7 | actual: chưa xác minh độc lập | record: TK-0030 R1; DEC-0026; 02_work/runs/TK-0030_R1_DONE.md:6; 03_output/CYC-03/checks/TK-0030_R1_verify.txt:30 | match: chưa xác minh | route: xai/grok-4.7 | basis: historical implementation recorded grok-4.7, native session 4aa3e4c0-92eb-4b24-9a74-af334b1d0649 cited by evidence; native metadata not independently inspected here; separate metadata repair recorded gpt-6.1-sol in PR38_B2_OWNER_ACCEPTANCE.md; no historical relabeling; quota unverified
+- CYC-03 | REVIEWER | requested: gemini-3.8-flash-n | actual: chưa xác minh độc lập | record: TK-0030 delta review; 03_output/CYC-03/checks/PR38_B2_OWNER_ACCEPTANCE.md | match: chưa xác minh | route: ag/gemini-3.8-flash | basis: OWNER reports gemini-3.8-flash and delta PASS; no own reviewer response metadata or independent transcript supplied; not cycle certification; quota unverified
 - CYC-02 | REVIEWER | requested: nhóm Gemini (DEC-0012) | actual: gemini-3.8-flash-n | record: RVW-CYC-02 | match: yes
 - CYC-02 | WORKER | requested: nhóm Codex (DEC-0012) | actual: gpt-6.1-terra | record: 02_work/runs/TK-0005_R1_DONE.md | match: yes
 - CYC-02 | WORKER | requested: nhóm Codex (DEC-0012) | actual: gpt-5.6-luna | record: 02_work/runs/TK-0003_R1_DONE.md | match: yes
