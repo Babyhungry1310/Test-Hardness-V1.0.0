@@ -1,0 +1,109 @@
+{
+  "task": "TK-0027",
+  "run": 1,
+  "loop": "L01",
+  "outcome": "PASS",
+  "actual_model": "gpt-6.1-sol",
+  "metadata_source": "C:/Users/linhdh/orca/Test-Hardness-V1.0.0.local/logs/CYC03_B2_TK-0027_METADATA.jsonl",
+  "metadata_field": "response.completed.response.model",
+  "response_id": "resp_0077eb0bfa43a601016afd765f363c87d080582657104cf6c0",
+  "native_session": "01a1ee15-2a43-71f0-b67d-7acf55038a5d",
+  "lead_confirmation": "msg_ff0f52c53d51",
+  "fixture_clarification": "msg_c20a1a35055a",
+  "fixture_boundary": "JSON snapshot contains data/state with CODEOWNERS as JSON string; only load is adapted to read snapshot.json and assert fixture directory; real audit and format_report run unchanged.",
+  "coverage_limit": "Does not retest on-disk CODEOWNERS loading covered by TK-0008.",
+  "static_review": {
+    "lines": 113,
+    "line_budget": 120,
+    "comments": 0,
+    "docstrings": 0,
+    "skip_or_xfail": 0,
+    "product_edits": 0
+  },
+  "done_when": {
+    "1": "2 positive cases assert exact confirmed row and identity limit plus self-review warning.",
+    "2": "10 negative cases cover different account, missing user/repo/owner/login/CODEOWNERS, other/comment/overridden CODEOWNERS and uncertain paths; never confirmed.",
+    "3": "6 classic/ruleset cases assert true/false/unknown requirement status, self-review warning, read-only report limit and absence of OWNER approval claim.",
+    "4": "L01 task verify exit 0: 18 passed; same-loop baseline exit 0: exactly 23 passed."
+  },
+  "loops": {
+    "executed": 1,
+    "remaining": 2,
+    "verify_passed": 18,
+    "verify_failed": 0,
+    "baseline_passed": 23,
+    "baseline_failed": 0
+  },
+  "policy": {
+    "sandbox": "danger-full-access",
+    "approval": "never",
+    "settings_changed": false
+  },
+  "validation": {
+    "run_schema": "PASS official run.schema.json via yaml.BaseLoader and Draft202012Validator after U+2192 repair",
+    "initial_validator_failure": "safe_load rejected trailing template --- as second document; validator corrected to safe_load_all; run unchanged",
+    "run_lines": 26,
+    "branch": "task/TK-0027-R1",
+    "head": "9cfe9434bfde66e1da6caf4a518fc50abf3dfc9a",
+    "scope_valid": true,
+    "files": [
+      "02_work/runs/TK-0027_R1_DONE.md",
+      "03_output/CYC-03/checks/TK-0027_R1_L01_baseline.txt",
+      "03_output/CYC-03/checks/TK-0027_R1_L01_commands.json",
+      "03_output/CYC-03/checks/TK-0027_R1_L01_verify.txt",
+      "03_output/CYC-03/checks/TK-0027_R1_review.json",
+      "tools/tests/test_shared_account_audit.py"
+    ],
+    "tracked_diff_empty": true
+  },
+  "prepublication_transport_failure": "Orca ask with embedded multiline raw diff exited 1: invalid_argument Unknown command orchestration ask @Owner; retry uses evidence path with exact UTF-8 diffs instead.",
+  "exact_diffs": {
+    "tools/tests/test_shared_account_audit.py": "diff --git a/tools/tests/test_shared_account_audit.py b/tools/tests/test_shared_account_audit.py\nnew file mode 100644\nindex 0000000..5fd4925\n--- /dev/null\n+++ b/tools/tests/test_shared_account_audit.py\n@@ -0,0 +1,113 @@\n+import json\n+\n+import pytest\n+\n+from tools import github_audit\n+\n+\n+@pytest.fixture\n+def audit_snapshot(tmp_path, monkeypatch):\n+    data = {\n+        \"repo\": {\"owner\": {\"login\": \"Owner\", \"id\": 17, \"type\": \"User\"}},\n+        \"user\": {\"login\": \"Owner\"},\n+        \"branch\": {\"protected\": True},\n+        \"protection\": {\"required_pull_request_reviews\": {\"require_code_owner_reviews\": True}},\n+        \"rulesets\": [],\n+        \"details\": [],\n+        \"manifest\": {},\n+        \"codeowners\": \"* @Owner\",\n+        \"protected_paths\": None,\n+    }\n+    state = {key: \"ok\" for key in (\"repo\", \"user\", \"branch\", \"protection\", \"rulesets\", \"codeowners\")}\n+    state[\"ruleset_details\"] = \"ok\"\n+\n+    def load(directory):\n+        assert directory == tmp_path\n+        bundle = json.loads((directory / \"snapshot.json\").read_text(encoding=\"utf-8\"))\n+        return bundle[\"data\"], bundle[\"state\"]\n+\n+    monkeypatch.setattr(github_audit, \"load\", load)\n+\n+    def run():\n+        bundle = {\"data\": data, \"state\": state}\n+        (tmp_path / \"snapshot.json\").write_text(json.dumps(bundle), encoding=\"utf-8\")\n+        lines, manifest = github_audit.audit(tmp_path)\n+        return {number: (result, reason) for number, result, reason in lines}, github_audit.format_report(lines, manifest)\n+\n+    return data, state, run\n+\n+\n+@pytest.mark.parametrize(\"login\", [\"Owner\", \"oWnEr\"])\n+def test_confirmed_shared_account_reports_identity_limit(audit_snapshot, login):\n+    data, state, run = audit_snapshot\n+    data[\"user\"][\"login\"] = login\n+    rows, report = run()\n+    assert rows[9] == (\n+        \"PASS\",\n+        \"đang dùng tài khoản OWNER; trùng CODEOWNERS hữu hiệu; không phân biệt được OWNER với tác tử\",\n+    )\n+    assert \"không phân biệt được OWNER với tác tử\" in report\n+    assert \"cảnh báo: tự duyệt PR cùng tài khoản không khả thi\" in rows[4][1]\n+\n+\n+@pytest.mark.parametrize(\"case,expected\", [\n+    (\"different_user\", \"FAIL\"),\n+    (\"missing_user\", \"UNKNOWN\"),\n+    (\"missing_repo\", \"UNKNOWN\"),\n+    (\"missing_owner\", \"UNKNOWN\"),\n+    (\"missing_login\", \"UNKNOWN\"),\n+    (\"missing_codeowners\", \"UNKNOWN\"),\n+    (\"other_codeowner\", \"FAIL\"),\n+    (\"comment_only\", \"FAIL\"),\n+    (\"overridden_owner\", \"FAIL\"),\n+    (\"uncertain_paths\", \"UNKNOWN\"),\n+])\n+def test_unconfirmed_account_never_claims_shared_identity(audit_snapshot, case, expected):\n+    data, state, run = audit_snapshot\n+    if case == \"different_user\":\n+        data[\"user\"][\"login\"] = \"Agent\"\n+    elif case in (\"missing_user\", \"missing_repo\"):\n+        key = case.removeprefix(\"missing_\")\n+        data[key], state[key] = None, \"missing\"\n+    elif case == \"missing_owner\":\n+        data[\"repo\"].pop(\"owner\")\n+    elif case == \"missing_login\":\n+        data[\"user\"].pop(\"login\")\n+    elif case == \"missing_codeowners\":\n+        data[\"codeowners\"], state[\"codeowners\"] = \"\", \"missing\"\n+    else:\n+        data[\"codeowners\"] = {\n+            \"other_codeowner\": \"* @Agent\",\n+            \"comment_only\": \"# @Owner\",\n+            \"overridden_owner\": \"* @Owner\\n* @Agent\",\n+            \"uncertain_paths\": \"/protected/ @Owner\",\n+        }[case]\n+    rows, report = run()\n+    assert rows[9][0] == expected\n+    assert \"trùng CODEOWNERS hữu hiệu\" not in rows[9][1]\n+    assert \"cảnh báo: tự duyệt PR cùng tài khoản không khả thi\" not in rows[4][1]\n+    assert f\"9 {expected} {rows[9][1]}\" in report\n+\n+\n+@pytest.mark.parametrize(\"required,expected\", [(True, \"PASS\"), (False, \"FAIL\"), (None, \"UNKNOWN\")])\n+@pytest.mark.parametrize(\"source\", [\"classic\", \"ruleset\"])\n+def test_review_configuration_is_not_owner_approval(audit_snapshot, required, expected, source):\n+    data, state, run = audit_snapshot\n+    data[\"protection\"][\"required_pull_request_reviews\"][\"require_code_owner_reviews\"] = required\n+    if source == \"ruleset\":\n+        data[\"protection\"][\"required_pull_request_reviews\"][\"require_code_owner_reviews\"] = False\n+        data[\"details\"] = [{\n+            \"target\": \"branch\", \"enforcement\": \"active\",\n+            \"conditions\": {\"ref_name\": {\"include\": [\"refs/heads/main\"], \"exclude\": []}},\n+            \"rules\": [{\"type\": \"pull_request\", \"parameters\": {\"require_code_owner_review\": required}}],\n+            \"bypass_actors\": [],\n+        }]\n+    rows, report = run()\n+    assert rows[4][0] == expected\n+    assert rows[9][0] == \"PASS\"\n+    assert \"cảnh báo: tự duyệt PR cùng tài khoản không khả thi\" in rows[4][1]\n+    assert f\"4 {expected} {rows[4][1]}\" in report\n+    assert \"Chỉ đọc cấu hình, không chứng minh máy chủ từ chối một lượt đẩy thật.\" in report\n+    assert \"OWNER đã duyệt\" not in report\n+    if required is True:\n+        assert rows[4][1].startswith(f\"{source} bắt buộc duyệt của code owner;\")\n",
+    "02_work/runs/TK-0027_R1_DONE.md": "diff --git a/02_work/runs/TK-0027_R1_DONE.md b/02_work/runs/TK-0027_R1_DONE.md\nnew file mode 100644\nindex 0000000..452781f\n--- /dev/null\n+++ b/02_work/runs/TK-0027_R1_DONE.md\n@@ -0,0 +1,26 @@\n+---\n+schema: 1\n+task: TK-0027\n+run: 1\n+outcome: DONE\n+model: \"gpt-6.1-sol\"\n+branch: task/TK-0027-R1\n+outputs: [\"tools/tests/test_shared_account_audit.py\"]\n+evidence:\n+  - \"03_output/CYC-03/checks/TK-0027_R1_L01_verify.txt\"\n+  - \"03_output/CYC-03/checks/TK-0027_R1_L01_baseline.txt\"\n+  - \"03_output/CYC-03/checks/TK-0027_R1_L01_commands.json\"\n+  - \"03_output/CYC-03/checks/TK-0027_R1_review.json\"\n+done_check:\n+  - \"1 → 03_output/CYC-03/checks/TK-0027_R1_L01_verify.txt\"\n+  - \"2 → 03_output/CYC-03/checks/TK-0027_R1_L01_verify.txt\"\n+  - \"3 → 03_output/CYC-03/checks/TK-0027_R1_L01_verify.txt\"\n+  - \"4 → 03_output/CYC-03/checks/TK-0027_R1_L01_baseline.txt\"\n+loops: [\"L01 | PASS | passed=18 failed=0\"]\n+deviations: {assumptions: [], differences: [], unverified: []}\n+escalate: \"no\"\n+escalation: {spec: \"\", problem: \"\", proposal: \"\"}\n+touched_protected: \"no\"\n+keywords: [shared-account, github-audit, regression]\n+usage: []\n+---\n"
+  },
+  "metadata_repair": {
+    "request": "msg_cecf354cc0f9",
+    "previous_validation_gap": "Prior schema-labelled check tested selected fields without official schema and missed literal question marks in done_check.",
+    "change": "Only four separators changed to chr(0x2192) UTF-8; original line endings preserved; own review audit updated.",
+    "schema": "harness/schemas/run.schema.json",
+    "validator": "yaml.BaseLoader; only schema/run converted to int; Draft202012Validator; trailing empty document permitted",
+    "result": "PASS",
+    "schema_errors": [],
+    "run_lines": 26,
+    "run_sha256_before": "7f6d5cc6650d33812088acf58bb06ad5886d763ca50e3f2a948d5184a6db61e4",
+    "run_sha256_after": "d2bb369528ea85da387dda92c988f2375bd5ff868c7b309a165dcc7696787ddd",
+    "review_sha256_before": "2ed765e750009c94872038c8c613a98268a9a811c9b62f342d798c637c8be3ed",
+    "preserved_hashes": {
+      "tools/tests/test_shared_account_audit.py": {
+        "before": "5b12ea6a169729f47ce117150322c283d6c38f9f2fa1f3b3a040b7306cefa708",
+        "after": "5b12ea6a169729f47ce117150322c283d6c38f9f2fa1f3b3a040b7306cefa708"
+      },
+      "03_output/CYC-03/checks/TK-0027_R1_L01_verify.txt": {
+        "before": "a140fec17ca23c46a57ae2e1b3811c0c8b71119115498dfa307fe6eb796af231",
+        "after": "a140fec17ca23c46a57ae2e1b3811c0c8b71119115498dfa307fe6eb796af231"
+      },
+      "03_output/CYC-03/checks/TK-0027_R1_L01_baseline.txt": {
+        "before": "ba2bb7271f0fa348417c262ada5b1572566c344795284f97e839007a853920a0",
+        "after": "ba2bb7271f0fa348417c262ada5b1572566c344795284f97e839007a853920a0"
+      },
+      "03_output/CYC-03/checks/TK-0027_R1_L01_commands.json": {
+        "before": "5d4dec2243dbe7a725b4e11f68e872598472b79687259439b92c01c7386cf4e4",
+        "after": "5d4dec2243dbe7a725b4e11f68e872598472b79687259439b92c01c7386cf4e4"
+      }
+    },
+    "scope": [
+      "02_work/runs/TK-0027_R1_DONE.md",
+      "03_output/CYC-03/checks/TK-0027_R1_review.json"
+    ],
+    "loops_used": 1,
+    "loops_max": 3,
+    "verify_passed": 18,
+    "baseline_passed": 23,
+    "additional_pytest": false,
+    "batch_claim": "TK-0027 only; no B2 PASS claim",
+    "repair_precheck_failures": [
+      "First precheck compared raw decoded CRLF text with read_text-normalized backup and stopped before edits; raw byte equality confirmed.",
+      "After arrow repair BaseLoader returned trailing empty document as empty string rather than None; validator accepts empty document representation."
+    ]
+  }
+}
