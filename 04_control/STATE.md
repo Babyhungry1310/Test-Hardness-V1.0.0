@@ -18,7 +18,7 @@ PROFILE: SHORT
 - RSK-0001 | OPEN | level: MEDIUM | due: 2026-11-26 | owner: LEAD
 ### 3. Recent decisions
 - DEC-0029 | ACTIVE trong nhánh governance, chưa hiệu lực thi công trước OWNER merge | hủy TK-0033; TK-0034 rồi TK-0035, sau đó TK-0018
-- DEC-0028 | ACTIVE trong nhánh governance, chưa hiệu lực thi công trước OWNER merge | TK-0032 nguồn sửa, rồi TK-0018; snapshot/bàn giao theo quyền riêng
+- DEC-0028 | ACTIVE | TK-0032 nguồn sửa, rồi TK-0018; snapshot/bàn giao theo quyền riêng
 - DEC-0026 | ACTIVE | TK-0030 fixes TK-0007; PR38 merged; OWNER confirms Gemini PASS and main recheck
 - DEC-0021 | ACTIVE | Phân biệt tuyến 9Router và model thực tế khi so sánh định danh
 - DEC-0020 | ACTIVE | Kiểm kê đầy đủ thay đổi dry run trước khi đề xuất chuyển về repo mẹ
@@ -34,7 +34,7 @@ PROFILE: SHORT
 - PR38 merged at main 9cfe9434bfde66e1da6caf4a518fc50abf3dfc9a. TK-0030 R1 DONE; B1 DONE. OWNER confirms independent Gemini delta PASS, C1-C14 acceptance and post-merge tools 62/baseline 23 PASS, exits 0. Source and limits: 03_output/CYC-03/checks/PR38_B2_OWNER_ACCEPTANCE.md; no historical run changes.
 - OWNER accepts pre-L01 smoke/launcher probes as not_verify and L01 as the sole official loop. Preserve original evidence; do not relabel failed launcher probes as PASS. Grok implementation and GPT grammar repair retain their actual-model history.
 - Kích hoạt B2 tại 9cfe943 là lịch sử; PLAN v9 đặt TK-0032/TK-0034 vào B2 với TK-0027, TK-0035 ở B3, TK-0018 ở B4. Chỉ chạy nguồn sau OWNER merge governance; writer Grok native, reviewer Gemini qua 9Router; actual xác minh từng phiên.
-- PLAN v9 chờ OWNER merge; v8 là nền gần nhất. DEC-0022..0025 và collision migration giữ tại lead-cyc02, không tích hợp hoặc ghi đè trong phiên này.
+- PLAN v8 đã ở main; PLAN v9 chờ OWNER merge. DEC-0022..0025 và collision migration giữ tại lead-cyc02, không tích hợp hoặc ghi đè trong phiên này.
 - GitHub audit configuration remains FAIL1-6/PASS7-8/UNKNOWN9 per merged TK-0008 snapshot; OWNER handles RSK-0004. Test PASS does not certify GitHub protection settings. No main/tag push probes; CYC-03 not closed and CYC-04 not opened.
 ### 5. Never do
 - Không xuất PDF; không dùng tên học viên thật trong dữ liệu thử
