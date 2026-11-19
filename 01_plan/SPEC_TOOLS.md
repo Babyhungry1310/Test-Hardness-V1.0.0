@@ -50,3 +50,15 @@ Nguồn: DEC-0015, DEC-0016. Nền: `main` @ 67a092f.
 | Pre-flight | TK-0007, TK-0018, repo tạm | Quyền đọc repo cục bộ | Chỉ có tác dụng khi tác tử gọi; không chặn lệnh chạy ngoài phiên |
 | Phía GitHub | TK-0008, dữ liệu đọc bằng `gh api` kiểu `GET` | Quyền đọc repo; đọc chi tiết luật nhánh có thể cần quyền quản trị, thiếu thì dòng đó là `UNKNOWN`. Bật luật: quyền quản trị, chỉ OWNER | Chỉ đọc cấu hình, không chứng minh máy chủ từ chối một lượt đẩy thật. Tác tử không đẩy thử vào `main` hay thẻ. Dùng chung tài khoản với OWNER thì luật không phân biệt được hai bên |
 <!-- END: LAYERS -->
+
+<!-- ANCHOR: HANDOFF -->
+## 5. Bàn giao TK-0032, TK-0033 và TK-0018 (DEC-0028)
+- Checklist là task và ACCEPTANCE#CYC_03 đã merge; thay checklist phải ghi quyết định. Hai vòng review là ngưỡng tái cấu trúc, không tự miễn lỗi đúng đắn.
+- LEAD chịu bước từ draft PASS sang diff/commit message chờ duyệt; WORKER giao code/bằng chứng/patch; REVIEWER chỉ đọc. Chỉ OWNER merge; commit, push và mở PR cần quyền riêng theo task/nhánh/SHA. PR mở và checks đạt là hai trạng thái khác nhau; không có check phải ghi không có.
+- Bundle ngoài repo theo task/rN, không ghi đè. MANIFEST sinh cuối: base SHA, file SHA256, Git blob OID/SHA256 và mode, attr/filter liên quan, Python/pytest, lệnh/cwd/env/exit/thời gian, log thô và kết quả từng ca. Hash cả SUMMARY; SUMMARY không chứa hash của nó hay manifest. Verdict ngoài bundle ghi hash MANIFEST làm bundle ID.
+- CRLF fixture sinh bằng byte lúc chạy; assert CRLF trước khi kiểm. Không đổi attributes/config. Mutation chỉ trên bản sao, giữ blob trước/sau, patch, hash, kỳ vọng/thực tế và log; số 3 fail/39 pass chỉ thuộc đối chứng cách ly Git cũ, không cố định số ca sau đổi base.
+- Trước publication so cây commit với allowlist, blob/hash/mode dự đoán theo EOL/filter được duyệt, base và bundle. Hash code giống không miễn kiểm khi base/phụ thuộc/môi trường thay đổi. Dùng script committer nếu worker thiếu Git; không tự cài hay mở quyền.
+- Sau nguồn merge, xác nhận main SHA, cập nhật base TK-0018 và review delta; không rewrite lịch sử đã publish, force push hay reset loop. Chạy verify toàn tools/tests và baseline23; ghi L02/L03 trên R1, giữ L01. Mutation mới theo hành vi bị tác động, không ép tổng test cũ.
+- BLOCKED ghi loại DECISION_OWNER/ACTION_LEAD/OUTPUT_WORKER/TOOLING/DEPENDENCY, chủ, điều kiện mở và thời điểm; tra quyết định cũ trước khi chờ OWNER. Event ngoài repo ghi từ/đến, task, chủ, thời điểm; đo PASS đến PR, review vòng, thời gian chờ và lỗi công cụ. SLA không tạo thêm quyền.
+- Tài khoản GitHub chung chưa tách OWNER/tác tử bằng kỹ thuật (DEC-0019, RSK-0004); giữ verdict/phiên riêng. Ưu tiên đề xuất GitHub App/tài khoản riêng, chưa tự thay cấu hình. Không nhận hai approval cùng tài khoản là chứng minh hai chủ thể độc lập.
+<!-- END: HANDOFF -->
