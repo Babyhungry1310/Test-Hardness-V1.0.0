@@ -11,11 +11,11 @@ outputs:
 evidence:
   - 03_output/CYC-03/checks/TK-0035_R1_mutation.txt
 done_check:
-  - "1 → verify passed=45"
-  - "2 → verify passed=45"
-  - "3 → verify passed=45"
-  - "4 → verify passed=45"
-  - "5 → verify passed=45 baseline passed=23"
+  - "1 → 03_output/CYC-03/checks/TK-0035_R1_mutation.txt"
+  - "2 → 03_output/CYC-03/checks/TK-0035_R1_mutation.txt"
+  - "3 → 03_output/CYC-03/checks/TK-0035_R1_mutation.txt"
+  - "4 → 03_output/CYC-03/checks/TK-0035_R1_mutation.txt"
+  - "5 → 03_output/CYC-03/checks/TK-0035_R1_mutation.txt"
   - "6 → 03_output/CYC-03/checks/TK-0035_R1_mutation.txt"
 loops:
   - "L01 | PASS | passed=45 failed=0 baseline=23"
