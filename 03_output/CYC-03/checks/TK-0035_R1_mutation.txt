@@ -1,0 +1,42 @@
+task: TK-0035
+run: R1
+base: ad13484164c5d2a837314621ae20f2edcf6d520a
+commit: 5ad70b6076d7c224b821b88d10684282edae22c8
+branch: task/TK-0035-R1
+bundle_id: 11553e1567520b65c79271df7a33a21d7dee4f56878ce858687599dc1a944157
+path: tools/preflight_main.py
+mode: 100644
+blob_before: fcc4f0704f60fce2bc36fac56a22b6498bfeb053
+sha256_before: 9742477b47e9f8633cc6136867ef58b5f89ba700df5594b790f0bd3a24ec6479
+blob_after: bc9952b95afbf5f42dea25c56cfb7ce79a231615
+sha256_after: 600c144a5d236e5aed8b3409e34b15dc883dfb7bc10b995988b2826832c291f8
+case: tools/tests/test_preflight_main.py::test_session_oserror_points[read_bytes]
+expected: fail
+actual_exit: 1
+actual: FAILED tools/tests/test_preflight_main.py::test_session_oserror_points[read_bytes]
+head_after_mutation: 5ad70b6076d7c224b821b88d10684282edae22c8
+worktree_after_mutation: clean
+patch:
+diff --git "a/C:\\Users\\linhdh\\orca\\workspaces\\Test-Hardness-V1.0.0\\tk0035-r1\\tools\\preflight_main.py" "b/C:\\Users\\linhdh\\orca\\workspaces\\Test-Hardness-V1.0.0\\tk0035-r1\\tmpesfslfpt\\tools\\preflight_main.py"
+index fcc4f07..bc9952b 100644
+--- "a/C:\\Users\\linhdh\\orca\\workspaces\\Test-Hardness-V1.0.0\\tk0035-r1\\tools\\preflight_main.py"
++++ "b/C:\\Users\\linhdh\\orca\\workspaces\\Test-Hardness-V1.0.0\\tk0035-r1\\tmpesfslfpt\\tools\\preflight_main.py"
+@@ -88,8 +88,7 @@ def classify_hooks(path):
+             continue
+         try:
+             blob = entry.read_bytes()
+-        except OSError as exc:
+-            errors.append(hook_failure(name, "read_bytes", str(exc)))
++        except OSError:
+             continue
+         if name not in HOOK_NAMES and not blob.startswith(b"#!"):
+             continue
+log:
+F                                                                        [100%]
+================================== FAILURES ===================================
+E   assert 0 == 1
+     +  where 0 = CompletedProcess(args=['C:\\Users\\linhdh\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe', 'C:\\Users\\linhdh...true\n    }\n  ],\n  "hook_status": "missing",\n  "warnings": [\n    "Hook ch\\u01b0a c\\u00e0i"\n  ]\n}\n', stderr='').returncode
+[1m[31mC:\Users\linhdh\orca\workspaces\Test-Hardness-V1.0.0\tk0035-r1\tmpesfslfpt\tools\tests\test_preflight_main.py[0m:529: assert 0 == 1
+=========================== short test summary info ===========================
+FAILED tools/tests/test_preflight_main.py::test_session_oserror_points[read_bytes]
+1 failed in 2.09s
