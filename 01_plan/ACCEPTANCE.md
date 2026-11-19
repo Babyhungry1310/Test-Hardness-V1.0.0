@@ -25,9 +25,9 @@
 - Bằng chứng của từng lớp nêu giới hạn và quyền cần theo `01_plan/SPEC_TOOLS.md#LAYERS`; không lớp nào được mô tả là chặn tuyệt đối.
 - Bộ test ca biên phân rõ ca bị chặn và ca là giới hạn đã biết.
 - Theo DEC-0028, pre-merge-commit chặn merge --no-ff tạo commit trên main; test xác minh HEAD/main không đổi và abort xong status sạch.
-- Session preflight nhận diện hook Git hoặc shebang, bỏ .md/.sample không phân biệt hoa thường; không hook là missing/warning, CR là crlf/exit 1, lỗi đọc là error/JSON/exit 1.
+- TK-0034/TK-0035: session preflight đọc core.hooksPath trước, fallback --git-path hooks khi config vắng/rỗng; nhận diện hook Git hoặc shebang, bỏ .md/.sample không phân biệt hoa thường; không hook là missing/warning, CR là crlf/exit 1, lỗi đọc là error/JSON/exit 1.
 - Fixture CRLF sinh byte trong tmp_path; kiểm blob/mode và đối chứng trên bản sao cây commit; không sửa attributes.
-- TK-0018 chỉ nghiệm thu sau B2 và hai nguồn đã tích hợp, cập nhật base và kiểm lại verify/baseline; PASS draft không thay PASS sản phẩm.
+- TK-0018 chỉ nghiệm thu sau B3 và TK-0032, TK-0034, TK-0035 đã tích hợp, cập nhật base và kiểm lại verify/baseline; PASS draft không thay PASS sản phẩm.
 - Không tác tử nào đẩy thử vào `main` hay thẻ, không đổi cài đặt repo.
 <!-- END: CYC_03 -->
 
