@@ -1,0 +1,3 @@
+command: python -m pytest -q --tb=line tools/tests/test_preflight_main.py
+exit: 0
+result: 32 passed in 53.94s

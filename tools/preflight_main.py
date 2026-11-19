@@ -19,6 +19,93 @@ def check_branch_pattern(role, branch):
     return bool(re.match(pat, branch)) if pat else False
 
 
+HOOK_NAMES = frozenset({
+    "applypatch-msg", "pre-applypatch", "post-applypatch", "pre-commit", "pre-merge-commit",
+    "prepare-commit-msg", "commit-msg", "post-commit", "pre-rebase", "post-checkout", "post-merge",
+    "pre-push", "pre-receive", "update", "proc-receive", "post-receive", "post-update",
+    "reference-transaction", "push-to-checkout", "pre-auto-gc", "post-rewrite", "sendemail-validate",
+    "fsmonitor-watchman", "p4-changelist", "p4-prepare-changelist", "p4-post-changelist",
+    "p4-pre-submit", "post-index-change",
+})
+
+
+def ignored_hook_name(name):
+    low = name.lower()
+    return low.endswith(".md") or low.endswith(".sample")
+
+
+def hook_failure(name, op, reason):
+    return {"name": name, "op": op, "reason": reason}
+
+
+def resolve_hooks_path(cwd, toplevel):
+    rc, raw, err = run_git(["config", "--get", "core.hooksPath"], cwd=cwd)
+    value = raw.strip() if rc == 0 else ""
+    if value:
+        path = Path(value)
+        if path.is_absolute():
+            return path, None
+        return Path(toplevel) / path, None
+    rc, raw, err = run_git(["rev-parse", "--git-path", "hooks"], cwd=cwd)
+    if rc != 0 or not raw.strip():
+        return None, err or "Cannot read hooks"
+    path = Path(raw.strip())
+    if not path.is_absolute():
+        base = Path(cwd) if cwd is not None else Path.cwd()
+        path = base / path
+    return path, None
+
+
+def classify_hooks(path):
+    files, errors = [], []
+    try:
+        is_dir = path.is_dir()
+    except OSError as exc:
+        return "error", files, [hook_failure(path.name, "is_dir", str(exc))]
+    if not is_dir:
+        try:
+            exists = path.exists()
+        except OSError as exc:
+            return "error", files, [hook_failure(path.name, "is_dir", str(exc))]
+        if not exists:
+            return "missing", files, []
+        return "error", files, [hook_failure(path.name, "is_dir", "not a directory")]
+    try:
+        entries = sorted(path.iterdir(), key=lambda item: item.name)
+    except OSError as exc:
+        return "error", files, [hook_failure(path.name, "iterdir", str(exc))]
+    found = False
+    for entry in entries:
+        name = entry.name
+        if ignored_hook_name(name):
+            continue
+        try:
+            is_file = entry.is_file()
+        except OSError as exc:
+            errors.append(hook_failure(name, "is_file", str(exc)))
+            continue
+        if not is_file:
+            continue
+        try:
+            blob = entry.read_bytes()
+        except OSError as exc:
+            errors.append(hook_failure(name, "read_bytes", str(exc)))
+            continue
+        if name not in HOOK_NAMES and not blob.startswith(b"#!"):
+            continue
+        found = True
+        if b"\r" in blob:
+            files.append(name)
+    files.sort()
+    if errors:
+        return "error", files, errors
+    if files:
+        return "crlf", files, []
+    if found:
+        return "installed", files, []
+    return "missing", files, []
+
+
 def run_preflight(role, stage, ref=None, cwd=None):
     rc, toplevel, _ = run_git(["rev-parse", "--show-toplevel"], cwd=cwd)
     if rc != 0:
@@ -45,11 +132,25 @@ def run_preflight(role, stage, ref=None, cwd=None):
         _, gcd, _ = run_git(["rev-parse", "--git-common-dir"], cwd=cwd)
         is_wt = (Path(gd).resolve() != Path(gcd).resolve()) or (Path(toplevel).resolve() / ".git").is_file()
         check("worktree", is_wt, "In session worktree" if is_wt else "In main checkout")
-        rc_h, hooks, _ = run_git(["config", "--get", "core.hooksPath"], cwd=cwd)
-        h_stat = "installed" if (rc_h == 0 and bool(hooks.strip())) else "missing"
-        check("hook", True, f"Hook path: {hooks.strip()}" if h_stat == "installed" else "Hook chưa cài", status=h_stat)
-        if h_stat == "missing":
+        path, err = resolve_hooks_path(cwd, toplevel)
+        if err:
+            h_stat, h_files, h_errors = "error", [], [{"name": "", "op": "resolve", "reason": err}]
+        else:
+            h_stat, h_files, h_errors = classify_hooks(path)
+        if h_stat == "error":
+            reason = h_errors[0]["reason"] if h_errors else "Cannot read hooks"
+            check("hook", False, reason, status=h_stat)
+            hook_payload = {"hook_status": h_stat, "files": h_files, "errors": h_errors, "reason": reason, "error": reason}
+        elif h_stat == "crlf":
+            check("hook", False, "Hook CRLF", status=h_stat)
+            hook_payload = {"hook_status": h_stat, "files": h_files}
+        elif h_stat == "installed":
+            check("hook", True, f"Hook path: {path}", status=h_stat)
+            hook_payload = {"hook_status": h_stat}
+        else:
+            check("hook", True, "Hook chưa cài", status="missing")
             warnings.append("Hook chưa cài")
+            hook_payload = {"hook_status": "missing"}
         rc_s, st_out, _ = run_git(["status", "--porcelain"], cwd=cwd)
         clean = (rc_s == 0 and len(st_out.strip()) == 0)
         check("clean", True, "Worktree clean" if clean else "Worktree có thay đổi chưa commit", clean=clean)
@@ -74,7 +175,7 @@ def run_preflight(role, stage, ref=None, cwd=None):
 
     data = {"ok": ok, "role": role, "stage": stage, "checks": checks}
     if stage == "session":
-        data["hook_status"] = h_stat
+        data.update(hook_payload)
     if warnings:
         data["warnings"] = warnings
     return (0 if ok else 1), data

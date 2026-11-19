@@ -50,6 +50,44 @@ def utf8_text(res):
     return res.stdout.decode("utf-8")
 
 
+def write_hook_bytes(directory, name, payload):
+    directory.mkdir(parents=True, exist_ok=True)
+    target = directory / name
+    target.write_bytes(payload)
+    seen = target.read_bytes()
+    if b"\r" in payload:
+        assert b"\r" in seen
+    return seen
+
+
+def load_cli_json(res):
+    return json.loads(res.stdout)
+
+
+def git_hooks_dir(cwd):
+    res = subprocess.run(["git", "rev-parse", "--git-path", "hooks"], cwd=cwd, check=True, capture_output=True, text=True)
+    path = Path(res.stdout.strip())
+    if not path.is_absolute():
+        path = cwd / path
+    return path
+
+
+HOOK_CASES = [
+    ("missing", "abs", {}, None, 0, "missing"),
+    ("lf", "abs", {"pre-commit": b"#!/bin/sh\n"}, None, 0, "installed"),
+    ("cr-name", "abs", {"pre-commit": b"#!/bin/sh\r\n"}, ["pre-commit"], 1, "crlf"),
+    ("cr-py", "abs", {"tool.py": b"#!/usr/bin/env python\r\n"}, ["tool.py"], 1, "crlf"),
+    ("rel-lf", "rel", {"pre-commit": b"#!/bin/sh\n"}, None, 0, "installed"),
+    ("absent", "absent", {}, None, 0, "installed"),
+    ("empty", "empty", {}, None, 0, "installed"),
+    ("skip", "abs", {"pre-commit.sample": b"#!/bin/sh\r\n", "pre-push.SAMPLE": b"#!/bin/sh\r\n", "POLICY.MD": b"#!x\r\n", "readme.md": b"#!x\r\n", "README": b"plain\r\n", "NOTES": b"plain\r\n", "LICENSE": b"plain\r\n"}, None, 0, "missing"),
+    ("order", "abs", {"pre-push": b"push\r\n", "pre-commit": b"commit\r\n", "tool.py": b"#!/usr/bin/env python\r\n", "NOTES": b"plain\r\n"}, ["pre-commit", "pre-push", "tool.py"], 1, "crlf"),
+    ("shebang-lf", "abs", {"README": b"#!/bin/sh\n"}, None, 0, "installed"),
+    ("cr-shebang", "abs", {"custom-hook": b"#!/bin/sh\r\n"}, ["custom-hook"], 1, "crlf"),
+    ("py-plain", "abs", {"tool.py": b"print(1)\r\n"}, None, 0, "missing"),
+]
+
+
 def test_branch_patterns():
     assert check_branch_pattern("worker", "task/TK-0007-R1")
     assert check_branch_pattern("worker", "task/TK-9999-R2")
@@ -124,6 +162,9 @@ def test_session_valid_worktree_passes(tmp_path):
     subprocess.run(["git", "config", "core.hooksPath", "tools/hooks"], cwd=repo, check=True, capture_output=True)
     wt = tmp_path / "wt"
     add_worktree(repo, wt, "task/TK-0007-R1")
+    write_hook_bytes(wt / "tools" / "hooks", "pre-commit", b"#!/bin/sh\n")
+    subprocess.run(["git", "add", "tools/hooks/pre-commit"], cwd=wt, check=True, capture_output=True)
+    subprocess.run(["git", "commit", "-m", "hook"], cwd=wt, check=True, capture_output=True)
     res = run_cli(["--role", "worker", "--stage", "session", "--json"], cwd=wt)
     assert res.returncode == 0
     data = json.loads(res.stdout)
@@ -306,3 +347,79 @@ def test_encoding_warnings_and_json(tmp_path, narrow):
     data = json.loads(utf8_text(js))
     assert data["ok"] is True
     assert data["warnings"] == ["Hook chưa cài", "Worktree có thay đổi chưa commit"]
+
+
+@pytest.mark.parametrize("case_id,anchor,payloads,names,code,status", HOOK_CASES, ids=[item[0] for item in HOOK_CASES])
+def test_session_hook_bytes(tmp_path, case_id, anchor, payloads, names, code, status):
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    init_repo(repo)
+    wt = tmp_path / "wt"
+    add_worktree(repo, wt, "task/TK-0034-R1")
+    write_hook_bytes(repo / "tools" / "hooks", "pre-commit", b"#!/bin/sh\r\n")
+    if anchor == "absent":
+        write_hook_bytes(wt, "pre-commit", b"#!/bin/sh\r\n")
+        subprocess.run(["git", "add", "pre-commit"], cwd=wt, check=True, capture_output=True)
+        subprocess.run(["git", "commit", "-m", "hooks"], cwd=wt, check=True, capture_output=True)
+        write_hook_bytes(git_hooks_dir(wt), "pre-commit", b"#!/bin/sh\n")
+    elif anchor == "empty":
+        write_hook_bytes(git_hooks_dir(wt), "pre-commit", b"#!/bin/sh\r\n")
+        write_hook_bytes(wt, "pre-commit", b"#!/bin/sh\n")
+        subprocess.run(["git", "add", "pre-commit"], cwd=wt, check=True, capture_output=True)
+        subprocess.run(["git", "commit", "-m", "hooks"], cwd=wt, check=True, capture_output=True)
+        subprocess.run(["git", "config", "core.hooksPath", ""], cwd=wt, check=True, capture_output=True)
+    elif anchor == "rel":
+        subprocess.run(["git", "config", "core.hooksPath", "tools/hooks"], cwd=wt, check=True, capture_output=True)
+        for name, payload in payloads.items():
+            write_hook_bytes(wt / "tools" / "hooks", name, payload)
+        subprocess.run(["git", "add", "-A"], cwd=wt, check=True, capture_output=True)
+        subprocess.run(["git", "commit", "-m", "hooks"], cwd=wt, check=True, capture_output=True)
+    else:
+        dest = tmp_path / "abs-hooks"
+        dest.mkdir()
+        subprocess.run(["git", "config", "core.hooksPath", str(dest)], cwd=wt, check=True, capture_output=True)
+        for name, payload in payloads.items():
+            write_hook_bytes(dest, name, payload)
+    res = run_cli(["--role", "worker", "--stage", "session", "--json"], cwd=wt)
+    data = load_cli_json(res)
+    assert res.returncode == code, case_id
+    assert data["hook_status"] == status
+    if names is None:
+        assert "files" not in data
+    else:
+        assert data["files"] == names
+    if status == "missing":
+        assert data["ok"] is True
+        assert data["warnings"] == ["Hook chưa cài"]
+    elif status == "installed":
+        assert data["ok"] is True
+        assert "warnings" not in data
+    else:
+        assert data["ok"] is False
+        assert "warnings" not in data
+
+
+def test_commit_push_do_not_classify_hooks(tmp_path):
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    init_repo(repo)
+    wt = tmp_path / "wt"
+    add_worktree(repo, wt, "task/TK-0034-R1")
+    blocker = tmp_path / "hookfile"
+    blocker.write_bytes(b"#!/bin/sh\r\n")
+    assert b"\r" in blocker.read_bytes()
+    subprocess.run(["git", "config", "core.hooksPath", str(blocker)], cwd=wt, check=True, capture_output=True)
+    commit = run_cli(["--role", "worker", "--stage", "commit", "--json"], cwd=wt)
+    assert commit.returncode == 0
+    assert "hook_status" not in load_cli_json(commit)
+    push = run_cli(["--role", "worker", "--stage", "push", "--json"], cwd=wt)
+    assert push.returncode == 0
+    assert "hook_status" not in load_cli_json(push)
+    session = run_cli(["--role", "worker", "--stage", "session", "--json"], cwd=wt)
+    assert session.returncode == 1
+    assert "Traceback" not in session.stderr
+    data = load_cli_json(session)
+    assert data["hook_status"] == "error"
+    assert data["files"] == []
+    assert data["errors"][0]["op"] == "is_dir"
+    assert data["reason"] == "not a directory"

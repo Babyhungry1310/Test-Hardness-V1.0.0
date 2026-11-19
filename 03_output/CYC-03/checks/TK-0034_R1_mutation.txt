@@ -1,0 +1,38 @@
+task: TK-0034
+run: R1
+base: 9b9d23ce07c1d82a03d69bb85dd84ce794952412
+commit: 93e45a0fc9235183b89ee5f632bd3197a028405b
+branch: task/TK-0034-R1
+bundle_id: 0a976494fca0e840aae3c13fe4fc8666f361d63629a7122f342bb18ddcc4dde4
+path: tools/preflight_main.py
+mode: 100644
+blob_before: fcc4f0704f60fce2bc36fac56a22b6498bfeb053
+sha256_before: 9742477b47e9f8633cc6136867ef58b5f89ba700df5594b790f0bd3a24ec6479
+blob_after: 612197df18a57438fc67652c50e451e8510adac1
+sha256_after: 599496abac8a3d61a73da3a817ac7b9fed18b8d6d15553686b355e6104aa10ca
+case: tools/tests/test_preflight_main.py::test_session_hook_bytes[cr-name]
+expected: fail
+actual_exit: 1
+actual: assert 0 == 1; hook_status installed
+head_after_mutation: 93e45a0fc9235183b89ee5f632bd3197a028405b
+worktree_after_mutation: clean
+patch:
+diff --git a/tools/preflight_main.py b/tools/preflight_main.py
+index fcc4f07..612197d 100644
+--- a/tools/preflight_main.py
++++ b/tools/preflight_main.py
+@@ -94,7 +94,7 @@ def classify_hooks(path):
+         if name not in HOOK_NAMES and not blob.startswith(b"#!"):
+             continue
+         found = True
+-        if b"\r" in blob:
++        if b"\r" in b"":
+             files.append(name)
+     files.sort()
+     if errors:
+log:
+F                                                                        [100%]
+E   AssertionError: cr-name
+    assert 0 == 1
+FAILED tools/tests/test_preflight_main.py::test_session_hook_bytes[cr-name]
+1 failed in 1.92s
