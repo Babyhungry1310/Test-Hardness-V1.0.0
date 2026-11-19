@@ -20,9 +20,9 @@ def add_worktree(repo_dir, wt_dir, branch_name):
     subprocess.run(["git", "worktree", "add", str(wt_dir), "-b", branch_name], cwd=repo_dir, check=True, capture_output=True)
 
 
-def run_cli(args, cwd):
+def run_cli(args, cwd, env=None):
     script = Path(__file__).resolve().parent.parent / "preflight_main.py"
-    return subprocess.run([sys.executable, str(script)] + args, cwd=cwd, capture_output=True, text=True, encoding="utf-8")
+    return subprocess.run([sys.executable, str(script)] + args, cwd=cwd, capture_output=True, text=True, encoding="utf-8", env=env)
 
 
 def child_env(narrow):
@@ -423,3 +423,176 @@ def test_commit_push_do_not_classify_hooks(tmp_path):
     assert data["files"] == []
     assert data["errors"][0]["op"] == "is_dir"
     assert data["reason"] == "not a directory"
+
+
+def session_wt(tmp_path):
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    init_repo(repo)
+    wt = tmp_path / "wt"
+    add_worktree(repo, wt, "task/TK-0035-R1")
+    return repo, wt
+
+
+def write_fault(directory):
+    directory.mkdir(parents=True, exist_ok=True)
+    code = (
+        "import os\nfrom pathlib import Path\n"
+        "pairs={}\n"
+        "for item in os.environ.get('TK0035_FAULTS','').split(','):\n"
+        "    if item:\n"
+        "        name,op=item.split(':',1)\n"
+        "        pairs.setdefault(name,set()).add(op)\n"
+        "orig={k:getattr(Path,k) for k in ('is_dir','is_file','iterdir','read_bytes')}\n"
+        "def is_dir(self,*a,**k):\n"
+        "    if 'is_dir' in pairs.get(self.name,()):\n"
+        "        raise OSError('denied')\n"
+        "    return orig['is_dir'](self,*a,**k)\n"
+        "def is_file(self,*a,**k):\n"
+        "    if 'is_file' in pairs.get(self.name,()):\n"
+        "        raise OSError('denied')\n"
+        "    return orig['is_file'](self,*a,**k)\n"
+        "def iterdir(self):\n"
+        "    if 'iterdir' in pairs.get(self.name,()):\n"
+        "        raise OSError('denied')\n"
+        "    return orig['iterdir'](self)\n"
+        "def read_bytes(self):\n"
+        "    if 'read_bytes' in pairs.get(self.name,()):\n"
+        "        raise OSError('denied')\n"
+        "    return orig['read_bytes'](self)\n"
+        "Path.is_dir=is_dir\nPath.is_file=is_file\nPath.iterdir=iterdir\nPath.read_bytes=read_bytes\n"
+    )
+    (directory / "sitecustomize.py").write_text(code, encoding="utf-8", newline="\n")
+
+
+def fault_env(directory, faults):
+    env = os.environ.copy()
+    prev = env.get("PYTHONPATH", "")
+    env["PYTHONPATH"] = str(directory) if not prev else str(directory) + os.pathsep + prev
+    env["TK0035_FAULTS"] = faults
+    return env
+
+
+FORM_HOOKS = {
+    "POLICY.MD": b"#!x\r\n",
+    "pre-commit.sample": b"#!/bin/sh\r\n",
+    "pre-push.SAMPLE": b"#!/bin/sh\r\n",
+    "X.SaMpLe": b"#!/bin/sh\r\n",
+    "README": b"plain\r\n",
+    "NOTES": b"plain\r\n",
+    "LICENSE": b"plain\r\n",
+    "custom-hook": b"#!/bin/sh\r\n",
+    "pre-commit": b"#!/bin/sh\r\n",
+}
+
+
+@pytest.mark.parametrize("form", ["relative", "absolute", "whitespace", "linked"])
+def test_session_hook_path_forms(tmp_path, form):
+    repo, wt = session_wt(tmp_path)
+    if form == "relative":
+        dest = wt / "tools" / "hooks"
+        config = "tools/hooks"
+    elif form == "absolute":
+        dest = tmp_path / "abs-hooks"
+        config = str(dest)
+    elif form == "whitespace":
+        dest = tmp_path / "hook dir"
+        config = str(dest)
+    else:
+        assert (wt / ".git").is_file()
+        write_hook_bytes(repo / "tools" / "hooks", "pre-commit", b"#!/bin/sh\n")
+        dest = wt / "tools" / "hooks"
+        config = "tools/hooks"
+    for name, payload in FORM_HOOKS.items():
+        write_hook_bytes(dest, name, payload)
+    subprocess.run(["git", "config", "core.hooksPath", config], cwd=wt, check=True, capture_output=True)
+    res = run_cli(["--role", "worker", "--stage", "session", "--json"], cwd=wt)
+    assert "Traceback" not in res.stderr
+    data = load_cli_json(res)
+    assert res.returncode == 1, form
+    assert data["hook_status"] == "crlf"
+    assert data["files"] == ["custom-hook", "pre-commit"]
+
+
+@pytest.mark.parametrize("op", ["is_dir", "iterdir", "is_file", "read_bytes"])
+def test_session_oserror_points(tmp_path, op):
+    _repo, wt = session_wt(tmp_path)
+    dest = tmp_path / "hookdir"
+    write_hook_bytes(dest, "pre-commit", b"#!/bin/sh\r\n")
+    subprocess.run(["git", "config", "core.hooksPath", str(dest)], cwd=wt, check=True, capture_output=True)
+    fault_dir = tmp_path / "fault"
+    write_fault(fault_dir)
+    target = "hookdir" if op in ("is_dir", "iterdir") else "pre-commit"
+    res = run_cli(["--role", "worker", "--stage", "session", "--json"], cwd=wt, env=fault_env(fault_dir, f"{target}:{op}"))
+    assert "Traceback" not in res.stderr
+    data = load_cli_json(res)
+    assert res.returncode == 1
+    assert data["hook_status"] == "error"
+    assert "files" in data and "errors" in data and "reason" in data
+    assert data["files"] == []
+    assert data["errors"][0]["op"] == op
+    assert data["errors"][0]["name"] == target
+    assert data["reason"] == data["errors"][0]["reason"] == "denied"
+
+
+def test_session_crlf_keeps_files_and_error_order(tmp_path):
+    _repo, wt = session_wt(tmp_path)
+    dest = tmp_path / "hookdir"
+    write_hook_bytes(dest, "aaa", b"#!/bin/sh\r\n")
+    write_hook_bytes(dest, "mid", b"#!/bin/sh\n")
+    write_hook_bytes(dest, "pre-commit", b"#!/bin/sh\r\n")
+    write_hook_bytes(dest, "tool.py", b"#!/usr/bin/env python\r\n")
+    write_hook_bytes(dest, "zzz", b"#!/bin/sh\r\n")
+    write_hook_bytes(dest, "POLICY.MD", b"#!x\r\n")
+    write_hook_bytes(dest, "pre-push.SAMPLE", b"#!/bin/sh\r\n")
+    write_hook_bytes(dest, "README", b"plain\r\n")
+    write_hook_bytes(dest, "NOTES", b"plain\r\n")
+    write_hook_bytes(dest, "LICENSE", b"plain\r\n")
+    subprocess.run(["git", "config", "core.hooksPath", str(dest)], cwd=wt, check=True, capture_output=True)
+    fault_dir = tmp_path / "fault"
+    write_fault(fault_dir)
+    res = run_cli(["--role", "worker", "--stage", "session", "--json"], cwd=wt, env=fault_env(fault_dir, "aaa:read_bytes,zzz:is_file"))
+    assert "Traceback" not in res.stderr
+    data = load_cli_json(res)
+    assert res.returncode == 1
+    assert data["hook_status"] == "error"
+    assert data["files"] == ["pre-commit", "tool.py"]
+    assert [(item["name"], item["op"]) for item in data["errors"]] == [("aaa", "read_bytes"), ("zzz", "is_file")]
+    assert data["reason"] == "denied"
+    for blocked in ("POLICY.MD", "pre-push.SAMPLE", "README", "NOTES", "LICENSE", "mid", "aaa", "zzz"):
+        assert blocked not in data["files"]
+
+
+@pytest.mark.parametrize("narrow", [False, True])
+@pytest.mark.parametrize("kind", ["crlf", "error"])
+def test_encoding_crlf_and_error(tmp_path, narrow, kind):
+    _repo, wt = session_wt(tmp_path)
+    if kind == "crlf":
+        dest = tmp_path / "hooks"
+        write_hook_bytes(dest, "pre-commit", b"#!/bin/sh\r\n")
+        subprocess.run(["git", "config", "core.hooksPath", str(dest)], cwd=wt, check=True, capture_output=True)
+        (wt / "dirty.txt").write_text("changes", encoding="utf-8")
+        res = run_cli_child(["--role", "worker", "--stage", "session"], wt, narrow=narrow)
+        assert res.returncode == 1
+        text = utf8_text(res)
+        assert "Hook CRLF" in text
+        assert "Cảnh báo: Worktree có thay đổi chưa commit" in text
+    else:
+        blocker = tmp_path / "hookfile"
+        blocker.write_bytes(b"#!/bin/sh\r\n")
+        assert b"\r" in blocker.read_bytes()
+        subprocess.run(["git", "config", "core.hooksPath", str(blocker)], cwd=wt, check=True, capture_output=True)
+        res = run_cli_child(["--role", "worker", "--stage", "session"], wt, narrow=narrow)
+        assert res.returncode == 1
+        text = utf8_text(res)
+        assert "Lỗi: not a directory" in text
+    assert "Traceback" not in res.stderr.decode("utf-8")
+    js = run_cli_child(["--role", "worker", "--stage", "session", "--json"], wt, narrow=narrow)
+    assert js.returncode == 1
+    data = json.loads(utf8_text(js))
+    if kind == "crlf":
+        assert data["hook_status"] == "crlf"
+        assert data["files"] == ["pre-commit"]
+    else:
+        assert data["hook_status"] == "error"
+        assert "files" in data and "errors" in data and "reason" in data
