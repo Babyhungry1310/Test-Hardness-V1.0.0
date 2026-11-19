@@ -1,0 +1,10 @@
+#!/bin/sh
+branch=$(git symbolic-ref --short HEAD 2>/dev/null) || {
+  printf '%s\n' "warning: detached HEAD"
+  exit 0
+}
+if [ "$branch" = "main" ]; then
+  printf '%s\n' "refused: commit blocked on branch $branch"
+  exit 1
+fi
+exit 0
