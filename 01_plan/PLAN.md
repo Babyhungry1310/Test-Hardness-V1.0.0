@@ -2,9 +2,10 @@
 schema: 1
 id: PLAN
 date: 2026-11-12
-based_on: [DEC-0002, DEC-0006, DEC-0007, DEC-0010, DEC-0013, DEC-0015, DEC-0016, DEC-0017, DEC-0018, DEC-0019, DEC-0020, DEC-0021, DEC-0026, DEC-0028]
+based_on: [DEC-0002, DEC-0006, DEC-0007, DEC-0010, DEC-0013, DEC-0015, DEC-0016, DEC-0017, DEC-0018, DEC-0019, DEC-0020, DEC-0021, DEC-0026, DEC-0028, DEC-0029]
 ---
 ## Status (newest first)
+- 2026-11-19 | ACTIVE | version: 9
 - 2026-11-19 | ACTIVE | version: 8
 - 2026-11-14 | ACTIVE | version: 7
 - 2026-11-14 | ACTIVE | version: 6
@@ -30,15 +31,17 @@ based_on: [DEC-0002, DEC-0006, DEC-0007, DEC-0010, DEC-0013, DEC-0015, DEC-0016,
 - TK-0007 | Kiểm pre-flight cho main theo vai và thời điểm | depends: none | assignee: W2
 - TK-0008 | Kiểm chỉ đọc lớp bảo vệ main và thẻ phía GitHub | depends: none | assignee: W3
 - TK-0032 | Hook pre-merge-commit và test merge thật | depends: TK-0006 | assignee: W1
-- TK-0033 | Detector CRLF/lỗi đọc hook trong session preflight | depends: TK-0007, TK-0030 | assignee: W2
-- TK-0018 | Ca biên và ca lách sau nguồn sửa | depends: TK-0006, TK-0007, TK-0032, TK-0033 | assignee: W3
+- TK-0034 | Detector session: core.hooksPath, missing/installed/crlf, JSON/exit | depends: TK-0007, TK-0030 | assignee: W2
+- TK-0035 | OSError, loại file, mã hóa Windows và dạng hooksPath | depends: TK-0034 | assignee: W2
+- TK-0018 | Ca biên và ca lách sau nguồn sửa | depends: TK-0006, TK-0007, TK-0032, TK-0034, TK-0035 | assignee: W3
 - TK-0027 | Kiểm hồi quy kiểm toán GitHub với tài khoản OWNER dùng chung | depends: TK-0008 | assignee: W2
 <!-- END: CYC_03 -->
 <!-- ANCHOR: CYC_03_BATCHES -->
 ## CYC-03 batches
 - B1 | tasks: TK-0006, TK-0007, TK-0008 | after: none
-- B2 | tasks: TK-0027, TK-0032, TK-0033 | after: B1
-- B3 | tasks: TK-0018 | after: B2
+- B2 | tasks: TK-0027, TK-0032, TK-0034 | after: B1
+- B3 | tasks: TK-0035 | after: B2
+- B4 | tasks: TK-0018 | after: B3
 <!-- END: CYC_03_BATCHES -->
 <!-- ANCHOR: CYC_04 -->
 ## CYC-04
