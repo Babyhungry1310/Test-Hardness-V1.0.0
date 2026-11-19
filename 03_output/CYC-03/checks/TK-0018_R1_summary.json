@@ -1,0 +1,118 @@
+{
+  "task": "TK-0018",
+  "run": 1,
+  "outcome": "BLOCKED",
+  "loop": "L01",
+  "branch": "task/TK-0018-R1",
+  "head": "9cfe9434bfde66e1da6caf4a518fc50abf3dfc9a",
+  "actual_model": "gpt-6.1-sol",
+  "metadata_source": "C:/Users/linhdh/orca/Test-Hardness-V1.0.0.local/logs/CYC03_B2_TK-0018_METADATA.jsonl",
+  "metadata_field": "response.completed.response.model",
+  "response_id": "resp_066b6a6423a220d8016afd76531ef087d0826362f49af75b7b",
+  "native_session": "01a1ee15-2a43-7df2-a314-c94e24a42525",
+  "run_id": "run_9501f5757080",
+  "metadata_verified_by": "LEAD msg_b371964f19ac",
+  "policy": {
+    "sandbox": "danger-full-access",
+    "approval": "never",
+    "changed": false
+  },
+  "test_diff": {
+    "operation": "add",
+    "lines": 131,
+    "sha256": "834cf988a82204b570f341b73d496b05de0c1782a201b93dd1b953caaa88b53b"
+  },
+  "verify": {
+    "exit_code": 1,
+    "passed": 44,
+    "failed": 3
+  },
+  "baseline": {
+    "exit_code": 0,
+    "passed": 23,
+    "failed": 0
+  },
+  "new_cases": {
+    "total": 24,
+    "must_block": 15,
+    "must_block_passed": 12,
+    "must_block_failed": 3,
+    "test_limit_passed": 9,
+    "bypass_limits": 5,
+    "allowed_similar_branches": 4,
+    "skipped": 0
+  },
+  "done_when": {
+    "1": "PASS: six pre-push cases reject; remote refs unchanged",
+    "2": "PASS: four similar branch names commit and push to local bare remote",
+    "3": "FAIL: amend and worktree reject; merge --no-ff creates commit on main with exit 0",
+    "4": "PASS: no-verify, empty hooksPath, update-ref, cherry-pick and rebase bypass on temporary main",
+    "5": "PASS: Main, task/tk-0001-r1, space and question-mark target refs exit 1 with JSON ok=false",
+    "6": "FAIL: original hooks LF; copied CRLF hooks both execute with exit 0, no installation failure detected",
+    "7": "PARTIAL: counts recorded, Windows baseline 23 passed; task verify fails"
+  },
+  "static_review": [
+    "131 lines <= 140",
+    "No comments/docstrings/xfail/skip or disabled code",
+    "No trace/validate executable present; manual workflow",
+    "Only pre-commit and pre-push installed; no pre-merge-commit"
+  ],
+  "execution_environment": {
+    "TMP": "C:/Users/linhdh/orca/Test-Hardness-V1.0.0.local/scratch/TK-0018",
+    "TEMP": "same as TMP",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTEST_ADDOPTS": "-p no:cacheprovider",
+    "scope": "child processes only; no persistent changes"
+  },
+  "boundaries": [
+    "All Git writes in tmp_path repos with local bare remotes",
+    "No working-clone hooksPath change",
+    "No server push or publication attempted",
+    "No permission error encountered",
+    "No additional pytest execution"
+  ],
+  "remaining": "LEAD resolve merge protection and CRLF installation-detection requirement before more work; do not change source in this task",
+  "final_validation": {
+    "exact_scope": [
+      "02_work/runs/TK-0018_R1_BLOCKED.md",
+      "03_output/CYC-03/checks/TK-0018_R1_L01_baseline.txt",
+      "03_output/CYC-03/checks/TK-0018_R1_L01_verify.txt",
+      "03_output/CYC-03/checks/TK-0018_R1_summary.json",
+      "tools/tests/test_main_guard_edges.py"
+    ],
+    "run_schema": "PASS: UTF-8 yaml.BaseLoader; schema/run cast to int; Draft202012Validator; trailing empty YAML document permitted; 34 lines; seven numbered U+2192 pointers; lowercase keywords",
+    "initial_manual_validation_failure": "Initial manual validation incorrectly accepted malformed done_check pointers, uppercase keywords and question-mark encoding loss; metadata repaired without changing captured tests or results",
+    "git_diff_check": "PASS",
+    "commits": 0,
+    "pushes": 0,
+    "loop_executions": 1,
+    "baseline_executions": 1
+  },
+  "metadata_repair": {
+    "scope": [
+      "02_work/runs/TK-0018_R1_BLOCKED.md",
+      "03_output/CYC-03/checks/TK-0018_R1_summary.json"
+    ],
+    "run_changes": [
+      "Split done_check into seven numbered U+2192 evidence pointers; retain 3/6 FAIL and 7 PARTIAL",
+      "Lowercase CRLF and Windows keywords",
+      "Replace encoding-damaged unverified, problem and proposal strings with plain ASCII English",
+      "Normalize repaired metadata files from CRLF to LF"
+    ],
+    "product_outcome": "BLOCKED; original task remains failed",
+    "loops_used": 1,
+    "loops_unused": 2,
+    "new_pytest_executions": 0,
+    "unchanged_artifact_sha256": {
+      "tools/tests/test_main_guard_edges.py": "834cf988a82204b570f341b73d496b05de0c1782a201b93dd1b953caaa88b53b",
+      "03_output/CYC-03/checks/TK-0018_R1_L01_verify.txt": "7b42495c9de7335f26ffd80dc9c46c3e4a8578caa76a3b2fd160553c53b51c0b",
+      "03_output/CYC-03/checks/TK-0018_R1_L01_baseline.txt": "cb2591894521aa68e38568337e40c12af0e6803f77098c0039f472cdee18167b"
+    },
+    "prior_run_sha256": "e9306009c959ac50b89b4cfa0b13fad8365dc3e579cd4a3dc6c2a0e844f83949",
+    "prior_summary_sha256": "f2f09b635859d2e0c8ba762c1daef8e3dc04b3d7e86b34f58a873536bae6f264",
+    "repair_validation_attempts": [
+      "First in-memory validation failed because CRLF prevented done_check replacement; no files written",
+      "Normalized newlines then schema validation passed"
+    ]
+  }
+}

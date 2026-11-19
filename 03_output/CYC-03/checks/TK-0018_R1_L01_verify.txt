@@ -1,0 +1,19 @@
+loop: L01
+command: C:\Users\linhdh\AppData\Local\Python\pythoncore-3.14-64\python.exe -m pytest -q --tb=line tools/tests/test_hooks.py tools/tests/test_preflight_main.py tools/tests/test_main_guard_edges.py
+exit_code: 1
+...................................F.........FF                          [100%]
+================================== FAILURES ===================================
+E   assert (0 == 1)
+     +  where 0 = CompletedProcess(args=['git', '-C', 'C:\\Users\\linhdh\\orca\\Test-Hardness-V1.0.0.local\\scratch\\TK-0018\\pytest-of-...out="Merge made by the 'ort' strategy.\n file.txt | 2 +-\n 1 file changed, 1 insertion(+), 1 deletion(-)\n", stderr='').returncode
+C:\Users\linhdh\orca\workspaces\Test-Hardness-V1.0.0\TK-0018-R1\tools\tests\test_main_guard_edges.py:81: assert (0 == 1)
+E   AssertionError: assert (0 != 0)
+     +  where 0 = CompletedProcess(args=['git', '-C', 'C:\\Users\\linhdh\\orca\\Test-Hardness-V1.0.0.local\\scratch\\TK-0018\\pytest-of-...ng repo', 'commit', '--allow-empty', '-m', 'CRLF'], returncode=0, stdout='[task/TK-0001-R1 09c73ee] CRLF\n', stderr='').returncode
+C:\Users\linhdh\orca\workspaces\Test-Hardness-V1.0.0\TK-0018-R1\tools\tests\test_main_guard_edges.py:130: AssertionError: assert (0 != 0)
+E   AssertionError: assert (0 != 0)
+     +  where 0 = CompletedProcess(args=['git', '-C', 'C:\\Users\\linhdh\\orca\\Test-Hardness-V1.0.0.local\\scratch\\TK-0018\\pytest-of-...018\\pytest-of-linhdh\\pytest-0\\test_crlf_hook_installation_bl1\\origin.git\n * [new branch]      HEAD -> main-fix\n').returncode
+C:\Users\linhdh\orca\workspaces\Test-Hardness-V1.0.0\TK-0018-R1\tools\tests\test_main_guard_edges.py:130: AssertionError: assert (0 != 0)
+=========================== short test summary info ===========================
+FAILED tools/tests/test_main_guard_edges.py::test_commit_on_main_blocked[merge]
+FAILED tools/tests/test_main_guard_edges.py::test_crlf_hook_installation_blocked[pre-commit]
+FAILED tools/tests/test_main_guard_edges.py::test_crlf_hook_installation_blocked[pre-push]
+3 failed, 44 passed in 110.66s (0:01:50)
