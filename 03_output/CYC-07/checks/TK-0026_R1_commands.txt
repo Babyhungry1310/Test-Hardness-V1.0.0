@@ -1,0 +1,19 @@
+# Dry-run results for sample commands in tools/README.md
+
+- tools/assign_audit.py | cmd: python tools/assign_audit.py --root . --cycle CYC-01 | exit: 0 | output: PASS
+- tools/batch_check.py | cmd: python tools/batch_check.py --plan 01_plan/PLAN.md --tasks 02_work/tasks --cycle CYC-07 | exit: 0 | output: PASS
+- tools/branch_names.py | cmd: python tools/branch_names.py main task/TK-0026-R1 | exit: 0 | output: main: main
+- tools/chat_blocks.py | cmd: python tools/chat_blocks.py --help | exit: 2 | output: usage: chat_blocks [-h] [--json] path
+- tools/clean_list.py | cmd: python tools/clean_list.py --help | exit: 0 | output: usage: clean_list [-h] --repo REPO --prs PRS [--out OUT] [--json]
+- tools/github_audit.py | cmd: python tools/github_audit.py --help | exit: 0 | output: usage: github_audit [-h] [--json] [--report REPORT] directory
+- tools/integrate_check.py | cmd: python tools/integrate_check.py --help | exit: 0 | output: usage: integrate_check.py [-h] [--repo REPO] [--base BASE]
+- tools/model_check.py | cmd: python tools/model_check.py catalog 04_control/MODEL_CATALOG.md | exit: 0 | output: PASS
+- tools/model_select.py | cmd: python -m tools.model_select --catalog 04_control/MODEL_CATALOG.md eligible | exit: 0 | output: claude-opus-4-6-thinking
+- tools/preflight_main.py | cmd: python tools/preflight_main.py --role worker --stage session | exit: 0 | output: Cáº£nh bÃ¡o: Hook chÆ°a cÃ i
+- tools/pytest_ini_check.py | cmd: python tools/pytest_ini_check.py . --template harness/templates/pytest.ini | exit: 0 | output: status: same
+- tools/scan.py | cmd: python tools/scan.py tools/scan_rules.json | exit: 0 | output: {"level":"ALLOW","ruleset":"scan-core-1","sha256":"232fd5d76c661a27f8748c21a3f1f
+- tools/scan_quarantine.py | cmd: python tools/scan_quarantine.py --help | exit: 2 | output: usage: scan_quarantine [-h] [--json] file scan_json quarantine_dir
+- tools/scan_wrap.py | cmd: python tools/scan_wrap.py tools/scan_rules.json --scan ALLOW --json | exit: 0 | output: {"ok": true, "source": "tools\\scan_rules.json", "sha256": "232fd5d76c661a27f874
+- tools/hooks/pre-commit | cmd: sh tools/hooks/pre-commit | exit: 0 | output: OK
+- tools/hooks/pre-merge-commit | cmd: sh tools/hooks/pre-merge-commit | exit: 0 | output: OK
+- tools/hooks/pre-push | cmd: sh tools/hooks/pre-push | exit: 0 | output: OK
