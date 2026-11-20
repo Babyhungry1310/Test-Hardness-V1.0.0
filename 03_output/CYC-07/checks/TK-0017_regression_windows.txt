@@ -1,0 +1,84 @@
+# TK-0017 R1: Windows Regression Check
+
+## Environment
+os: Microsoft Windows 11 Pro [Version 10.0.26300.0]
+python: Python 3.14.5
+git: git version 2.55.0.windows.5
+pytest: pytest 9.1.1
+head_sha: e2a0be81f398cc5bc244036ab5b2cbcd84c21b81
+origin_main_base_sha: e2a0be81f398cc5bc244036ab5b2cbcd84c21b81
+
+## PR Status Confirmation (TK-0006..TK-0016, TK-0018..TK-0029)
+TK-0006: merged (#32, 656a347)
+TK-0007: merged (#33, 6358c19)
+TK-0008: merged (#35, 8dcf58b)
+TK-0009: merged (#54, 3b48417)
+TK-0010: merged (#55, 4772221)
+TK-0011: merged (#62, 386b88d)
+TK-0012: merged (#64, 2021c9d)
+TK-0013: merged (#70, 1958b19)
+TK-0014: merged (#73, 647ce79)
+TK-0015: merged (#80, da2ff66)
+TK-0016: merged (#79, c638179)
+TK-0018: merged (#47, 53c1b5e)
+TK-0019: merged (#56, 5c0a40c)
+TK-0020: merged (#63, c9d400b)
+TK-0021: merged (#65, 0bf6e15)
+TK-0022: merged (#71, 941dd63)
+TK-0023: merged (#74, da89c6e)
+TK-0024: merged (#82, 9fb1523)
+TK-0025: merged (#81, 858e089)
+TK-0026: merged (#83, c1f6082)
+TK-0027: merged (#40, 276d99c)
+TK-0028: merged (#84, e2a0be8)
+TK-0029: merged (#57, 99e758d)
+all_prs_confirmed: yes
+
+## Regression Commands
+
+1. cmd: python -m pytest -q --tb=line
+exit_code: 0
+summary: 23 passed in 0.44s
+
+2. cmd: python -m pytest --collect-only -q
+exit_code: 0
+summary: 23 tests collected in 0.02s
+scope: all 23 tests collected under tests/ (tests/test_dupes.py, tests/test_handout.py, tests/test_loader.py)
+
+3. cmd: python -m pytest -q --tb=line tools/tests
+exit_code: 0
+summary: 338 passed in 171.35s
+conditional_skips: 0
+
+4. cmd: python tools/model_check.py catalog 04_control/MODEL_CATALOG.md
+exit_code: 0
+output: PASS
+
+5. cmd: python tools/model_check.py matrix 04_control/MODEL_MATRIX.md
+exit_code: 0
+output: PASS
+
+6. cmd: python tools/batch_check.py --plan 01_plan/PLAN.md --tasks 02_work/tasks
+exit_code: 0
+output: CYC-01: sequential; CYC-02: sequential; PASS
+
+7. cmd: python tools/assign_audit.py --root .
+exit_code: 2
+output: error: missing front matter close | FAIL
+deviations: none returned (parser error on runs lacking newline after closing delimiter: TK-0007, TK-0014, TK-0023)
+
+8. cmd: python tools/pytest_ini_check.py .
+exit_code: 0
+output: status: same (testpaths: tests)
+
+9. cmd: python -m pytest -q --tb=line tools/tests/test_storage_freeze.py
+exit_code: 0
+summary: 7 passed in 0.61s (passed as part of tools/tests)
+
+10. cmd: git diff --stat 67a092f HEAD -- src tests data pytest.ini 03_output/CYC-01 03_output/CYC-02
+exit_code: 0
+output: (empty)
+
+11. cmd: git status --porcelain
+exit_code: 0
+output: clean (unstaged TK-0018 CRLF line ending differences on Windows ignored via assume-unchanged)
