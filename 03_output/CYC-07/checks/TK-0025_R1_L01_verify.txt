@@ -1,0 +1,152 @@
+FF.FFF.                                                                  [100%]
+
+================================== FAILURES ===================================
+
+_____________________ test_clean_merge_orders_share_tree ______________________
+
+tools\tests\test_integrate_check.py:144: in test_clean_merge_orders_share_tree
+
+    assert snapshot(work) == before
+
+E   AssertionError: assert {'head': 'e93...al worktree']} == {'head': 'e93...r/work tree']}
+
+E     
+
+E     Omitting 3 identical items, use -vv to show
+
+E     Differing items:
+
+E     {'worktrees': ['C:/Users/linhdh/AppData/Local/Temp/pytest-of-linhdh/pytest-447/test_clean_merge_orders_share_0/repo di...ntegrate-check-bkp6wiby/trial worktree', 'C:/Users/linhdh/AppData/Local/Temp/integrate-check-p6efmalj/trial worktree']} != {'worktrees': ['C:/Users/linhdh/AppData/Local/Temp/pytest-of-linhdh/pytest-447/test_clean_merge_orders_share_0/repo dir/work tree']}
+
+E     Use -v to get more diff
+
+________________ test_conflict_names_file_and_shas_then_aborts ________________
+
+tools\tests\test_integrate_check.py:166: in test_conflict_names_file_and_shas_then_aborts
+
+    assert snapshot(work) == before
+
+E   AssertionError: assert {'head': 'ba0...al worktree']} == {'head': 'ba0...r/work tree']}
+
+E     
+
+E     Omitting 3 identical items, use -vv to show
+
+E     Differing items:
+
+E     {'worktrees': ['C:/Users/linhdh/AppData/Local/Temp/pytest-of-linhdh/pytest-447/test_conflict_names_file_and_s0/repo dir/work tree', 'C:/Users/linhdh/AppData/Local/Temp/integrate-check-2qpdb_ra/trial worktree']} != {'worktrees': ['C:/Users/linhdh/AppData/Local/Temp/pytest-of-linhdh/pytest-447/test_conflict_names_file_and_s0/repo dir/work tree']}
+
+E     Use -v to get more diff
+
+_________________ test_older_base_still_merges_and_is_offset __________________
+
+tools\tests\test_integrate_check.py:194: in test_older_base_still_merges_and_is_offset
+
+    assert payload["offset"] == [left]
+
+E   AssertionError: assert [] == ['be28b26dbee...5331524bdb60']
+
+E     
+
+E     Right contains one more item: 'be28b26dbeed3880e53d5160ec2e5331524bdb60'
+
+E     Use -v to get more diff
+
+_______________ test_two_worktrees_commit_does_not_touch_other ________________
+
+tools\tests\test_integrate_check.py:212: in test_two_worktrees_commit_does_not_touch_other
+
+    assert snapshot(two) == before
+
+E   AssertionError: assert {'head': '26d...s0/two tree']} == {'head': '26d...s0/two tree']}
+
+E     
+
+E     Omitting 3 identical items, use -vv to show
+
+E     Differing items:
+
+E     {'refs': '26d9924cc49023b7bbea5adb7840d73dbdeaa03f refs/heads/main\n4135eb9aef00345efddb043f9179e014a32a754b refs/head...23b7bbea5adb7840d73dbdeaa03f refs/heads/task/two\n26d9924cc49023b7bbea5adb7840d73dbdeaa03f refs/remotes/origin/main\n'} != {'refs': '26d9924cc49023b7bbea5adb7840d73dbdeaa03f refs/heads/main\n26d9924cc49023b7bbea5adb7840d73dbdeaa03f refs/head...23b7bbea5adb7840d73dbdeaa03f refs/heads/task/two\n26d9924cc49023b7bbea5adb7840d73dbdeaa03f refs/remotes/origin/main\n'}
+
+E     Use -v to get more diff
+
+________________ test_working_clone_refs_head_status_unchanged ________________
+
+tools\tests\test_integrate_check.py:235: in test_working_clone_refs_head_status_unchanged
+
+    assert snapshot(work) == before_work
+
+E   AssertionError: assert {'head': '3e6.../other tree']} == {'head': '3e6.../other tree']}
+
+E     
+
+E     Omitting 3 identical items, use -vv to show
+
+E     Differing items:
+
+E     {'worktrees': ['C:/Users/linhdh/AppData/Local/Temp/pytest-of-linhdh/pytest-447/test_working_clone_refs_head_s0/repo di...orktree', 'C:/Users/linhdh/AppData/Local/Temp/pytest-of-linhdh/pytest-447/test_working_clone_refs_head_s0/other tree']} != {'worktrees': ['C:/Users/linhdh/AppData/Local/Temp/pytest-of-linhdh/pytest-447/test_working_clone_refs_head_s0/repo di...rk tree', 'C:/Users/linhdh/AppData/Local/Temp/pytest-of-linhdh/pytest-447/test_working_clone_refs_head_s0/other tree']}
+
+E     Use -v to get more diff
+
+---------------------------- Captured stdout call -----------------------------
+
+{
+
+  "base": "3e656829b20254547cfbd0c4a7e1b540af8eb4c1",
+
+  "merged": [
+
+    "3bd15d136db1ccfa2cc56bd1fb9acb233bf00954"
+
+  ],
+
+  "tree": "cdb97534232913c1392a023744e9c3c976f59ae2",
+
+  "worktree": "C:\\Users\\linhdh\\AppData\\Local\\Temp\\integrate-check-d8zhrl2p\\trial worktree",
+
+  "heads": [
+
+    {
+
+      "sha": "3bd15d136db1ccfa2cc56bd1fb9acb233bf00954",
+
+      "files": [
+
+        "left.txt"
+
+      ],
+
+      "out_of_scope": [],
+
+      "base_offset": false
+
+    }
+
+  ],
+
+  "out_of_scope": [],
+
+  "shared": [],
+
+  "conflict": null,
+
+  "offset": [],
+
+  "result": "clean"
+
+}
+
+=========================== short test summary info ===========================
+
+FAILED tools/tests/test_integrate_check.py::test_clean_merge_orders_share_tree
+
+FAILED tools/tests/test_integrate_check.py::test_conflict_names_file_and_shas_then_aborts
+
+FAILED tools/tests/test_integrate_check.py::test_older_base_still_merges_and_is_offset
+
+FAILED tools/tests/test_integrate_check.py::test_two_worktrees_commit_does_not_touch_other
+
+FAILED tools/tests/test_integrate_check.py::test_working_clone_refs_head_status_unchanged
+
+5 failed, 2 passed in 19.02s
+
