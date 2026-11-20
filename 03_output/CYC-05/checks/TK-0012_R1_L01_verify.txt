@@ -1,0 +1,73 @@
+FFFF.FFFF.FFFF..                                                         [100%]
+================================== FAILURES ===================================
+E   AssertionError: assert ['missing_key'] == []
+      
+      Left contains one more item: 'missing_key'
+      Use -v to get more diff
+C:\Users\linhdh\orca\workspaces\Test-Hardness-V1.0.0\tk0012-r1\tools\tests\test_chat_blocks.py:109: AssertionError: assert ['missing_key'] == []
+E   AssertionError: assert ['missing_key'] == []
+      
+      Left contains one more item: 'missing_key'
+      Use -v to get more diff
+C:\Users\linhdh\orca\workspaces\Test-Hardness-V1.0.0\tk0012-r1\tools\tests\test_chat_blocks.py:114: AssertionError: assert ['missing_key'] == []
+E   AssertionError: assert ['lead_in', 'missing_key'] == ['lead_in']
+      
+      Left contains one more item: 'missing_key'
+      Use -v to get more diff
+C:\Users\linhdh\orca\workspaces\Test-Hardness-V1.0.0\tk0012-r1\tools\tests\test_chat_blocks.py:125: AssertionError: assert ['lead_in', 'missing_key'] == ['lead_in']
+E   AssertionError: assert ['after_end', 'missing_key'] == ['after_end']
+      
+      Left contains one more item: 'missing_key'
+      Use -v to get more diff
+C:\Users\linhdh\orca\workspaces\Test-Hardness-V1.0.0\tk0012-r1\tools\tests\test_chat_blocks.py:132: AssertionError: assert ['after_end', 'missing_key'] == ['after_end']
+E   AssertionError: assert ['missing_end', 'missing_key'] == ['missing_end']
+      
+      Left contains one more item: 'missing_key'
+      Use -v to get more diff
+C:\Users\linhdh\orca\workspaces\Test-Hardness-V1.0.0\tk0012-r1\tools\tests\test_chat_blocks.py:144: AssertionError: assert ['missing_end', 'missing_key'] == ['missing_end']
+E   AssertionError: assert ['too_many_qu...'missing_key'] == ['too_many_questions']
+      
+      Left contains one more item: 'missing_key'
+      Use -v to get more diff
+C:\Users\linhdh\orca\workspaces\Test-Hardness-V1.0.0\tk0012-r1\tools\tests\test_chat_blocks.py:153: AssertionError: assert ['too_many_qu...'missing_key'] == ['too_many_questions']
+E   AssertionError: assert ['missing_key'] == ['summary_lines']
+      
+      At index 0 diff: 'missing_key' != 'summary_lines'
+      Use -v to get more diff
+C:\Users\linhdh\orca\workspaces\Test-Hardness-V1.0.0\tk0012-r1\tools\tests\test_chat_blocks.py:163: AssertionError: assert ['missing_key'] == ['summary_lines']
+E   AssertionError: assert ['missing_key'] == ['decide_mismatch']
+      
+      At index 0 diff: 'missing_key' != 'decide_mismatch'
+      Use -v to get more diff
+C:\Users\linhdh\orca\workspaces\Test-Hardness-V1.0.0\tk0012-r1\tools\tests\test_chat_blocks.py:169: AssertionError: assert ['missing_key'] == ['decide_mismatch']
+E   AssertionError: assert 'escalate' in 'missing required key: changed'
+C:\Users\linhdh\orca\workspaces\Test-Hardness-V1.0.0\tk0012-r1\tools\tests\test_chat_blocks.py:185: AssertionError: assert 'escalate' in 'missing required key: changed'
+E   AssertionError: assert ['table', 'missing_key'] == ['table']
+      
+      Left contains one more item: 'missing_key'
+      Use -v to get more diff
+C:\Users\linhdh\orca\workspaces\Test-Hardness-V1.0.0\tk0012-r1\tools\tests\test_chat_blocks.py:191: AssertionError: assert ['table', 'missing_key'] == ['table']
+E   AssertionError: assert ['missing_key'] == []
+      
+      Left contains one more item: 'missing_key'
+      Use -v to get more diff
+C:\Users\linhdh\orca\workspaces\Test-Hardness-V1.0.0\tk0012-r1\tools\tests\test_chat_blocks.py:211: AssertionError: assert ['missing_key'] == []
+E   AssertionError: assert 1 == 0
+     +  where 1 = main(['C:\\Users\\linhdh\\AppData\\Local\\Temp\\pytest-of-linhdh\\pytest-380\\test_cli_json_and_text0\\message.txt', '--json'])
+---------------------------- Captured stdout call -----------------------------
+{"ok": false, "issues": [{"code": "missing_key", "message": "missing required key: changed"}]}
+C:\Users\linhdh\orca\workspaces\Test-Hardness-V1.0.0\tk0012-r1\tools\tests\test_chat_blocks.py:216: AssertionError: assert 1 == 0
+=========================== short test summary info ===========================
+FAILED tools/tests/test_chat_blocks.py::test_valid_endings_with_and_without_summary
+FAILED tools/tests/test_chat_blocks.py::test_questions_within_limit_match_decide
+FAILED tools/tests/test_chat_blocks.py::test_lead_in_before_summary - Asserti...
+FAILED tools/tests/test_chat_blocks.py::test_content_after_ending_block - Ass...
+FAILED tools/tests/test_chat_blocks.py::test_missing_ending_block - Assertion...
+FAILED tools/tests/test_chat_blocks.py::test_six_question_blocks - AssertionE...
+FAILED tools/tests/test_chat_blocks.py::test_summary_13_lines - AssertionErro...
+FAILED tools/tests/test_chat_blocks.py::test_decide_does_not_match_question_count
+FAILED tools/tests/test_chat_blocks.py::test_missing_required_key - Assertion...
+FAILED tools/tests/test_chat_blocks.py::test_table_outside_code_is_reported
+FAILED tools/tests/test_chat_blocks.py::test_table_inside_code_is_not_reported
+FAILED tools/tests/test_chat_blocks.py::test_cli_json_and_text - AssertionErr...
+12 failed, 4 passed in 0.33s
