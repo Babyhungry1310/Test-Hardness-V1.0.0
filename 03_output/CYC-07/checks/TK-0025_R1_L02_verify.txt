@@ -1,0 +1,26 @@
+.F.F...                                                                  [100%]
+
+================================== FAILURES ===================================
+
+E   AssertionError: assert ['67b6405ebcb...6aedce9b6e2f'] == ['67b6405ebcb...f3b20c750392']
+
+      
+
+      At index 1 diff: '5479cd7505fc50b5dd45d0ccb3406aedce9b6e2f' != '80d4e48023d75ba6b481f6efc4f2f3b20c750392'
+
+      Use -v to get more diff
+
+C:\Users\linhdh\orca\workspaces\Test-Hardness-V1.0.0\tk0025-r1\tools\tests\test_integrate_check.py:159: AssertionError: assert ['67b6405ebcb...6aedce9b6e2f'] == ['67b6405ebcb...f3b20c750392']
+
+E   assert 1 == 0
+
+C:\Users\linhdh\orca\workspaces\Test-Hardness-V1.0.0\tk0025-r1\tools\tests\test_integrate_check.py:192: assert 1 == 0
+
+=========================== short test summary info ===========================
+
+FAILED tools/tests/test_integrate_check.py::test_conflict_names_file_and_shas_then_aborts
+
+FAILED tools/tests/test_integrate_check.py::test_older_base_still_merges_and_is_offset
+
+2 failed, 5 passed in 15.04s
+
