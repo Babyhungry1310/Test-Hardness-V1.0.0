@@ -193,12 +193,10 @@ def test_route_note_over_15_words(tmp_path):
     assert code == 1
     assert "note has 16 words" in messages(data)
 
-def test_live_catalog_note_line_rejected():
+def test_live_catalog_passes():
     code, data = check_file("04_control/MODEL_CATALOG.md", "catalog")
-    assert code == 1
-    hits = [item for item in data["issues"] if item["message"] == "note has 21 words"]
-    assert len(hits) == 1
-    assert "2026-11-18T06:28Z" in hits[0]["line"]
+    assert code == 0
+    assert data["issues"] == []
 
 def test_assignment_wrong_shape(tmp_path):
     text = MATRIX.replace(
