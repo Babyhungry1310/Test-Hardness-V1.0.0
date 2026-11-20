@@ -1,0 +1,51 @@
+{
+  "task": "TK-0018",
+  "run": 1,
+  "outcome": "DONE",
+  "loop": "L02",
+  "branch": "task/TK-0018-R1",
+  "base": "3e225b84123d981f27fd045d5cfcb574e6cab1dc",
+  "actual_model": "grok-4.7",
+  "metadata_source": "summary.json current_model_id",
+  "inputs_merged": ["TK-0032", "TK-0034", "TK-0035"],
+  "verify": {
+    "command": "python -m pytest -q --tb=line tools/tests",
+    "exit_code": 0,
+    "passed": 134,
+    "failed": 0
+  },
+  "baseline": {
+    "command": "python -m pytest -q --tb=line",
+    "exit_code": 0,
+    "passed": 23,
+    "failed": 0
+  },
+  "l01": {
+    "passed": 44,
+    "failed": 3,
+    "preserved": true
+  },
+  "cases": {
+    "total": 25,
+    "must_block": 16,
+    "known_limit": 9,
+    "skipped": 0
+  },
+  "max_loops": 3,
+  "loops_used": 2,
+  "loops_remaining": 1,
+  "diff": {
+    "file": "tools/tests/test_main_guard_edges.py",
+    "status": "untracked",
+    "lines": 138,
+    "line_budget": 140,
+    "prior_sha256": "834cf988a82204b570f341b73d496b05de0c1782a201b93dd1b953caaa88b53b",
+    "sha256": "342f7ce61dd290620fdfdd2093fa1174b30d8e0fa7f1cb33d4e311d11f7a6785",
+    "changes": [
+      "merge --no-ff asserts refusal, unchanged main HEAD, MERGE_HEAD, abort, and clean status",
+      "CRLF copies assert bytes then session preflight exit 1, hook_status crlf, and the hook file name"
+    ]
+  },
+  "commits": 0,
+  "pushes": 0
+}

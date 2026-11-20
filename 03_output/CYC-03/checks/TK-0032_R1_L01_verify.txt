@@ -1,0 +1,4 @@
+command: C:\Users\linhdh\AppData\Local\Python\pythoncore-3.14-64\python.exe -m pytest -q --tb=line tools/tests/test_pre_merge_commit.py
+exit: 0
+...                                                                      [100%]
+3 passed in 4.18s
