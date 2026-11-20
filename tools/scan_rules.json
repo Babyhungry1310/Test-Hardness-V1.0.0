@@ -1,0 +1,126 @@
+{
+  "ruleset": "scan-core-1",
+  "limits": {
+    "max_file_bytes": 5242880,
+    "max_decode_depth": 3,
+    "min_base64_length": 24,
+    "max_decode_count": 200,
+    "max_decoded_bytes": 1048576
+  },
+  "patterns": [
+    {
+      "rule": "override_vi_all",
+      "group": "override",
+      "level": "QUARANTINE",
+      "pattern": "bỏ\\s+qua\\s+mọi\\s+chỉ\\s+dẫn"
+    },
+    {
+      "rule": "override_vi_follow",
+      "group": "override",
+      "level": "QUARANTINE",
+      "pattern": "từ\\s+giờ\\s+bạn\\s+chỉ\\s+làm\\s+theo"
+    },
+    {
+      "rule": "override_en_ignore",
+      "group": "override",
+      "level": "QUARANTINE",
+      "pattern": "ignore\\s+(?:all\\s+|any\\s+)?(?:previous|prior|above)\\s+(?:instructions|prompts|rules|directives)"
+    },
+    {
+      "rule": "override_en_disregard",
+      "group": "override",
+      "level": "QUARANTINE",
+      "pattern": "disregard\\s+(?:all\\s+|any\\s+)?(?:previous|prior)\\s+(?:instructions|prompts|rules)"
+    },
+    {
+      "rule": "impersonation_system_label",
+      "group": "impersonation",
+      "level": "QUARANTINE",
+      "pattern": "(?:^|\\n)\\s*system\\s*:"
+    },
+    {
+      "rule": "impersonation_owner_approved",
+      "group": "impersonation",
+      "level": "QUARANTINE",
+      "pattern": "owner\\s+đã\\s+duyệt"
+    },
+    {
+      "rule": "dangerous_push_main",
+      "group": "dangerous_action",
+      "level": "QUARANTINE",
+      "pattern": "hãy\\s+đẩy\\s+thẳng"
+    },
+    {
+      "rule": "dangerous_push_main_en",
+      "group": "dangerous_action",
+      "level": "QUARANTINE",
+      "pattern": "push\\s+(?:straight|directly)\\s+to\\s+[`'\"]?main\\b"
+    },
+    {
+      "rule": "dangerous_automerge",
+      "group": "dangerous_action",
+      "level": "QUARANTINE",
+      "pattern": "bật\\s+auto[-\\s]?merge"
+    },
+    {
+      "rule": "dangerous_automerge_en",
+      "group": "dangerous_action",
+      "level": "QUARANTINE",
+      "pattern": "enable\\s+auto[-\\s]?merge"
+    },
+    {
+      "rule": "dangerous_send_env",
+      "group": "dangerous_action",
+      "level": "QUARANTINE",
+      "pattern": "gửi\\s+file\\s+[`'\"]?\\.env\\b"
+    },
+    {
+      "rule": "dangerous_git_push_describe",
+      "group": "dangerous_action",
+      "level": "WARN",
+      "pattern": "git\\s+push\\b"
+    },
+    {
+      "rule": "zone2_email",
+      "group": "zone2",
+      "level": "WARN",
+      "pattern": "[A-Za-z0-9._%+-]{1,64}@[A-Za-z0-9.-]{1,253}\\.[A-Za-z]{2,24}"
+    },
+    {
+      "rule": "zone2_national_id",
+      "group": "zone2",
+      "level": "QUARANTINE",
+      "pattern": "(?:số\\s+định\\s+danh(?:\\s+cá\\s+nhân)?|cccd|cmnd)\\s*[:\\-]?\\s*\\d{9,12}\\b"
+    },
+    {
+      "rule": "zone3_openai_token",
+      "group": "zone3",
+      "level": "BLOCK",
+      "pattern": "sk-[A-Za-z0-9_-]{20,}"
+    },
+    {
+      "rule": "zone3_github_token",
+      "group": "zone3",
+      "level": "BLOCK",
+      "pattern": "ghp_[A-Za-z0-9]{36}"
+    },
+    {
+      "rule": "zone3_github_pat",
+      "group": "zone3",
+      "level": "BLOCK",
+      "pattern": "github_pat_[A-Za-z0-9_]{20,}"
+    },
+    {
+      "rule": "zone3_aws_key",
+      "group": "zone3",
+      "level": "BLOCK",
+      "pattern": "AKIA[0-9A-Z]{16}"
+    },
+    {
+      "rule": "zone3_pem",
+      "group": "zone3",
+      "level": "BLOCK",
+      "pattern": "-----BEGIN [A-Z ]{0,12}PRIVATE KEY-----"
+    }
+  ]
+}
