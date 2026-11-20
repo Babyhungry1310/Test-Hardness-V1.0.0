@@ -96,3 +96,24 @@ Toàn bộ 279 file trong `67a092f..95a0e46` đã được phủ bởi inventory
 Với mỗi ID ở mục 2, chọn một: `APPROVE transfer` | `APPROVE adjust` | `REJECT` | `DEFER`.
 
 Sau khi duyệt, LEAD mới được mở PR sang repo mẹ theo đúng các ID được APPROVE, trên phiên bản đích OWNER chỉ định.
+
+---
+
+## 5. Phê duyệt OWNER
+
+- Ngày: 2026-11-20
+- Lời OWNER trong phiên LEAD: `ok duyệt`
+- Phạm vi: chấp nhận nguyên văn khuyến nghị LEAD trong mục 2 của bản này
+
+| ID | Quyết định OWNER |
+|---|---|
+| T1 … T11 | APPROVE transfer |
+| A1 … A3 | APPROVE adjust |
+| N1 … N6 | APPROVE do-not-transfer (không chuyển) |
+
+Ghi chú còn thiếu trước khi LEAD mở PR sang repo mẹ:
+1. OWNER chỉ định **URL repo mẹ** và **phiên bản/commit đích**.
+2. OWNER đặt thẻ `cycle/CYC-03` … `cycle/CYC-07` (không bắt buộc để chuyển, nhưng còn nợ vận hành).
+3. PR #37 vẫn DEFER / xử lý riêng (N6).
+
+LEAD không mở PR ở repo mẹ cho đến khi có URL và phiên bản đích.
