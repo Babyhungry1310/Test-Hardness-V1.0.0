@@ -277,16 +277,21 @@ def test_too_large_not_partial_scan(tmp_path):
     assert data["level"] == "QUARANTINE"
     assert data["reasons"] == [{"rule": "too_large", "group": "limit", "position": 0, "layer": 0}]
     assert data["decoded_skipped"] == 0
-    exact = write_file(tmp_path, "fit.bin", b"a" * limit)
+    # Non-base64 alphabet filler so later decode limits do not treat the file as one run.
+    chunk = b"clean text!\n"
+    exact_raw = (chunk * ((limit // len(chunk)) + 1))[:limit]
+    assert len(exact_raw) == limit
+    exact = write_file(tmp_path, "fit.bin", exact_raw)
     res, data = scan(exact)
     assert res.returncode == 0
     assert data["level"] == "ALLOW"
     assert data["reasons"] == []
 
 
-def test_base64_not_decoded(tmp_path):
-    blob = base64.b64encode(OVERRIDE.encode("utf-8")).decode("ascii")
-    res, data = scan(write_file(tmp_path, "enc.txt", blob + " " + MARKER), hidden=(OVERRIDE, blob))
+def test_short_base64_not_decoded(tmp_path):
+    blob = base64.b64encode(b"short").decode("ascii")
+    assert len(blob) < 24
+    res, data = scan(write_file(tmp_path, "enc.txt", blob + " " + MARKER), hidden=(blob,))
     assert res.returncode == 0
     assert data["level"] == "ALLOW"
     assert data["decoded_skipped"] == 0
