@@ -6,11 +6,11 @@ origin: "01_plan/PLAN.md#CYC_07"
 ---
 <!-- ANCHOR: TASKS -->
 ## Tasks
-- TK-0028 | run: none | outcome: ASSIGNED
-- TK-0015 | run: none | outcome: ASSIGNED
-- TK-0016 | run: none | outcome: ASSIGNED
-- TK-0024 | run: none | outcome: ASSIGNED
-- TK-0025 | run: none | outcome: ASSIGNED
-- TK-0026 | run: none | outcome: ASSIGNED
-- TK-0017 | run: none | outcome: ASSIGNED
+- TK-0015 | run: R1 | outcome: DONE
+- TK-0016 | run: R1 | outcome: DONE
+- TK-0024 | run: R1 | outcome: DONE
+- TK-0025 | run: R1 | outcome: DONE
+- TK-0026 | run: R1 | outcome: DONE
+- TK-0028 | run: R1 | outcome: DONE
+- TK-0017 | run: R1 | outcome: DONE
 <!-- END: TASKS -->
