@@ -2,7 +2,7 @@ PHASE: CLOSE
 CYCLE: CYC-07
 PROFILE: SHORT
 
-## Handover board (updated: 2026-11-20, main @ 95a0e46)
+## Handover board (updated: 2026-11-20, main @ 15b0304)
 ### 1. Progress
 - CYC-01 | PASS | TK-0001 DONE R2, TK-0002 DONE R1, TK-0004 DONE R1 | thẻ cycle/CYC-01 @ e2b7944
 - CYC-02 | PASS | TK-0003 DONE R1, TK-0005 DONE R1 | RVW-CYC-02 vòng 1 PASS | thẻ cycle/CYC-02 @ 36bafbe
@@ -30,8 +30,8 @@ PROFILE: SHORT
 - DEC-0015 | ACTIVE | Nâng khung lên V1.0.1: bảo vệ main, ma trận model, chat và storage, dọn nhánh, scanner
 - Quyết định cũ: DEC-0014, DEC-0013, DEC-0012, DEC-0011, DEC-0010, DEC-0008, DEC-0007, DEC-0006, DEC-0004, DEC-0002 ACTIVE; DEC-0009 SUPERSEDED_BY DEC-0012; DEC-0005 RETIRED. Chi tiết trong sổ gốc.
 ### 4. Next action
-- OWNER duyệt 03_output/CYC-07/checks/UPSTREAM_PROPOSALS.md từng mục trước khi chuyển repo mẹ
+- OWNER đã duyệt UPSTREAM_PROPOSALS (T transfer, A adjust, N không chuyển); còn thiếu URL và phiên bản repo mẹ
 - OWNER đặt thẻ cycle/CYC-03 tới cycle/CYC-07; LEAD không tạo thẻ
-- PR #37 để sau dry-run; không mở PR repo mẹ khi chưa có APPROVE
+- PR #37 để sau; không mở PR repo mẹ trước khi OWNER chỉ định đích
 ### 5. Never do
 - Không xuất PDF; không dùng tên học viên thật trong dữ liệu thử
