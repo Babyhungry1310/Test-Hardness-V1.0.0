@@ -1,0 +1,47 @@
+task: TK-0023
+run: R1
+os: Windows-11-10.0.26300-SP0
+ruleset: scan-core-1
+
+counts_by_kind:
+  must_catch: 5
+  must_not_false_positive: 8
+  known_limit: 10
+  total: 23
+
+known_limits:
+  - test_limit_rephrased_override
+  - test_limit_non_vi_en_language
+  - test_limit_encoding_hex
+  - test_limit_encoding_rot13
+  - test_limit_encoding_url
+  - test_limit_base64_short_pieces
+  - test_limit_content_inside_image
+  - test_limit_split_across_files
+  - test_limit_leetspeak_override
+  - test_limit_base64_multiline_split
+
+measured_times:
+  test_catch_large_zero_width_chars: 7.94s
+  test_benign_large_repeated_unclosed_html_tags: 2.52s
+  test_benign_large_one_line: 1.33s
+  test_benign_ordinary_sources_polyglot: 0.49s
+  test_benign_technical_docs_vi_and_en: 0.24s
+  test_limit_split_across_files: 0.24s
+  test_benign_small_image_base64: 0.13s
+  test_benign_large_200_base64_threshold: 0.13s
+  test_limit_encoding_rot13: 0.13s
+  test_limit_content_inside_image: 0.12s
+  test_catch_nested_b64_3_layers_with_newlines: 0.12s
+  test_catch_override_mixed_case_extra_spaces_newlines: 0.12s
+  test_limit_leetspeak_override: 0.12s
+  test_limit_non_vi_en_language: 0.12s
+  test_limit_encoding_url: 0.12s
+  test_catch_override_nested_html_comments_in_markdown: 0.12s
+  test_catch_override_zero_width_between_letters: 0.12s
+  test_limit_rephrased_override: 0.12s
+  test_benign_emoji_zwj_and_vietnamese_composed_decomposed: 0.12s
+  test_limit_base64_short_pieces: 0.12s
+  test_limit_base64_multiline_split: 0.12s
+  test_limit_encoding_hex: 0.12s
+  test_benign_bom_only_file: 0.12s
