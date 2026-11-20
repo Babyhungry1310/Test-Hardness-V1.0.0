@@ -1,16 +1,16 @@
-PHASE: CLOSE
-CYCLE: CYC-06
+PHASE: EXECUTE
+CYCLE: CYC-07
 PROFILE: SHORT
 
-## Handover board (updated: 2026-11-20, main @ da89c6e)
+## Handover board (updated: 2026-11-20, main @ c35fcfd)
 ### 1. Progress
 - CYC-01 | PASS | TK-0001 DONE R2, TK-0002 DONE R1, TK-0004 DONE R1 | thẻ cycle/CYC-01 @ e2b7944
 - CYC-02 | PASS | TK-0003 DONE R1, TK-0005 DONE R1 | RVW-CYC-02 vòng 1 PASS | thẻ cycle/CYC-02 @ 36bafbe
 - CYC-03 | PASS | TK-0006 R1 DONE, TK-0007 R1 DONE, TK-0008 R4 DONE, TK-0018 R1 DONE, TK-0027 R1 DONE, TK-0030 R1 DONE, TK-0032 R1 DONE, TK-0033 CANCELLED, TK-0034 R1 DONE, TK-0035 R1 DONE | RVW-CYC-03 vòng 1 PASS | chờ OWNER đặt thẻ cycle/CYC-03
 - CYC-04 | PASS | TK-0009 R3 DONE, TK-0010 R1 DONE, TK-0019 R2 DONE, TK-0029 R1 DONE | cổng @ f310d9d | chờ OWNER đặt thẻ cycle/CYC-04
 - CYC-05 | PASS | TK-0011 R1 DONE, TK-0012 R1 DONE, TK-0020 R1 DONE, TK-0021 R1 DONE | cổng @ 64b3ef2 | chờ OWNER đặt thẻ cycle/CYC-05
-- CYC-06 | PASS | TK-0013 R1 DONE, TK-0014 R1 DONE, TK-0022 R1 DONE, TK-0023 R1 DONE | RVW-CYC-06 vòng 1 PASS | chờ OWNER đặt thẻ cycle/CYC-06
-- CYC-07 | ASSIGNED | TK-0015, TK-0016, TK-0024, TK-0025, TK-0026, TK-0028, TK-0017 | batch, pytest, hồi quy
+- CYC-06 | PASS | TK-0013 R1 DONE, TK-0014 R1 DONE, TK-0022 R1 DONE, TK-0023 R1 DONE | cổng @ c35fcfd | chờ OWNER đặt thẻ cycle/CYC-06
+- CYC-07 | EXECUTE | B1: TK-0015 Grok, TK-0016 Gemini, TK-0024 Gemini, TK-0025 Grok | verify_default 23 @ c35fcfd
 ### 2. Open risks
 - RSK-0004 | OPEN | level: HIGH | due: 2026-11-26 | owner: OWNER
 - RSK-0005 | OPEN | level: MEDIUM | due: 2026-12-12 | owner: LEAD
@@ -30,8 +30,8 @@ PROFILE: SHORT
 - DEC-0015 | ACTIVE | Nâng khung lên V1.0.1: bảo vệ main, ma trận model, chat và storage, dọn nhánh, scanner
 - Quyết định cũ: DEC-0014, DEC-0013, DEC-0012, DEC-0011, DEC-0010, DEC-0008, DEC-0007, DEC-0006, DEC-0004, DEC-0002 ACTIVE; DEC-0009 SUPERSEDED_BY DEC-0012; DEC-0005 RETIRED. Chi tiết trong sổ gốc.
 ### 4. Next action
-- OWNER merge PR cổng CYC-06, đặt thẻ cycle/CYC-06 lên commit merge, rồi nói Start CYC-07
-- OWNER vẫn đặt thẻ cycle/CYC-03, cycle/CYC-04 và cycle/CYC-05; LEAD không tạo thẻ
-- Không thi công CYC-07 trước lệnh Start CYC-07
+- B1 song song: Gemini TK-0016 và TK-0024; Grok TK-0015 và TK-0025
+- B2 TK-0026 chỉ sau khi cả B1 trên main; B3 TK-0028; B4 TK-0017
+- OWNER vẫn đặt thẻ cycle/CYC-03 tới cycle/CYC-06; LEAD không tạo thẻ; kiểm định cuối CYC-07 dùng gpt-5.6-luna
 ### 5. Never do
 - Không xuất PDF; không dùng tên học viên thật trong dữ liệu thử
