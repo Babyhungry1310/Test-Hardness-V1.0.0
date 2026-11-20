@@ -1,0 +1,7 @@
+.................F...                                                    [100%]
+================================== FAILURES ===================================
+E   json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+C:\Users\linhdh\AppData\Local\Python\pythoncore-3.14-64\Lib\json\decoder.py:363: json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+=========================== short test summary info ===========================
+FAILED tools/tests/test_assign_audit.py::test_usage_exits_2 - json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+1 failed, 20 passed in 0.56s
