@@ -1,0 +1,33 @@
+FF.FFF                                                                   [100%]
+================================== FAILURES ===================================
+E   AssertionError: assert 'unknown' == 'task'
+      
+      - task
+      + unknown
+C:\Users\linhdh\orca\workspaces\Test-Hardness-V1.0.0\tk0011-r1\tools\tests\test_branch_names.py:41: AssertionError: assert 'unknown' == 'task'
+E   AssertionError: assert 'unknown' == 'review'
+      
+      - review
+      + unknown
+C:\Users\linhdh\orca\workspaces\Test-Hardness-V1.0.0\tk0011-r1\tools\tests\test_branch_names.py:47: AssertionError: assert 'unknown' == 'review'
+E   AssertionError: assert 'unknown' != 'unknown'
+     +  where 'unknown' = classify('upgrade/1.0.1')
+C:\Users\linhdh\orca\workspaces\Test-Hardness-V1.0.0\tk0011-r1\tools\tests\test_branch_names.py:62: AssertionError: assert 'unknown' != 'unknown'
+E   AssertionError: assert 1 == 0
+     +  where 1 = main(['main', 'task/TK-0001-R1'])
+---------------------------- Captured stdout call -----------------------------
+main: main
+task/TK-0001-R1: unknown
+C:\Users\linhdh\orca\workspaces\Test-Hardness-V1.0.0\tk0011-r1\tools\tests\test_branch_names.py:66: AssertionError: assert 1 == 0
+E   AssertionError: assert [{'name': 're...': 'unknown'}] == [{'name': 're...': 'unknown'}]
+      
+      At index 0 diff: {'name': 'review/CYC-02', 'kind': 'unknown'} != {'name': 'review/CYC-02', 'kind': 'legacy-review'}
+      Use -v to get more diff
+C:\Users\linhdh\orca\workspaces\Test-Hardness-V1.0.0\tk0011-r1\tools\tests\test_branch_names.py:78: AssertionError: assert [{'name': 're...': 'unknown'}] == [{'name': 're...': 'unknown'}]
+=========================== short test summary info ===========================
+FAILED tools/tests/test_branch_names.py::test_each_kind_has_exact_and_near_miss
+FAILED tools/tests/test_branch_names.py::test_new_and_legacy_review - Asserti...
+FAILED tools/tests/test_branch_names.py::test_input_names_are_classified - As...
+FAILED tools/tests/test_branch_names.py::test_cli_exit_codes - AssertionError...
+FAILED tools/tests/test_branch_names.py::test_json_output - AssertionError: a...
+5 failed, 1 passed in 0.06s
