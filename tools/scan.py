@@ -1,4 +1,5 @@
 import argparse
+import base64
 import hashlib
 import json
 import re
@@ -91,7 +92,12 @@ STRUCT_LEVELS = {
     "homoglyph": "QUARANTINE",
     "html_hidden": "QUARANTINE",
     "too_large": "QUARANTINE",
+    "depth_exceeded": "QUARANTINE",
+    "limit_exceeded": "QUARANTINE",
+    "binary_file": "QUARANTINE",
 }
+B64_RE = re.compile(rb"[A-Za-z0-9+/=]{24,}")
+PEM_RE = re.compile(rb"-----BEGIN [A-Z ]{0,30}-----[^-]+-----END [A-Z ]{0,30}-----")
 
 
 class ScanError(Exception):
@@ -178,8 +184,63 @@ def read_input(path):
         raise ScanError("TOOL_ERROR") from exc
 
 
-def reason(rule, group, position):
-    return {"rule": rule, "group": group, "position": position, "layer": 0}
+def reason(rule, group, position, layer=0):
+    return {"rule": rule, "group": group, "position": position, "layer": layer}
+
+
+def limit_hit(name, position=0, layer=0):
+    return reason(name, "limit", position, layer)
+
+
+def is_binary_bytes(raw):
+    if not raw:
+        return False
+    if b"\x00" in raw:
+        return True
+    try:
+        text = raw.decode("utf-8")
+    except UnicodeDecodeError:
+        return True
+    control_chars = 0
+    for char in text:
+        code = ord(char)
+        if code < 32 and code not in (9, 10, 13):
+            control_chars += 1
+    return control_chars > 0
+
+
+def is_text_bytes(data):
+    if not data or b"\x00" in data:
+        return False
+    try:
+        text = data.decode("utf-8")
+    except UnicodeDecodeError:
+        return False
+    for char in text:
+        code = ord(char)
+        if code in (9, 10, 13) or code >= 32:
+            continue
+        return False
+    return True
+
+
+def try_decode_b64(chunk, max_decoded_bytes):
+    if len(chunk) > max_decoded_bytes and not chunk.endswith(b"="):
+        return None
+    if len(chunk) > max_decoded_bytes * 4 // 3 + 4:
+        return None
+    stripped = chunk.rstrip(b"=")
+    pad_len = len(chunk) - len(stripped)
+    if b"=" in stripped or pad_len > 2:
+        return None
+    rem = len(chunk) % 4
+    if rem == 1:
+        return None
+    padded = chunk + (b"=" * ((4 - rem) % 4))
+    try:
+        return base64.b64decode(padded, validate=True)
+    except (ValueError, base64.binascii.Error):
+        return None
 
 
 def decode_map(raw):
@@ -377,34 +438,85 @@ def decide(found, levels):
     return LEVEL_NAME[score]
 
 
-def payload(level, ruleset, digest, found):
+def payload(level, ruleset, digest, found, skipped=0):
     return {
         "level": level,
         "ruleset": ruleset,
         "sha256": digest,
         "reasons": found,
-        "decoded_skipped": 0,
+        "decoded_skipped": skipped,
     }
+
+
+def collect_layer(raw, rules, layer, state):
+    if not raw:
+        return
+    if raw.isascii():
+        text = raw.decode("ascii")
+        hits = pattern_hits(text, None, None, rules["compiled"], hidden_spans(text))
+    else:
+        text, offsets = decode_map(raw)
+        stripped, indexes, hidden = strip_hidden(text)
+        for index in hidden:
+            state["found"].append(reason("hidden_char", "concealment", offsets[index], layer))
+        for start in find_homoglyphs(stripped):
+            state["found"].append(reason("homoglyph", "concealment", offsets[indexes[start]], layer))
+        folded = fold_text(stripped)
+        hits = pattern_hits(folded, indexes, offsets, rules["compiled"], hidden_spans(text))
+    for item in hits:
+        item["layer"] = layer
+        state["found"].append(item)
+    if state["blocked"] is not None:
+        return
+    if layer == 0 and decide(state["found"], rules["levels"]) == "BLOCK":
+        return
+    clean_for_b64 = PEM_RE.sub(b" ", raw)
+    min_len = rules["limits"]["min_base64_length"]
+    max_count = rules["limits"]["max_decode_count"]
+    max_bytes = rules["limits"]["max_decoded_bytes"]
+    max_depth = rules["limits"]["max_decode_depth"]
+    for match in B64_RE.finditer(clean_for_b64):
+        if state["blocked"] is not None:
+            return
+        chunk = match.group(0)
+        if len(chunk) < min_len:
+            continue
+        start = match.start()
+        decoded = try_decode_b64(chunk, max_bytes)
+        if decoded is None:
+            continue
+        if state["count"] >= max_count:
+            state["blocked"] = limit_hit("limit_exceeded", start, layer)
+            return
+        state["count"] += 1
+        if state["decoded"] + len(decoded) > max_bytes:
+            state["blocked"] = limit_hit("limit_exceeded", start, layer)
+            return
+        state["decoded"] += len(decoded)
+        if not is_text_bytes(decoded):
+            state["skipped"] += 1
+            continue
+        nxt = layer + 1
+        if nxt > max_depth:
+            state["blocked"] = limit_hit("depth_exceeded", start, layer)
+            return
+        collect_layer(decoded, rules, nxt, state)
+        if state["blocked"] is not None:
+            return
 
 
 def scan_bytes(raw, rules):
     digest = hashlib.sha256(raw).hexdigest()
     if len(raw) > rules["limits"]["max_file_bytes"]:
-        return payload("QUARANTINE", rules["ruleset"], digest, [reason("too_large", "limit", 0)])
-    if raw.isascii():
-        text = raw.decode("ascii")
-        found = pattern_hits(text, None, None, rules["compiled"], hidden_spans(text))
-        ordered = sort_reasons(found)
-        return payload(decide(ordered, rules["levels"]), rules["ruleset"], digest, ordered)
-    text, offsets = decode_map(raw)
-    stripped, indexes, hidden = strip_hidden(text)
-    found = [reason("hidden_char", "concealment", offsets[index]) for index in hidden]
-    for start in find_homoglyphs(stripped):
-        found.append(reason("homoglyph", "concealment", offsets[indexes[start]]))
-    folded = fold_text(stripped)
-    found.extend(pattern_hits(folded, indexes, offsets, rules["compiled"], hidden_spans(text)))
-    ordered = sort_reasons(found)
-    return payload(decide(ordered, rules["levels"]), rules["ruleset"], digest, ordered)
+        return payload("QUARANTINE", rules["ruleset"], digest, [reason("too_large", "limit", 0, 0)], 0)
+    if is_binary_bytes(raw):
+        return payload("QUARANTINE", rules["ruleset"], digest, [reason("binary_file", "format", 0, 0)], 0)
+    state = {"found": [], "skipped": 0, "count": 0, "decoded": 0, "blocked": None}
+    collect_layer(raw, rules, 0, state)
+    if state["blocked"] is not None:
+        return payload("QUARANTINE", rules["ruleset"], digest, [state["blocked"]], state["skipped"])
+    ordered = sort_reasons(state["found"])
+    return payload(decide(ordered, rules["levels"]), rules["ruleset"], digest, ordered, state["skipped"])
 
 
 def default_rules():
