@@ -1,7 +1,7 @@
 ---
 schema: 1
 task: TK-0036
-run: 1
+run: 2
 outcome: DONE
 model: "xai/grok-4.5"
 branch: task/TK-0036-R1
@@ -23,7 +23,7 @@ done_check:
   - "5 → 05_memory/upstream/04_nhat_ky_kiem_toan_va_quan_tri_van_hanh.md"
 loops:
   - "L01 | FAIL | scan quarantine file 02 dangerous_automerge"
-  - "L02 | PASS | rescan ALLOW/WARN only; pytest tools/tests"
+  - "L02 | PASS | passed=338 failed=0"
 deviations:
   assumptions: []
   differences:
@@ -32,6 +32,6 @@ deviations:
 escalate: no
 escalation: {spec: "", problem: "", proposal: ""}
 touched_protected: no
-keywords: [upstream, scan, TK-0036, DU_THAO]
+keywords: [upstream, scan, tk-0036, du-thao]
 usage: []
 ---
