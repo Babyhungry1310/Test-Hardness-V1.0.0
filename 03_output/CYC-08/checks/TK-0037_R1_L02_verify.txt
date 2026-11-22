@@ -1,0 +1,4 @@
+loop: L02
+command: python -m pytest -q --tb=line tools/tests
+exit_code: 0
+summary: 338 passed in 313.72s

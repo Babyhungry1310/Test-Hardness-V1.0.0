@@ -105,8 +105,8 @@ based_on: [DEC-0002, DEC-0006, DEC-0007, DEC-0010, DEC-0013, DEC-0015, DEC-0016,
 <!-- END: CYC_08 -->
 <!-- ANCHOR: CYC_08_BATCHES -->
 ## CYC-08 batches
-- B0a | tasks: TK-0036 | after: none
-- B0b | tasks: TK-0037 | after: B0a
+- B1 | tasks: TK-0036 | after: none
+- B2 | tasks: TK-0037 | after: B1
 <!-- END: CYC_08_BATCHES -->
 <!-- ANCHOR: RISKS -->
 ## Risks
