@@ -1,0 +1,20 @@
+﻿
+### 00_tong_quan_upstream.md
+{"level":"ALLOW","ruleset":"scan-core-1","sha256":"65d9e0d6df45e3b2ebfe566cc246576d5bfd0c0156d45c952301c02b9c932989","reasons":[],"decoded_skipped":0}
+
+
+### 01_brainstorm_va_tra_cuu_ngoai.md
+{"level":"ALLOW","ruleset":"scan-core-1","sha256":"3009e1683a36e78994724aa3582a9c1a927aab9d3568a1d0778526e76f3ed274","reasons":[],"decoded_skipped":0}
+
+
+### 02_quyen_worker_va_phong_thu_injection.md
+{"level":"QUARANTINE","ruleset":"scan-core-1","sha256":"6b1f3535b2f7f914eb64f29d346b23379902d9186085b3eb5e808a6483f15607","reasons":[{"rule":"dangerous_automerge","group":"dangerous_action","position":4717,"layer":0}],"decoded_skipped":0}
+
+
+### 03_ha_tang_context_va_dieu_phoi_loop.md
+{"level":"WARN","ruleset":"scan-core-1","sha256":"9943ba118e044bf2dd8fd72fd6662acf5cb4308e7d962444650a1e7b1827aef6","reasons":[{"rule":"dangerous_git_push_describe","group":"dangerous_action","position":17219,"layer":0}],"decoded_skipped":0}
+
+
+### 04_nhat_ky_kiem_toan_va_quan_tri_van_hanh.md
+{"level":"ALLOW","ruleset":"scan-core-1","sha256":"3335d65b87423a7ba37e69df5836f727000a1dad615284a469e2b890d1cd903f","reasons":[],"decoded_skipped":0}
+
