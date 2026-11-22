@@ -1,0 +1,6 @@
+loop: L01
+command: python -m pytest -q --tb=line tools/tests
+exit_code: 1
+summary: 337 passed, 1 failed
+failed: tools/tests/test_batch_check.py::test_live_plan_passes_and_early_cycles_are_sequential
+cause: CYC-08 batches B0a/B0b not matched by batch_check BATCH_LINE B\d+; fixed to B1/B2 in PLAN for L02
