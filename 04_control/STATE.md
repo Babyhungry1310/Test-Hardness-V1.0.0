@@ -1,8 +1,8 @@
-PHASE: CLOSE
-CYCLE: CYC-07
+PHASE: BUILD
+CYCLE: CYC-08
 PROFILE: SHORT
 
-## Handover board (updated: 2026-11-20, main @ 15b0304)
+## Handover board (updated: 2026-11-22, main @ 2f282ea)
 ### 1. Progress
 - CYC-01 | PASS | TK-0001 DONE R2, TK-0002 DONE R1, TK-0004 DONE R1 | thẻ cycle/CYC-01 @ e2b7944
 - CYC-02 | PASS | TK-0003 DONE R1, TK-0005 DONE R1 | RVW-CYC-02 vòng 1 PASS | thẻ cycle/CYC-02 @ 36bafbe
@@ -10,7 +10,8 @@ PROFILE: SHORT
 - CYC-04 | PASS | TK-0009 R3 DONE, TK-0010 R1 DONE, TK-0019 R2 DONE, TK-0029 R1 DONE | cổng @ f310d9d | chờ OWNER đặt thẻ cycle/CYC-04
 - CYC-05 | PASS | TK-0011 R1 DONE, TK-0012 R1 DONE, TK-0020 R1 DONE, TK-0021 R1 DONE | cổng @ 64b3ef2 | chờ OWNER đặt thẻ cycle/CYC-05
 - CYC-06 | PASS | TK-0013 R1 DONE, TK-0014 R1 DONE, TK-0022 R1 DONE, TK-0023 R1 DONE | cổng @ c35fcfd | chờ OWNER đặt thẻ cycle/CYC-06
-- CYC-07 | PASS | TK-0015 R1 DONE, TK-0016 R1 DONE, TK-0024 R1 DONE, TK-0025 R1 DONE, TK-0026 R1 DONE, TK-0028 R1 DONE, TK-0017 R1 DONE | RVW-CYC-07 vòng 1 PASS | chờ OWNER đặt thẻ cycle/CYC-07
+- CYC-07 | PASS | TK-0015 R1 DONE, TK-0016 R1 DONE, TK-0024 R1 DONE, TK-0025 R1 DONE, TK-0026 R1 DONE, TK-0028 R1 DONE, TK-0017 R1 DONE | RVW-CYC-07 vòng 1 PASS | chờ OWNER đặt thẻ cycle/CYC-07 @ 95a0e46
+- CYC-08 | BUILD | TK-0036 DONE R2 (#92 @ 2f282ea); TK-0037 ASSIGNED (Gemini WORKER / Grok REVIEWER)
 ### 2. Open risks
 - RSK-0004 | OPEN | level: HIGH | due: 2026-11-26 | owner: OWNER
 - RSK-0005 | OPEN | level: MEDIUM | due: 2026-12-12 | owner: LEAD
@@ -30,8 +31,9 @@ PROFILE: SHORT
 - DEC-0015 | ACTIVE | Nâng khung lên V1.0.1: bảo vệ main, ma trận model, chat và storage, dọn nhánh, scanner
 - Quyết định cũ: DEC-0014, DEC-0013, DEC-0012, DEC-0011, DEC-0010, DEC-0008, DEC-0007, DEC-0006, DEC-0004, DEC-0002 ACTIVE; DEC-0009 SUPERSEDED_BY DEC-0012; DEC-0005 RETIRED. Chi tiết trong sổ gốc.
 ### 4. Next action
-- OWNER đã duyệt UPSTREAM_PROPOSALS (T transfer, A adjust, N không chuyển); còn thiếu URL và phiên bản repo mẹ
-- OWNER đặt thẻ cycle/CYC-03 tới cycle/CYC-07; LEAD không tạo thẻ
-- PR #37 để sau; không mở PR repo mẹ trước khi OWNER chỉ định đích
+- OWNER Start CYC-08 (Kaizen Dot1): merge PR kích hoạt lead/cyc08-activate nếu còn mở; rồi merge PR TK-0037
+- TK-0037: Gemini WORKER (9router ag/gemini-3.8-flash-high) tạo DSC-20261121-kzn1 + DEC-0031 + STATE + RSK-0004 (E14=tách conchonomoconmeo-AIAIAI); Grok REVIEWER
+- OWNER đặt thẻ cycle/CYC-07 @ 95a0e46 (không chặn CYC-08); không mở PR repo mẹ trước khi chỉ định URL/version
+- PR #37 CLOSED (draft) — ghi nhận trong TK-0037
 ### 5. Never do
 - Không xuất PDF; không dùng tên học viên thật trong dữ liệu thử
