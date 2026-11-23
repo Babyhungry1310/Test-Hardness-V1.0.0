@@ -18,6 +18,7 @@ PROFILE: SHORT
 - RSK-0006 | OPEN | level: MEDIUM | due: 2026-12-12 | owner: LEAD
 - RSK-0001 | OPEN | level: MEDIUM | due: 2026-11-26 | owner: LEAD
 ### 3. Recent decisions
+- DEC-0032 | ACTIVE | Kaizen Dot1 P6d (E27–E43, Q-A…Q-I, supersedes batch) — ACCEPTED 2026-11-23
 - DEC-0031 | ACTIVE | Kaizen Dot1 Bước 0: E14=tách tài khoản; E15 chuyển repo mẹ theo nhóm PROPOSAL; 5 quyết định chặn = ĐỒNG Ý (SRC-0006)
 - DEC-0030 | ACTIVE | cập nhật test_scan_core trước TK-0014 giải mã base64
 - DEC-0029 | ACTIVE | hủy TK-0033; TK-0033 đã CANCELLED trên main
@@ -41,3 +42,9 @@ PROFILE: SHORT
 ### 5. Never do
 - Không xuất PDF; không dùng tên học viên thật trong dữ liệu thử
 
+### P6d handoff (LEAD Planning · 2026-11-23)
+- DEC-0032 | ACCEPTED / ACTIVE | Kaizen Dot1 P6d delta trên P5; origin DSC-20261123-gsd1
+- Kế hoạch hiện hành: SRC-0003 bản **P6d** (`06_sources/SRC-0003_kaizen-chi-tiet-dot1.md`) trên nhánh `lead/TK-0053-src0003-p6d` (nháp, chưa mở PR)
+- Batch kế tiếp: **B1b** (TK-0053) chờ L1.1 xong rồi mới mở PR
+- O1.1–O1.4: OWNER đã báo xong; L1.1 chạy theo `03_output/CYC-08/checks/baseline_session_spec.md`
+- Sau L1.1: mở PR TK-0053 (B1b) theo SRC-0003 P6d; DEC-0032 ACTIVE
