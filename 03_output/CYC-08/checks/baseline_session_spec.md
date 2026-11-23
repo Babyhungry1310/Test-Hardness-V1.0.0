@@ -36,7 +36,7 @@ Ghi chú đo: cùng điểm đo cho cả 6 lần chạy (3 phiên × 2). Nếu �
 | --- | --- |
 | Vai chính | LEAD |
 | Mục tiêu | Rà C1–C14 mức đọc trên **một PR đã merge mẫu** (cùng SHA neo dưới); xuất khối nhận xét ngắn, không merge |
-| Đầu vào cố định | PR mẫu: `#94` (TK-0037) @ `e64f84a`; đọc diff/files qua `gh pr view` / `gh pr diff` (hoặc tương đương). Không sửa, không merge, không bật auto-merge |
+| Đầu vào cố định | PR mẫu: `#94` (TK-0037) @ `e64f84a`; đọc diff/files qua `gh pr view` / `gh pr diff` (hoặc tương đương). Không sửa, không merge, không dùng chế độ auto-merge |
 | Tuyến yêu cầu | `xai/grok-4.5` (LEAD) |
 | Model kỳ vọng (catalog) | cùng quy ước Phiên 1 |
 | Provider version | Ghi khi L1.1 |
