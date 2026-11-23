@@ -11,13 +11,14 @@ PROFILE: SHORT
 - CYC-05 | PASS | TK-0011 R1 DONE, TK-0012 R1 DONE, TK-0020 R1 DONE, TK-0021 R1 DONE | cổng @ 64b3ef2 | chờ OWNER đặt thẻ cycle/CYC-05
 - CYC-06 | PASS | TK-0013 R1 DONE, TK-0014 R1 DONE, TK-0022 R1 DONE, TK-0023 R1 DONE | cổng @ c35fcfd | chờ OWNER đặt thẻ cycle/CYC-06
 - CYC-07 | PASS | TK-0015 R1 DONE, TK-0016 R1 DONE, TK-0024 R1 DONE, TK-0025 R1 DONE, TK-0026 R1 DONE, TK-0028 R1 DONE, TK-0017 R1 DONE | RVW-CYC-07 vòng 1 PASS | chờ OWNER đặt thẻ cycle/CYC-07 @ 95a0e46
-- CYC-08 | BUILD | Kaizen Dot1 | TK-0036 DONE R2 (#92); TK-0037 DONE R1 (#94 @ e64f84a); TK-0038 ASSIGNED (lead assign PR); O1.1–O1.4 OWNER; L1.1 after TK-0038 merge
+- CYC-08 | BUILD | Kaizen Dot1 | TK-0036 DONE R2 (#92); TK-0037 DONE R1 (#94 @ e64f84a); TK-0038 ASSIGNED/product theo PLAN; O1.1–O1.4 xong; L1.1 DONE; O1.5 duyệt; TK-0053 merged (#97) — SRC-0003 P6d + DSC-20261123-gsd1 + DEC-0032
 ### 2. Open risks
 - RSK-0004 | OPEN | level: HIGH | due: 2026-11-26 | owner: OWNER | E14=tách (agent conchonomoconmeo-AIAIAI; OWNER Babyhungry1310); chờ O1.1–O1.3
 - RSK-0005 | OPEN | level: MEDIUM | due: 2026-12-12 | owner: LEAD
 - RSK-0006 | OPEN | level: MEDIUM | due: 2026-12-12 | owner: LEAD
 - RSK-0001 | OPEN | level: MEDIUM | due: 2026-11-26 | owner: LEAD
 ### 3. Recent decisions
+- DEC-0032 | ACTIVE | Kaizen Dot1 P6d (E27–E43, Q-A…Q-I, supersedes batch) — ACCEPTED 2026-11-23; kế hoạch hiện hành SRC-0003 P6d (`06_sources/SRC-0003_kaizen-chi-tiet-dot1.md`); origin DSC-20261123-gsd1
 - DEC-0031 | ACTIVE | Kaizen Dot1 Bước 0: E14=tách tài khoản; E15 chuyển repo mẹ theo nhóm PROPOSAL; 5 quyết định chặn = ĐỒNG Ý (SRC-0006)
 - DEC-0030 | ACTIVE | cập nhật test_scan_core trước TK-0014 giải mã base64
 - DEC-0029 | ACTIVE | hủy TK-0033; TK-0033 đã CANCELLED trên main
@@ -32,11 +33,11 @@ PROFILE: SHORT
 - DEC-0015 | ACTIVE | Nâng khung lên V1.0.1: bảo vệ main, ma trận model, chat và storage, dọn nhánh, scanner
 - Quyết định cũ: DEC-0014, DEC-0013, DEC-0012, DEC-0011, DEC-0010, DEC-0008, DEC-0007, DEC-0006, DEC-0004, DEC-0002 ACTIVE; DEC-0009 SUPERSEDED_BY DEC-0012; DEC-0005 RETIRED. Chi tiết trong sổ gốc.
 ### 4. Next action
-- OWNER merge lead assign TK-0038 (task card + PLAN/CYC-08/STATE), rồi merge PR product TK-0038 (chỉ baseline_session_spec.md)
-- OWNER hoàn tất O1.1–O1.4 trước L1.1 (ruleset, luật thẻ, collaborator agent, secret scanning/push protection); hạn RSK-0004 2026-11-26
-- Sau TK-0038 merge + O1.1–O1.4: LEAD chạy L1.1 (3 phiên × 2) theo baseline_session_spec.md; artifact local only
+- PR #97 (TK-0053) merged: SRC-0003 P6d + DSC-20261123-gsd1 + DEC-0032 + STATE; L1.1 DONE; O1.5 duyệt; OWNER miễn review (Luna KIỂM XÁC NHẬN + V-RESP)
+- Kế tiếp: mở PR `lead/e44-dsc` (E44 DSC; tối đa một PR lead/ mở) → cửa sổ thay đổi → DEC-0033 (linh hoạt model / phân loại review; WORKER S3=grok) → Bước 2
 - OWNER đặt thẻ cycle/CYC-07 @ 95a0e46 nếu chưa; không mở PR repo mẹ trước URL/version
 - PR #37 CLOSED — không mở lại làm cổng Bước 0
+
 
 ### 5. Never do
 - Không xuất PDF; không dùng tên học viên thật trong dữ liệu thử
