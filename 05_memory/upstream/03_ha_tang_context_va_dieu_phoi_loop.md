@@ -1,3 +1,5 @@
+Bản tham khảo 2026-11-22. Nguồn hiện hành: SRC-0003 P6d, DEC-0032.
+
 # H3 — Hạ tầng, context, cache và điều phối loop
 
 - Trạng thái: DỰ THẢO; chưa mục nào có hiệu lực.
