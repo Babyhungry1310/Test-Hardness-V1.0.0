@@ -2,9 +2,10 @@
 schema: 1
 id: PLAN
 date: 2026-11-12
-based_on: [DEC-0002, DEC-0006, DEC-0007, DEC-0010, DEC-0013, DEC-0015, DEC-0016, DEC-0017, DEC-0018, DEC-0019, DEC-0020, DEC-0021, DEC-0026, DEC-0028, DEC-0029]
+based_on: [DEC-0002, DEC-0006, DEC-0007, DEC-0010, DEC-0013, DEC-0015, DEC-0016, DEC-0017, DEC-0018, DEC-0019, DEC-0020, DEC-0021, DEC-0026, DEC-0028, DEC-0029, DEC-0031]
 ---
 ## Status (newest first)
+- 2026-11-23 | ACTIVE | version: 11
 - 2026-11-22 | ACTIVE | version: 10
 - 2026-11-19 | ACTIVE | version: 9
 - 2026-11-19 | ACTIVE | version: 8
@@ -102,11 +103,13 @@ based_on: [DEC-0002, DEC-0006, DEC-0007, DEC-0010, DEC-0013, DEC-0015, DEC-0016,
 ## CYC-08
 - TK-0036 | Copy H0–H4 DỰ THẢO vào 05_memory/upstream/ | depends: none | assignee: W1
 - TK-0037 | Tạo DSC E1–E26, DEC-0031 Kaizen, cập nhật STATE và RSK-0004 theo E14=tách | depends: TK-0036 | assignee: W1
+- TK-0038 | Đóng băng đặc tả 3 phiên chuẩn + chỉ số CS1–CS4 | depends: TK-0037 | assignee: W1
 <!-- END: CYC_08 -->
 <!-- ANCHOR: CYC_08_BATCHES -->
 ## CYC-08 batches
 - B1 | tasks: TK-0036 | after: none
 - B2 | tasks: TK-0037 | after: B1
+- B3 | tasks: TK-0038 | after: B2
 <!-- END: CYC_08_BATCHES -->
 <!-- ANCHOR: RISKS -->
 ## Risks
