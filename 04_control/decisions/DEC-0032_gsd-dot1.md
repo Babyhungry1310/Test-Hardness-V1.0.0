@@ -62,6 +62,7 @@ OWNER chấp nhận gói HANDOFF_P6D và chốt QUYET_DINH_OWNER_HANDOFF_P6D (20
 
 ### 8. Đổi thứ tự so với P5 (`supersedes`)
 - B2a after B1b3; TK-0039 depends_on TK-0058; B3b after B3a2; B3e after B3d2.
+- B3b/B3e theo **Q-OWNER-B3** (`QUYET_DINH_OWNER_HANDOFF_P6D` — Đồ thị Bước 3).
 - Lý do: tuần tự hóa file chung (`00_tong_quan_upstream.md`), Bước 2 sau L1.1, TK-0055 trước TK-0045, baseline trước bật hook.
 
 ### 9. Marker AUTO

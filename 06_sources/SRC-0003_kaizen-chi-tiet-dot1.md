@@ -129,8 +129,8 @@ Mọi mã P5 dưới đây giữ nguyên nghĩa. Định nghĩa chép từ `06_s
 | TK-0042 | ĐỔI (thẻ giữ nguyên P5) | Schema run MINOR E7/E21; CONVENTIONS mã 0/1/2/3, bảng lỗi E5/E16/E18; write_scope 5/5 path | Việc Q-B (sửa `$defs/path` + test) **chuyển sang TK-0055** vì write_scope P5 đã đủ 5 path. Không đổi nghĩa TK-0042; không cần `supersedes` | E7, E21 | Q-B | Đ3 |
 | TK-0039 | ĐỔI · `supersedes: TK-0039.depends_on (P5)` | `depends_on: [TK-0038]`; verify `python -m pytest -q --tb=line tools/tests` | `depends_on: [TK-0058]`; verify `verify_doc_artifact.py` theo 5.5; goal, scope, done_when giữ P5 | — | SAI LỆCH 1 (QUYET_DINH_OWNER); Q-E, Q-F | Đ2 |
 | B2a | ĐỔI · `supersedes: B2a (P5)` | `after: B1a` | `after: B1b3` | — | SAI LỆCH 1 | Đ2 |
-| B3b | ĐỔI · `supersedes: B3b (P5)` | `after: B3a` | `after: B3a2` | — | Đồ thị B3 | Đ3 |
-| B3e | ĐỔI · `supersedes: B3e (P5)` | `after: B3d` | `after: B3d2` | — | Đồ thị B3 | Đ3 |
+| B3b | ĐỔI · `supersedes: B3b (P5)` | `after: B3a` | `after: B3a2` | — | QUYET_DINH_OWNER_HANDOFF_P6D — Đồ thị Bước 3 (Q-OWNER-B3) | Đ3 |
+| B3e | ĐỔI · `supersedes: B3e (P5)` | `after: B3d` | `after: B3d2` | — | QUYET_DINH_OWNER_HANDOFF_P6D — Đồ thị Bước 3 (Q-OWNER-B3) | Đ3 |
 | TK-0040 | ĐỔI (chỉ verify) | như TK-0039 | như TK-0039 | — | Q-E, Q-F | Đ2 |
 | TK-0041 | ĐỔI (chỉ verify) | như TK-0039 | như TK-0039 | — | Q-E, Q-F | Đ2 |
 | B3d | ĐỔI | `B3d \| tasks: TK-0045 \| after: B3c` | `B3d \| tasks: TK-0045 \| after: B3c, O3.1` (O3.1 đã là cổng chữ trong constraint P5; nay ghi vào đồ thị). Không đổi nghĩa | — | Q-D | Đ3 |
@@ -449,13 +449,13 @@ verify: >-
   python tools/verify_doc_artifact.py 06_sources/SRC-0003_kaizen-chi-tiet-dot1.md --contains "P6d" --heading "Bảng delta"
   && python tools/validate_task_schema.py 06_sources/SRC-0003_kaizen-chi-tiet-dot1.md --schema harness/schemas/task.schema.json --known-ids 06_sources/SRC-0003_kaizen-chi-tiet-dot1.md
   && python tools/verify_doc_artifact.py 04_control/decisions/DEC-0032_gsd-dot1.md --contains "DEC-0032" --contains "ACCEPTED"
-  && python tools/verify_doc_artifact.py 05_memory/discussions/2026/DSC-20261123-gsd1.md --contains "Q-A" --contains "Q-I"
+  && python tools/verify_doc_artifact.py 05_memory/discussions/2026/DSC-20261123-gsd1.md --contains "Q-A" --contains "Q-B" --contains "Q-C" --contains "Q-D" --contains "Q-E" --contains "Q-F" --contains "Q-G" --contains "Q-H" --contains "Q-I" --contains "Q-OWNER-B3"
   && python tools/verify_doc_artifact.py 04_control/STATE.md --contains "DEC-0032"
 done_when:
   - "SRC-0003 co chuoi P6d va muc Bang delta (--contains P6d, --heading)"
   - "The trong SRC-0003 qua validate_task_schema ma 0, tru loi da biet (validate_task_schema)"
   - "DEC-0032 co ma DEC-0032 va trang thai ACCEPTED (--contains x2)"
-  - "DSC ghi du Q-A den Q-I (--contains Q-A, Q-I)"
+  - "DSC ghi du Q-A Q-B Q-C Q-D Q-E Q-F Q-G Q-H Q-I va Q-OWNER-B3 (--contains x10)"
   - "STATE nhac DEC-0032 (--contains)"
   - "Noi dung DEC-0032 dung muc 5.8 cua goi (kiem o cong REVIEWER)"
 size: "1 session · 4 files"
@@ -545,11 +545,11 @@ verify: >-
   --sha256 05_memory/upstream/02_quyen_worker_va_phong_thu_injection.md=SHA_02
   --sha256 06_sources/SRC-0007_phuong-an-tich-hop-gsd-dot1.md=SHA_07 --sha256 06_sources/SRC-0008_gsd-core-de-xuat-kaizen.md=SHA_08
   --sha256 06_sources/SRC-0009_readme-goi-kaizen.md=SHA_09
-  && python tools/verify_doc_artifact.py 06_sources/README.md --contains "SRC-0007" --contains "SRC-0009"
+  && python tools/verify_doc_artifact.py 06_sources/README.md --contains "SRC-0007" --contains "SRC-0008" --contains "SRC-0009"
 done_when:
   - "Bon file nap ton tai, UTF-8, khong bi mat hay duong dan may (kiem mac dinh)"
   - "Bon file nap trung sha256 ban sanitize (--sha256 tung file)"
-  - "06_sources/README.md liet ke SRC-0007 den SRC-0009 (--contains)"
+  - "06_sources/README.md liet ke SRC-0007 SRC-0008 SRC-0009 (--contains x3)"
   - "Khong file QUARANTINE nao trong commit (kiem o cong REVIEWER)"
 size: "1 session · 5 files"
 depends_on:
@@ -592,9 +592,11 @@ verify: >-
   python tools/verify_doc_artifact.py 04_control/decisions/DEC-0007_cyc-01-reviewer-claude.md
   04_control/decisions/DEC-0012_cyc-02-reviewer-gemini.md 04_control/decisions/DEC-0014_cyc-02-pr20-not-a-review-round.md
   04_control/decisions/DEC-0028_tk-0018-source-handoff.md 04_control/decisions/DEC-0029_split-tk-0033-session-detector.md
-  --contains "RETIRED"
+  --regex "## Status \\(newest first\\)\\r?\\n- \\d{4}-\\d{2}-\\d{2} \\| RETIRED\\b"
+  --append-only-vs origin/main
 done_when:
-  - "Moi DEC trong scope co dong RETIRED moi nhat (--contains RETIRED tren ca 5 file)"
+  - "Moi DEC trong scope co dong trang thai moi nhat RETIRED (--regex Status newest first + RETIRED tren ca 5 file)"
+  - "Nam file DEC chi append so voi origin/main (--append-only-vs)"
   - "Khong sua DEC ngoai danh sach (kiem o cong REVIEWER)"
 size: "1 session · 5 files"
 depends_on:
