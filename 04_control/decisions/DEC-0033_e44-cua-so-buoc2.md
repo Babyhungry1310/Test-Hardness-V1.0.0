@@ -33,51 +33,52 @@ keywords: [e44, model-flex, review-class, v-resp, cua-so-thay-doi]
 ## Decision and rationale
 
 ### A. Model và review (F05, F11, F12, F25, F42, F43, F46)
-- Giữ điểm 1, 3, 5 của DEC-0018 (xem `04_control/decisions/superseded/DEC-0018_model-selection-per-assignment.md`, mục RATIONALE). Điểm 2 và 4 bị thay bởi các dòng dưới.
-- Ba loại review theo E44: Brainstorm và Planning bắt buộc review, OWNER chọn REVIEWER khác họ, hoặc MERGE, hoặc tự review; phiếu WORKER qua cổng máy 4 điểm do LEAD tự chạy.
-- Phiếu WORKER chạm vùng 🔒 hoặc sổ (DEC, RSK, REQ) tính là review bắt buộc, báo OWNER bằng mẫu CẦN REVIEW.
-- Nguồn model thực tế hợp lệ: nhật ký công cụ của phiên, hoặc `usageHistory` của 9Router đọc bằng `usage_9router.py` đúng khung giờ dispatch (V-RESP).
-- Chuỗi `<tuyến>/<model>` bỏ tiền tố tuyến rồi so mã; quy tắc "có / thì UNKNOWN" không áp cho V-RESP.
+- Giữ điểm 1, 3, 5 của DEC-0018 (xem `04_control/decisions/superseded/DEC-0018_model-selection-per-assignment.md`, mục RATIONALE). Điểm 2 và 4 bị thay bởi các dòng dưới. (F12)
+- Ba loại review theo E44: Brainstorm và Planning bắt buộc review, OWNER chọn REVIEWER khác họ, hoặc MERGE, hoặc tự review; phiếu WORKER qua cổng máy 4 điểm do LEAD tự chạy. (F12)
+- Phiếu WORKER chạm vùng 🔒 hoặc sổ (DEC, RSK, REQ) tính là review bắt buộc, báo OWNER bằng mẫu CẦN REVIEW. (F12, F43)
+- Nguồn model thực tế hợp lệ: nhật ký công cụ của phiên, hoặc `usageHistory` của 9Router đọc bằng `usage_9router.py` đúng khung giờ dispatch (V-RESP). (F11, F46)
+- Chuỗi `<tuyến>/<model>` bỏ tiền tố tuyến rồi so mã; quy tắc "có / thì UNKNOWN" không áp cho V-RESP. (F46)
 - Khai V-RESP phải kèm CSV và khung giờ, do LEAD chạy. Tự khai không có CSV tính là CHƯA XÁC MINH (F43).
-- CHƯA XÁC MINH: dùng được cho phiếu WORKER đạt cổng máy; không dùng cho vai bắt buộc review hay vai được đo.
-- Vai cần xác minh model chỉ giao cho tuyến mà `usage_9router.py` đã trả dòng khớp model ở lần kiểm agent-tools gần nhất; lần kiểm ghi vào ROUTE_CHECKS với `source: usageHistory`. Quy tắc theo bằng chứng log, không theo tên họ model (F25 là một trường hợp).
-- Họ = khóa `group` của catalog (grok, gpt, gemini, claude…). REVIEWER khác họ với người soạn. `group` là `unverified` thì hỏi OWNER.
-- SRC-0005 là danh sách ưu tiên; MODEL_CATALOG là sổ dữ kiện quyết định đủ điều kiện. Tuyến không có log không đủ điều kiện cho vai cần xác minh.
+- CHƯA XÁC MINH: dùng được cho phiếu WORKER đạt cổng máy; không dùng cho vai bắt buộc review hay vai được đo. (F12, F25)
+- Vai cần xác minh model chỉ giao cho tuyến mà `usage_9router.py` đã trả dòng khớp model ở lần kiểm agent-tools gần nhất; lần kiểm ghi vào ROUTE_CHECKS với `source: usageHistory`. Quy tắc theo bằng chứng log, không theo tên họ model (F25 là một trường hợp). (F25, F43)
+- Họ = khóa `group` của catalog (grok, gpt, gemini, claude…). REVIEWER khác họ với người soạn. `group` là `unverified` thì hỏi OWNER. (F12, F46)
+- SRC-0005 là danh sách ưu tiên; MODEL_CATALOG là sổ dữ kiện quyết định đủ điều kiện. Tuyến không có log không đủ điều kiện cho vai cần xác minh. (F12, F46)
 - REVIEWER chấm theo checklist đóng băng lúc giao; lỗi ngoài checklist ghi WARN (F05). REVIEWER tự lấy nguồn chuẩn từ mục lục, không dùng nguồn người làm đưa (F42).
 
 ### B. Đo (F09)
-- L5.1 đo theo cặp: khung @ `7ad7aa6` và khung sau TK-0050, cùng cặp model có sẵn lúc đó, 3 phiên × 2 lần mỗi khung (12 lượt); không so trực tiếp L1.1 với L5.1.
-- Quyết định OWNER 2026-11-23: WORKER Session 3 của L1.1 đổi từ gemini sang grok vì tuyến gemini không có log 9Router.
+- L5.1 đo theo cặp: khung @ `7ad7aa6` và khung sau TK-0050, cùng cặp model có sẵn lúc đó, 3 phiên × 2 lần mỗi khung (12 lượt); không so trực tiếp L1.1 với L5.1. (F09)
+- Quyết định OWNER 2026-11-23: WORKER Session 3 của L1.1 đổi từ gemini sang grok vì tuyến gemini không có log 9Router. (F09, F25)
 - Phần còn lại của spec đo (F06, F08, F31) làm ở cửa sổ trước Bước 4.
 
-### C. Nguồn và quét (F20, F33, F38, F39)
-- Nguồn bị QUARANTINE do câu cấm hoặc câu mô tả: sanitize theo tiền lệ TK-0036, trên bản sao; bản cách ly giữ nguyên.
-- Mỗi lần sanitize ghi cụm cần tránh vào danh sách cụm của thư mục làm việc để trả về người soạn; người soạn chạy `tools/scan.py` trước khi nộp.
-- Hash chỉ dùng cho đầu vào đóng băng, bằng chứng đo, file chép nguyên văn; ghi 12 ký tự đầu.
-- File vào repo phải qua kiểm đường dẫn máy (`verify_doc_artifact.py`, kiểm mặc định).
+### C. Nguồn và quét (F20, F33, F38, F39, F48)
+- Nguồn bị QUARANTINE do câu cấm hoặc câu mô tả: sanitize theo tiền lệ TK-0036, trên bản sao; bản cách ly giữ nguyên. (F38)
+- Mỗi lần sanitize ghi cụm cần tránh vào danh sách cụm của thư mục làm việc để trả về người soạn; người soạn chạy `tools/scan.py` trước khi nộp. (F39)
+- Hash chỉ dùng cho đầu vào đóng băng, bằng chứng đo, file chép nguyên văn; ghi 12 ký tự đầu. (F33)
+- File vào repo phải qua kiểm đường dẫn máy (`verify_doc_artifact.py`, kiểm mặc định). (F20)
+- `scan.py` BLOCK do mẫu token bắt nhầm mã bản ghi chỉ được chấp nhận theo lệnh OWNER cho đúng file, đúng lần nạp, đúng số hit đã ghi; khác thì dừng. (F48)
 
 ### D. Thẻ task và preflight (F15, F40, F47)
-- `line_budget` chỉ tính dòng tự viết; task chép nguyên văn ghi riêng kích thước nguồn.
-- PREFLIGHT 5 mục là điều kiện giao phiếu; thêm điều kiện: lệnh verify chạy được trên checkout sạch @ `origin/main`.
-- "Kế hoạch sẵn sàng" phải có danh sách giả định đã thăm dò, mỗi giả định kèm bằng chứng; áp từ thẻ đầu Bước 3.
-- Đồ thị batch: thêm B1b3a (TK-0060) và B1b4 (TK-0059 thu hẹp, trước B2a); phần `--base-ref` tách thành TK-0061 ở B3a1.
+- `line_budget` chỉ tính dòng tự viết; task chép nguyên văn ghi riêng kích thước nguồn. (F40)
+- PREFLIGHT 5 mục là điều kiện giao phiếu; thêm điều kiện: lệnh verify chạy được trên checkout sạch @ `origin/main`. (F47)
+- "Kế hoạch sẵn sàng" phải có danh sách giả định đã thăm dò, mỗi giả định kèm bằng chứng; áp từ thẻ đầu Bước 3. (F15)
+- Đồ thị batch: thêm B1b3a (TK-0060) và B1b4 (TK-0059 thu hẹp, trước B2a); phần `--base-ref` tách thành TK-0061 ở B3a1. (F47)
 
 ### E. Vận hành tác tử (F10, F19, F21, F34, F35)
-- `git fetch` và ghi SHA `origin/main` đầu mỗi phiên LEAD và mỗi lượt đo.
-- "commit" chỉ dùng cho git commit; file làm việc ngoài repo liệt kê trong mục lục thư mục làm việc.
-- Mỗi lúc một việc chính. Tin nhắn giữa tác tử theo khung TỪ/ĐẾN/LOẠI/MÃ/REF/CẦN LÀM/ĐẦU VÀO/ĐẦU RA/DỪNG KHI/TRẢ LỜI.
-- Vòng tự động: OWNER merge PR thẻ đầu Bước được coi là `Go` cho các phiếu WORKER không chạm 🔒 của Bước đó; phiếu chạm 🔒 vẫn chờ lệnh OWNER.
-- Một lần đổi tên file (git rename) tính là 1 path trong write_scope.
+- `git fetch` và ghi SHA `origin/main` đầu mỗi phiên LEAD và mỗi lượt đo. (F10)
+- "commit" chỉ dùng cho git commit; file làm việc ngoài repo liệt kê trong mục lục thư mục làm việc. (F19, F35)
+- Mỗi lúc một việc chính. Tin nhắn giữa tác tử theo khung TỪ/ĐẾN/LOẠI/MÃ/REF/CẦN LÀM/ĐẦU VÀO/ĐẦU RA/DỪNG KHI/TRẢ LỜI. (F21, F34)
+- Vòng tự động: OWNER merge PR thẻ đầu Bước được coi là `Go` cho các phiếu WORKER không chạm 🔒 của Bước đó; phiếu chạm 🔒 vẫn chờ lệnh OWNER. (OWNER Q5, 2026-11-24)
+- Một lần đổi tên file (git rename) tính là 1 path trong write_scope. (OWNER Q7, 2026-11-24)
 
 ### F. STATE và sổ (F28, F32, F36, F37, F45)
-- STATE chỉ ghi hiện tại, ≤ 300 từ, không BOM, ghi đè; lịch sử trỏ tới thẻ cycle; mục 4 lấy từ đồ thị batch.
-- DEC và DSC theo `harness/schemas/` và STATUS_GRAMMAR. Khóa `supersedes` chỉ ghi mã DEC; dòng kế hoạch bị thay ghi ở mục "Thay thế" và `affects`.
+- STATE chỉ ghi hiện tại, ≤ 300 từ, không BOM, ghi đè; lịch sử trỏ tới thẻ cycle; mục 4 lấy từ đồ thị batch. (F28, F32, F36, F37)
+- DEC và DSC theo `harness/schemas/` và STATUS_GRAMMAR. Khóa `supersedes` chỉ ghi mã DEC; dòng kế hoạch bị thay ghi ở mục "Thay thế" và `affects`. (F44, F45)
 
 ### Thay thế
-- DEC-0018 (khóa `supersedes`): điểm 2 (REVIEWER cho mọi phần, chỉ khác mã model) và điểm 4 (không rõ model thực tế thì dừng).
-- Dòng L5.1 của P5 trong SRC-0003 (so trực tiếp với L1.1): thay bằng mục B.
-- `harness/rules/LEAD.md` luật 27, 30; `harness/rules/REVIEWER.md` luật 2 (phần ai chỉ định REVIEWER); `harness/rules/WORKER.md` luật 2 (phần `Go` từng task).
-- `harness/MODEL_POLICY.md` mục SAME_MODEL, ELIGIBILITY, ROUTE_CHECKS, REQUESTED_ACTUAL, NO_MODEL, REVIEWER_INDEPENDENCE ở các điểm trái mục A.
+- DEC-0018 (khóa `supersedes`): điểm 2 (REVIEWER cho mọi phần, chỉ khác mã model) và điểm 4 (không rõ model thực tế thì dừng). (F12)
+- Dòng L5.1 của P5 trong SRC-0003 (so trực tiếp với L1.1): thay bằng mục B. (F09)
+- `harness/rules/LEAD.md` luật 27, 30; `harness/rules/REVIEWER.md` luật 2 (phần ai chỉ định REVIEWER); `harness/rules/WORKER.md` luật 2 (phần `Go` từng task). (F12)
+- `harness/MODEL_POLICY.md` mục SAME_MODEL, ELIGIBILITY, ROUTE_CHECKS, REQUESTED_ACTUAL, NO_MODEL, REVIEWER_INDEPENDENCE ở các điểm trái mục A. (F11, F12, F46)
 <!-- END: RATIONALE -->
 <!-- ANCHOR: CONSEQUENCES -->
 ## Consequences
