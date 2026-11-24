@@ -1,4 +1,4 @@
-﻿---
+---
 schema: 1
 task: TK-0059
 run: 1
@@ -14,10 +14,10 @@ outputs:
 evidence:
   - 03_output/CYC-08/checks/TK-0059_R1_L02_pytest.txt
 done_check:
-  - "1 â†’ 02_work/runs/TK-0059_R1_DONE.md"
-  - "2 â†’ 03_output/CYC-08/checks/TK-0059_R1_L02_pytest.txt"
-  - "3 â†’ task verify: 5 files, 13 checks, 0 violations"
-  - "4 â†’ Windows pytest: 21 passed, 0 failed"
+  - "1 → 02_work/runs/TK-0059_R1_DONE.md"
+  - "2 → 03_output/CYC-08/checks/TK-0059_R1_L02_pytest.txt"
+  - "3 → task verify: 5 files, 13 checks, 0 violations"
+  - "4 → Windows pytest: 21 passed, 0 failed"
 loops:
   - "L01 | FAIL | passed=20 failed=1 failure=test_good_doc_passes_CRLF_F53"
   - "L02 | PASS | passed=21 failed=0"
