@@ -7,13 +7,14 @@ proposed_by: LEAD
 decided_by: OWNER
 cycle: CYC-08
 origin: "DSC-20261123-gsd1"
-supersedes: "B2a (P5); TK-0039.depends_on (P5); B3b (P5); B3e (P5)"
+supersedes: ""
 cancels: []
 waives: []
 affects: [DEC-0031, "06_sources/SRC-0003_kaizen-chi-tiet-dot1.md", "01_plan/PLAN.md#CYC_08"]
 keywords: [kaizen, p6d, e27-e43, batch, verify]
 ---
 ## Status (newest first)
+- 2026-11-24 | ACTIVE
 - 2026-11-23 | ACCEPTED
 <!-- ANCHOR: CONTEXT -->
 ## Context

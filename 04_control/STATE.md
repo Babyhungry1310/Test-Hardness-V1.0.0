@@ -2,10 +2,10 @@ PHASE: BUILD
 CYCLE: CYC-08
 PROFILE: SHORT
 
-## Handover board (updated: 2026-11-24, main @ 5190ea36bf05)
+## Handover board (updated: 2026-11-24, main @ 513fe87ed33b)
 ### 1. Progress
 - CYC-01…CYC-07 | PASS | chi tiết theo thẻ cycle và RVW tương ứng
-- CYC-08 | BUILD | Kaizen Dot1 | TK-0036 (#92), TK-0037 (#94), TK-0038 (#96), TK-0053 (#97), TK-0057 R2 (#100), TK-0058 (#101) DONE; L1.1 DONE, O1.5 duyệt; TK-0060 (DEC-0033) đang mở PR
+- CYC-08 | BUILD | Kaizen Dot1 | TK-0036 (#92), TK-0037 (#94), TK-0038 (#96), TK-0053 (#97), TK-0057 R2 (#100), TK-0058 (#101), TK-0060 (#102) DONE; L1.1 DONE, O1.5 duyệt; DEC-0033 ACTIVE; PR khuôn DEC-0032 + bản chụp sổ đang mở
 ### 2. Open risks
 - RSK-0004 | OPEN | level: HIGH | due: 2026-11-26 | owner: OWNER | E14=tách; O1.1–O1.4 xong, chờ OWNER đóng
 - RSK-0005 | OPEN | level: MEDIUM | due: 2026-12-12 | owner: LEAD
@@ -28,8 +28,7 @@ PROFILE: SHORT
 - DEC-0015 | ACTIVE | Nâng khung lên V1.0.1: bảo vệ main, ma trận model, chat và storage, dọn nhánh, scanner
 - Quyết định cũ: DEC-0014, DEC-0013, DEC-0012, DEC-0011, DEC-0010, DEC-0008, DEC-0007, DEC-0006, DEC-0004, DEC-0002 ACTIVE; DEC-0009 SUPERSEDED_BY DEC-0012; DEC-0005 RETIRED. Chi tiết trong sổ gốc.
 ### 4. Next action
-- OWNER merge TK-0060 (B1b3a)
-- PR `lead/` nhỏ: khuôn DEC-0032 + bản chụp sổ phát hiện
+- OWNER merge PR khuôn DEC-0032 + bản chụp sổ phát hiện
 - TK-0059 thu hẹp (B1b4): đưa 3 script + 2 test vào `tools/`
 - Bước 2: TK-0039 (B2a) → TK-0040 (B2b) → TK-0041 (B2c)
 ### 5. Never do
