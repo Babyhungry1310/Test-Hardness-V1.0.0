@@ -14,6 +14,7 @@ affects: [DEC-0003, DEC-0005, RSK-0003, "01_plan/PLAN.md#CYC_01"]
 keywords: [model-assignment, worker, reviewer]
 ---
 ## Status (newest first)
+- 2026-11-24 | RETIRED
 - 2026-11-12 | ACTIVE
 <!-- ANCHOR: CONTEXT -->
 ## Context

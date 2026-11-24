@@ -14,6 +14,7 @@ affects: [TK-0018, TK-0032, TK-0033, "01_plan/PLAN.md", "01_plan/ACCEPTANCE.md",
 keywords: [hooks, crlf, source-tasks, handoff, immutable-evidence]
 ---
 ## Status (newest first)
+- 2026-11-24 | RETIRED
 - 2026-11-19 | ACTIVE
 <!-- ANCHOR: CONTEXT -->
 ## Context
