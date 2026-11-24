@@ -14,6 +14,7 @@ affects: ["harness/MODEL_POLICY.md", "harness/HARNESS.md", "harness/rules/LEAD.m
 keywords: [model-policy, model-selection, reviewer-independence, route-check, same-model, harness-upgrade]
 ---
 ## Status (newest first)
+- 2026-11-24 | SUPERSEDED_BY DEC-0033
 - 2026-11-14 | ACTIVE
 <!-- ANCHOR: CONTEXT -->
 ## Context
