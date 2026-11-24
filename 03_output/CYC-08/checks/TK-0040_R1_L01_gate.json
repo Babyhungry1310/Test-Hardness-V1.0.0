@@ -1,0 +1,47 @@
+{
+  "summary": "GATE TK-0040 1898e656d1a9..b15492dc40f6: KHÔNG ĐẠT · FAIL: G7 · WARN: -",
+  "base": "1898e656d1a9296a9f837e2a0f5ef8ef9ac7e10d",
+  "head": "b15492dc40f69b1dbfe6c5e24f8d7e5b44aa7299",
+  "items": [
+    {
+      "check": "G1",
+      "level": "PASS",
+      "msg": "2 path trong scope; 3 file run/bằng chứng"
+    },
+    {
+      "check": "G2",
+      "level": "PASS",
+      "msg": "1 commit đều của conchonomoconmeo-AIAIAI"
+    },
+    {
+      "check": "G3",
+      "level": "PASS",
+      "msg": "sổ chỉ thêm dòng; Status DEC đúng ngữ pháp"
+    },
+    {
+      "check": "G4",
+      "level": "PASS",
+      "msg": "không BOM, không CRLF"
+    },
+    {
+      "check": "G5",
+      "level": "PASS",
+      "msg": "scan bằng tools/ của base: ALLOW"
+    },
+    {
+      "check": "G7",
+      "level": "FAIL",
+      "msg": "verify mã 1: 04_control/MODEL_CATALOG.md: REGEX: không có dòng khớp 'code: \"grok-4\\\\\\\\.5\"\\\\\\\\n(?:\\\\\\\\s+\\\\\\\\w+: [^\\\\\\\\n]*\\\\\\\\n){0,3}?\\\\\\\\s+group: grok\\\\\\\\b' | 04_control/MODEL_CATALOG.md: REGEX: không có dòng khớp 'code: \"gpt-6-luna\"\\\\\\\\n(?:\\\\\\\\s+\\\\\\\\w+: [^\\\\\\\\n]*\\\\\\\\n){0,3}?\\\\\\\\s+group: gpt\\\\\\\\b' | FAIL: 1 file, 11 phép kiểm, 2 vi phạm"
+    },
+    {
+      "check": "G9",
+      "level": "PASS",
+      "msg": "run: ['02_work/runs/TK-0040_R1_DONE.md']"
+    },
+    {
+      "check": "G8",
+      "level": "PASS",
+      "msg": "nhánh task/TK-0040-R1"
+    }
+  ]
+}
