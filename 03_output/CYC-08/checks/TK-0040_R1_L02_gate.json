@@ -1,0 +1,52 @@
+{
+  "summary": "GATE TK-0040 0a42283593d7..0a0aec4a5d0c: ĐẠT · FAIL: - · WARN: -",
+  "base": "0a42283593d7e6efbd682b5d3034ba4d49b17069",
+  "head": "0a0aec4a5d0c47137eedc6a239486e426d0d2459",
+  "items": [
+    {
+      "check": "G1",
+      "level": "PASS",
+      "msg": "2 path trong scope; 4 file run/bằng chứng"
+    },
+    {
+      "check": "G2",
+      "level": "PASS",
+      "msg": "4 commit đều của conchonomoconmeo-AIAIAI"
+    },
+    {
+      "check": "G3",
+      "level": "PASS",
+      "msg": "sổ chỉ thêm dòng; Status DEC đúng ngữ pháp"
+    },
+    {
+      "check": "G4",
+      "level": "PASS",
+      "msg": "không BOM, không CRLF"
+    },
+    {
+      "check": "G5",
+      "level": "PASS",
+      "msg": "scan bằng tools/ của base: ALLOW"
+    },
+    {
+      "check": "G7",
+      "level": "PASS",
+      "msg": "verify mã 0: PASS: 1 file, 11 phép kiểm, 0 vi phạm | PASS: 1 file, 5 phép kiểm, 0 vi phạm | PASS: 1 file, 5 phép kiểm, 0 vi phạm"
+    },
+    {
+      "check": "G9",
+      "level": "PASS",
+      "msg": "run: ['02_work/runs/TK-0040_R1_DONE.md']"
+    },
+    {
+      "check": "G10",
+      "level": "PASS",
+      "msg": "1 file run qua run.schema.json"
+    },
+    {
+      "check": "G8",
+      "level": "PASS",
+      "msg": "nhánh task/TK-0040-R1"
+    }
+  ]
+}
