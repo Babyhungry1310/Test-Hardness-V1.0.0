@@ -1,3 +1,5 @@
+Bản tham khảo 2026-11-22. Nguồn hiện hành: SRC-0003 P6d, DEC-0032.
+
 # H0 — Hồ sơ đề xuất cập nhật khung (Upstream)
 
 - Trạng thái: DỰ THẢO; chưa mục nào có hiệu lực.
