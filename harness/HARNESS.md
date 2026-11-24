@@ -7,7 +7,7 @@
 
 | Thuộc tính | Giá trị |
 |---|---|
-| Phiên bản | 1.0.1 (Semantic Versioning [THY-26]) |
+| Phiên bản | 1.0.2 (Semantic Versioning [THY-26]) |
 | Ngày | 2026-11-14 |
 | Vị trí trong repo | `harness/HARNESS.md` |
 | Ngôn ngữ | Văn bản tiếng Việt. Mọi **mã, tên file, tên thư mục, khóa YAML, giá trị trạng thái, tên neo** dùng tiếng Anh |
@@ -668,11 +668,11 @@ Ba cách gọi: **SETUP** (lệnh thiết lập của Orca khi tạo worktree) �
 | `doctor` | Kiểm tra đầu phiên: đúng nhánh, thư mục `.local` tồn tại, không có bí mật trong file theo dõi, `STATE.md` khớp bản gốc, phiên bản khung khớp | — → danh sách đạt/không đạt | SETUP; AGENT đầu phiên | Không làm cả phiên trên nền sai |
 | `validate` | Kiểm bản ghi theo schema và ngữ pháp; ba kết quả mục 8.2; chạy các kiểm tra C1–C14 | File hoặc PR → kết quả + lỗi | AGENT trước commit; CI | Model không tự soát định dạng |
 | `get` | Tra một con trỏ hoặc một mã vết, trả đúng đoạn; tìm cả kho lạnh | Con trỏ → đoạn văn bản | AGENT | Đọc một đoạn thay vì cả file |
-| `ledger` | Đọc ghi sổ: thêm `DEC`/`RSK`/`REQ` từ mẫu, cấp mã, chèn dòng trạng thái, chuyển kho lạnh, liệt kê mục đang sống theo từ khóa, truy chuỗi thay thế | Lệnh → file sổ / danh sách | AGENT (LEAD) | Không sai định dạng; không đọc cả thư mục sổ |
+| `ledger` | Đọc ghi sổ: thêm `DEC`/`RSK`/`REQ` từ mẫu, tạo task, cấp mã `TK`/`CYC`/`SRC`, chèn dòng trạng thái, chuyển kho lạnh, liệt kê mục đang sống theo từ khóa, truy chuỗi thay thế | Lệnh → file sổ / danh sách | AGENT (LEAD) | Không sai định dạng; không đọc cả thư mục sổ |
 | `discuss` | Đọc ghi `DSC`: tạo khung, thêm sự kiện, khép phiên, liệt kê `PROPOSAL` còn mở, chuyển `PROPOSAL` đã chốt thành bản nháp `DEC` | Lệnh → file `DSC` | AGENT (LEAD), cuối phiên `DISCUSS` | Phiên sau không hỏi lại điều đã bàn |
-| `trace` | Ghi log theo vết và chặn lặp quá giới hạn: chạy lệnh `verify` của task, tự khép loop và tăng số loop, từ chối chạy khi run đã đủ `max_loops`, ghi kết quả, cắt đầu ra dài sang `scratch/`; sinh chỉ mục log; điền trường `loops` của run. Ở mức `SPAN`: rút các bước từ nhật ký phiên của công cụ thành dòng span | Task → dòng log, chỉ mục, tóm tắt loop | AGENT (WORKER), thay cho việc tự chạy `verify` | Có vết từng vòng làm–kiểm mà model không phải tự ghi |
+| `trace` | Đếm số run, ghi log theo vết và chặn lặp quá giới hạn: chạy lệnh `verify` của task, tự khép loop và tăng số loop, từ chối chạy khi run đã đủ `max_loops`, ghi kết quả, cắt đầu ra dài sang `scratch/`; sinh chỉ mục log; điền trường `loops` của run. Ở mức `SPAN`: rút các bước từ nhật ký phiên của công cụ thành dòng span | Task → dòng log, chỉ mục, tóm tắt loop | AGENT (WORKER), thay cho việc tự chạy `verify` | Có vết từng vòng làm–kiểm mà model không phải tự ghi |
 | `loop` | Kích hoạt và điều khiển loop cho một task hoặc cả chu kỳ: chuẩn bị worktree, giao task cho WORKER, gọi `trace` để kiểm, lặp lại tối đa 3 lần, đóng loop và gom lỗi khi không đạt | Mã task hoặc chu kỳ → run `DONE` hoặc `BLOCKED` kèm bằng chứng | MANUAL (OWNER chạy để kích hoạt); AGENT (LEAD, khi OWNER bảo "Start CYC-nn") | OWNER kích hoạt một lệnh, không phải theo từng vòng |
-| `state` | Sinh lại mục 1, 2, 3, 5 của `STATE.md` và bảng nghiệm thu của cổng PASS từ bản gốc | Repo → `STATE.md`, bảng nghiệm thu | AGENT (LEAD) sau mỗi thay đổi sổ hoặc task | Bản chiếu khớp bản gốc theo cấu tạo; nghiệm thu nhanh |
+| `state` | Sinh lại mục 1, 2, 3, 5 của `STATE.md`, digest chu kỳ, khung `CORE.md` và bảng nghiệm thu của cổng PASS từ bản gốc | Repo → `STATE.md`, bảng nghiệm thu | AGENT (LEAD) sau mỗi thay đổi sổ hoặc task | Bản chiếu khớp bản gốc theo cấu tạo; nghiệm thu nhanh |
 | `context` | Phân tích prompt: tìm mã, loại phiên, từ khóa → xác định dữ liệu cần → trích đoạn theo neo → ghép theo ngân sách dòng; mỗi đoạn có con trỏ nguồn và nhãn tin cậy. Có chế độ chỉ in kế hoạch nạp | Prompt thô → prompt có ngữ cảnh | MANUAL trước khi giao việc; AGENT ở bước đầu | Không tốn lượt model để tìm ngữ cảnh |
 | `scan` | Quét dữ liệu ngoài theo bộ luật trong file cấu hình; xác định, chạy độc lập, không sửa bản gốc; bốn mức xử lý (mục 10.2) | File → mức + lý do | AGENT trước khi đọc nguồn ngoài; LEAD trước khi thêm `SRC` | Giảm rủi ro bị chèn chỉ dẫn |
 | `index` | (Tùy chọn) Sinh bảng tra mã → file, neo → vị trí, từ khóa → mã vào `.local/cache/` | Repo → chỉ mục | `get` và `context` tự gọi khi chỉ mục cũ | Tăng tốc khi dự án lớn. Thiếu chỉ mục thì quét thư mục, kết quả phải giống nhau |

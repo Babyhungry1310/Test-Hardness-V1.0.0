@@ -1,0 +1,9 @@
+{
+  "level": "ALLOW",
+  "ruleset": "scan-core-1",
+  "sha256": "365e67d1605de1f6dc82774a40e359dbd64a1e12a080c5dfa9beb6cff385ed8e",
+  "reasons": [],
+  "decoded_skipped": 0,
+  "input": "tracked diff added lines only",
+  "exit_code": 0
+}

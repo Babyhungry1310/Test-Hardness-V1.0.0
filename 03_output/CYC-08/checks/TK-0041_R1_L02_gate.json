@@ -1,0 +1,52 @@
+{
+  "summary": "GATE TK-0041 working-tree: PASS · FAIL: - · WARN: -",
+  "base": "72159cf645bc75ccd84cf377e46a3990d528a41f",
+  "branch": "task/TK-0041-R1",
+  "items": [
+    {
+      "check": "G1",
+      "level": "PASS",
+      "msg": "changed paths restricted to task scope, run and checks"
+    },
+    {
+      "check": "G2",
+      "level": "PASS",
+      "msg": "configured commit identity conchonomoconmeo-AIAIAI"
+    },
+    {
+      "check": "G3",
+      "level": "PASS",
+      "msg": "O2.4 rows 1–3 reflected; proposal source rows retained"
+    },
+    {
+      "check": "G4",
+      "level": "PASS",
+      "msg": "changed files UTF-8, no BOM, LF"
+    },
+    {
+      "check": "G5",
+      "level": "PASS",
+      "msg": "base scanner on added lines: ALLOW"
+    },
+    {
+      "check": "G7",
+      "level": "PASS",
+      "msg": "exact task doc verifies"
+    },
+    {
+      "check": "G8",
+      "level": "PASS",
+      "msg": "branch task/TK-0041-R1"
+    },
+    {
+      "check": "G9",
+      "level": "PASS",
+      "msg": "run: 02_work/runs/TK-0041_R1_DONE.md"
+    },
+    {
+      "check": "G10",
+      "level": "PASS",
+      "msg": "run.schema.json errors=0"
+    }
+  ]
+}

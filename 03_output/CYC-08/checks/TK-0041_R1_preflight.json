@@ -1,0 +1,100 @@
+{
+  "branch": "task/TK-0041-R1",
+  "checks": [
+    {
+      "command": "python -X utf8 tools/preflight_main.py --role worker --stage session --json",
+      "exit_code": 0,
+      "result": {
+        "ok": true,
+        "role": "worker",
+        "stage": "session",
+        "checks": [
+          {
+            "name": "not_main",
+            "passed": true,
+            "reason": "Not on main branch"
+          },
+          {
+            "name": "branch_pattern",
+            "passed": true,
+            "reason": "Branch 'task/TK-0041-R1' valid"
+          },
+          {
+            "name": "worktree",
+            "passed": true,
+            "reason": "In session worktree"
+          },
+          {
+            "name": "hook",
+            "passed": true,
+            "reason": "Hook chưa cài",
+            "status": "missing"
+          },
+          {
+            "name": "clean",
+            "passed": true,
+            "reason": "Worktree có thay đổi chưa commit",
+            "clean": false
+          }
+        ],
+        "hook_status": "missing",
+        "warnings": [
+          "Hook chưa cài",
+          "Worktree có thay đổi chưa commit"
+        ]
+      }
+    },
+    {
+      "command": "python -X utf8 tools/preflight_main.py --role worker --stage commit --json",
+      "exit_code": 0,
+      "result": {
+        "ok": true,
+        "role": "worker",
+        "stage": "commit",
+        "checks": [
+          {
+            "name": "not_main",
+            "passed": true,
+            "reason": "Not on main branch"
+          },
+          {
+            "name": "branch_pattern",
+            "passed": true,
+            "reason": "Branch 'task/TK-0041-R1' valid"
+          }
+        ]
+      }
+    },
+    {
+      "command": "python -X utf8 tools/preflight_main.py --role worker --stage push --ref refs/heads/task/TK-0041-R1 --json",
+      "exit_code": 0,
+      "result": {
+        "ok": true,
+        "role": "worker",
+        "stage": "push",
+        "checks": [
+          {
+            "name": "not_main",
+            "passed": true,
+            "reason": "Target not main"
+          },
+          {
+            "name": "not_tag",
+            "passed": true,
+            "reason": "Target not tag"
+          },
+          {
+            "name": "target_matches_session",
+            "passed": true,
+            "reason": "Target matches task/TK-0041-R1"
+          },
+          {
+            "name": "branch_pattern",
+            "passed": true,
+            "reason": "Branch 'task/TK-0041-R1' valid"
+          }
+        ]
+      }
+    }
+  ]
+}
