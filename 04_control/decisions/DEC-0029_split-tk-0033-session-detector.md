@@ -14,6 +14,7 @@ affects: [TK-0018, TK-0033, TK-0034, TK-0035, "01_plan/PLAN.md", "01_plan/ACCEPT
 keywords: [preflight, hooks, crlf, line-budget]
 ---
 ## Status (newest first)
+- 2026-11-24 | RETIRED
 - 2026-11-19 | ACTIVE
 <!-- ANCHOR: CONTEXT -->
 ## Context

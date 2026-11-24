@@ -14,6 +14,7 @@ affects: [TK-0003, TK-0005]
 keywords: [reviewer, model-assignment, review-round]
 ---
 ## Status (newest first)
+- 2026-11-24 | RETIRED
 - 2026-11-13 | ACTIVE
 <!-- ANCHOR: CONTEXT -->
 ## Context
