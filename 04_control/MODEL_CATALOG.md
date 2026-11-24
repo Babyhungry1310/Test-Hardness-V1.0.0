@@ -248,6 +248,9 @@ models:
 
 <!-- ANCHOR: ROUTE_CHECKS -->
 ## Route checks (newest first)
+- 2026-11-24T08:41Z | route: cx/gpt-6-luna | actual: gpt-6-luna | kind: agent-tools | result: OK | source: usageHistory (P6D/xac_minh_luna_p6d.csv) | note: latest successful Responses call
+- 2026-11-24T08:34Z | route: xai/grok-4.5 | actual: grok-4.5 | kind: agent-tools | result: OK | source: usageHistory (P6D/l11_usage_rerun_1A.csv) | note: latest successful Responses call
+- 2026-11-24T04:05Z | route: ag/gemini-3.8-flash | actual: gemini-3.8-flash | kind: agent-tools | result: OK | source: usageHistory (P6D/f43_usage_gemini.csv) | note: latest successful Responses call
 - 2026-11-18T09:56Z | route: cx/gpt-6.1-sol | actual: gpt-6.1-sol | kind: agent-tools | result: OK | source: own-session response.completed.model; native 01a1ee15-2a43-7df2-a314-c94e24a42525; launch 4481162e-bfc9-4968-89df-1db364946f47 | note: TK-0018 phase-zero Read passed; isolated transport
 - 2026-11-18T09:56Z | route: cx/gpt-6.1-sol | actual: gpt-6.1-sol | kind: agent-tools | result: OK | source: own-session response.completed.model; native 01a1ee15-2a43-71f0-b67d-7acf55038a5d; launch 47e62a58-ed5e-446f-bae2-fd3eb314ad0a | note: TK-0027 phase-zero Read passed; isolated transport
 - 2026-11-18T06:28Z | route: cx/gpt-6.1-sol | actual: gpt-6.1-sol | kind: agent-tools | result: OK | source: own-session response.completed.model; launch ed8f9ead-c03b-4d7b-aba9-07fbd456a2ed; PR38_B2_OWNER_ACCEPTANCE.md | note: none
