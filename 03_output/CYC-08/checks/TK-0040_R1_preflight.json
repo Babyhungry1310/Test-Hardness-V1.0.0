@@ -8,5 +8,6 @@
     "l11_rerun_1A.csv": "66cfd1813ea1d0afac0e3d688efb09ff361ad9c2538295fc60d0e835c0f60466",
     "l11_rerun_1B.csv": "101a563c27cf5c5ad09641beeab33ea313ae3ff220b1add42614dac093fa42c3"
   },
-  "handoff_preflight": "9/9 ??t sau khi REF ???c c?p nh?t trong scratch; P3 WARN v? CSV ngo?i repo kh?ng map trong m?c l?c"
+  "handoff_preflight": "9/9 ??t sau khi REF ???c c?p nh?t trong scratch; P3 WARN v? CSV ngo?i repo kh?ng map trong m?c l?c",
+  "gate": "KH?NG ??T ? G7 ? regex newline over-escaped; no further correction per plan"
 }
