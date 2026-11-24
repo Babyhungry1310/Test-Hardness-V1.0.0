@@ -38,17 +38,17 @@ keywords: [e44, model-flex, review-class, v-resp, cua-so-thay-doi]
 - Phiếu WORKER chạm vùng 🔒 hoặc sổ (DEC, RSK, REQ) tính là review bắt buộc, báo OWNER bằng mẫu CẦN REVIEW. (F12, F43)
 - Nguồn model thực tế hợp lệ: nhật ký công cụ của phiên, hoặc `usageHistory` của 9Router đọc bằng `usage_9router.py` đúng khung giờ dispatch (V-RESP). (F11, F46)
 - Chuỗi `<tuyến>/<model>` bỏ tiền tố tuyến rồi so mã; quy tắc "có / thì UNKNOWN" không áp cho V-RESP. (F46)
-- Khai V-RESP phải kèm CSV và khung giờ, do LEAD chạy. Tự khai không có CSV tính là CHƯA XÁC MINH (F43).
+- Khai V-RESP phải kèm CSV và khung giờ, do LEAD chạy. Tự khai không có CSV tính là CHƯA XÁC MINH. (F43)
 - CHƯA XÁC MINH: dùng được cho phiếu WORKER đạt cổng máy; không dùng cho vai bắt buộc review hay vai được đo. (F12, F25)
 - Vai cần xác minh model chỉ giao cho tuyến mà `usage_9router.py` đã trả dòng khớp model ở lần kiểm agent-tools gần nhất; lần kiểm ghi vào ROUTE_CHECKS với `source: usageHistory`. Quy tắc theo bằng chứng log, không theo tên họ model (F25 là một trường hợp). (F25, F43)
 - Họ = khóa `group` của catalog (grok, gpt, gemini, claude…). REVIEWER khác họ với người soạn. `group` là `unverified` thì hỏi OWNER. (F12, F46)
 - SRC-0005 là danh sách ưu tiên; MODEL_CATALOG là sổ dữ kiện quyết định đủ điều kiện. Tuyến không có log không đủ điều kiện cho vai cần xác minh. (F12, F46)
-- REVIEWER chấm theo checklist đóng băng lúc giao; lỗi ngoài checklist ghi WARN (F05). REVIEWER tự lấy nguồn chuẩn từ mục lục, không dùng nguồn người làm đưa (F42).
+- REVIEWER chấm theo checklist đóng băng lúc giao; lỗi ngoài checklist ghi WARN. REVIEWER tự lấy nguồn chuẩn từ mục lục, không dùng nguồn người làm đưa. (F05, F42)
 
 ### B. Đo (F09)
 - L5.1 đo theo cặp: khung @ `7ad7aa6` và khung sau TK-0050, cùng cặp model có sẵn lúc đó, 3 phiên × 2 lần mỗi khung (12 lượt); không so trực tiếp L1.1 với L5.1. (F09)
 - Quyết định OWNER 2026-11-23: WORKER Session 3 của L1.1 đổi từ gemini sang grok vì tuyến gemini không có log 9Router. (F09, F25)
-- Phần còn lại của spec đo (F06, F08, F31) làm ở cửa sổ trước Bước 4.
+- Phần còn lại của spec đo làm ở cửa sổ trước Bước 4. (F06, F08, F31)
 
 ### C. Nguồn và quét (F20, F33, F38, F39, F48)
 - Nguồn bị QUARANTINE do câu cấm hoặc câu mô tả: sanitize theo tiền lệ TK-0036, trên bản sao; bản cách ly giữ nguyên. (F38)
