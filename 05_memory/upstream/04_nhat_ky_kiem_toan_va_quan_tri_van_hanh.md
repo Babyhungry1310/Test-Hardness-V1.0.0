@@ -1,12 +1,13 @@
-Bản tham khảo 2026-11-22. Nguồn hiện hành: SRC-0003 P6d, DEC-0032.
+B?n tham kh?o 2026-11-22. Ngu?n hi?n h?nh: SRC-0003 P6d, DEC-0032.
 
 # H4 — Nhật ký kiểm toán và quản trị vận hành
 
-- Trạng thái: DỰ THẢO; chưa mục nào có hiệu lực.
+- Trạng thái: DỰ THẢO cho các mục chưa có trạng thái. Mục đã chốt (DEC-0031, DSC-20261121-kzn1) ghi trạng thái ở H0 mục 3.
 - Nguồn: đúc kết từ phiên thi công CYC03-B2 (TK-0027). Hồ sơ cũ không ghi ngày, model.
 - Biên tập lại: 2026-11-19, theo thẩm định Kaizen.
 - Cập nhật 2026-11-21: ngữ nghĩa khóa model (E21); hiệu lực DEC có thời hạn (E12); bằng chứng thô và bản đã che (E22); nhãn vai, hạng task và điểm đo cố định (E8); chỉ số tuyến theo hạng (E19); quét secret ở pre-push (E23); fixer loại checks/.
-- Hồ sơ được commit ở trạng thái DỰ THẢO (xem H0); chờ OWNER chốt các PROPOSAL.
+- Cập nhật 2026-11-22: schema run thêm trường cho phép kiểm lời tự báo (mục 1, E40); lưu ý cách ghi "actual_model" và "evidence.kind" ở TK-0042 (mục 1); tên file bí mật không phân biệt hoa thường (mục 10, E38).
+- Đã nạp vào repo ở TK-0036 (05_memory/upstream/). File này là bản đề xuất cập nhật 2026-11-22; LEAD đồng bộ vào bản trong repo.
 
 ## 1. Bổ sung schema run
 Nhãn: GỘP (vào schema run hiện có) | Đợt: Đ3a | PROPOSAL: E7, E12, E21
@@ -15,6 +16,16 @@ Nhãn: GỘP (vào schema run hiện có) | Đợt: Đ3a | PROPOSAL: E7, E12, E2
 - Phép kiểm SAME_MODEL của validate: REVIEWER hợp lệ khi danh sách model của REVIEWER không giao với danh sách model của mọi WORKER trong chu kỳ.
 - Thêm một khóa ghi loại bằng chứng: raw (output gốc của tiến trình), derived (kết quả tính toán, so sánh), report (lời trần thuật của model, tin cậy thấp nhất). Tên khóa: [LEAD chốt]. Không đổi kiểu của khóa evidence hiện có.
 - Ghi thêm trong run (tên khóa: [LEAD chốt]): hạng task (E17), tuyến trước và sau khi leo bậc, kết quả phép kiểm CLAIM_MISMATCH.
+- Trường cho phép kiểm lời tự báo (thêm 2026-11-22, E40, theo self-check của executor GSD):
+  - `files_created`: danh sách file WORKER khai đã tạo hoặc sửa.
+  - `commits`: các SHA WORKER khai đã commit.
+  - `self_check`: PASSED, hoặc FAILED kèm mục thiếu.
+  - Script kiểm lại: file tồn tại; SHA là tổ tiên HEAD của đúng nhánh task. Lệch là CLAIM_MISMATCH.
+  - Chỉ áp cho run sau mốc kiểm (quyết định chặn 4 của DEC-0031).
+- Lưu ý 2026-11-22 về TK-0042 trong SRC-0003. Bản tóm tắt hiện trạng ghi TK-0042 "hỗ trợ `actual_model` danh sách, `evidence.kind`". Theo mục này:
+  - Không thêm khóa `actual_model`. Khóa `model` hiện có nhận danh sách mã catalog của model thực tế đã xác minh (E21; quyết định chặn 5 của DEC-0031).
+  - Khóa loại bằng chứng không được đổi kiểu của khóa `evidence` hiện có. Nếu `evidence` đang là chuỗi hoặc danh sách, `evidence.kind` sẽ biến nó thành object; khi đó loại bằng chứng phải là khóa riêng.
+  - LEAD kiểm nguyên văn TK-0042 trong SRC-0003 và sửa ở TK-0053 nếu cần.
 - Đổi schema mức MINOR, đi qua PR upgrade/, chỉ áp cho run sau mốc kiểm.
 
 ## 2. Thời hạn của quyết định
@@ -91,6 +102,7 @@ Nhãn: GIỮ | Đợt: Đ1 (push protection phía GitHub), Đ3b (hook pre-push) 
   - Quét lại trước khi nộp gói kiểm định.
   - Hook có thể bị bỏ qua, nên preflight đầu phiên hoặc github_audit kiểm lại các nhánh đã đẩy.
 - Che giá trị chỉ áp cho báo cáo quét và bản commit; bản thô kèm hash giữ ở <project>.local (mục 4).
+- Tên file bí mật (`.env`, `.env.*`, `.secrets`) so không phân biệt hoa thường, vì trên Windows `.ENV` chính là `.env` (thêm 2026-11-22, E38, theo `gsd-secret-read-guard` của GSD). Phép kiểm chạy trên diff ở TK-0046.
 
 ## 11. Linter có sẵn thay một phần script tự viết
 Nhãn: GIỮ | Đợt: Đ3b | PROPOSAL: E9, E24

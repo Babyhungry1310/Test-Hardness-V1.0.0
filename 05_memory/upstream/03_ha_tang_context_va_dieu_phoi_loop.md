@@ -1,12 +1,13 @@
-Bản tham khảo 2026-11-22. Nguồn hiện hành: SRC-0003 P6d, DEC-0032.
+B?n tham kh?o 2026-11-22. Ngu?n hi?n h?nh: SRC-0003 P6d, DEC-0032.
 
 # H3 — Hạ tầng, context, cache và điều phối loop
 
-- Trạng thái: DỰ THẢO; chưa mục nào có hiệu lực.
+- Trạng thái: DỰ THẢO cho các mục chưa có trạng thái. Mục đã chốt (DEC-0031, DSC-20261121-kzn1) ghi trạng thái ở H0 mục 3.
 - Nguồn: bài học vận hành đa model (DeepSeek, Claude, GPT qua DeepInfra, 9Router). Hồ sơ cũ không ghi ngày, phiên, model.
 - Biên tập lại: 2026-11-19, theo thẩm định Kaizen.
 - Cập nhật 2026-11-21: tuyến free được làm WORKER có điều kiện (E10 sửa); thêm phân hạng task và thang leo tuyến (mục 16, E17); khung thời gian, hạn mức, ngắt mạch cho tuyến free (mục 17); bảng lỗi thống nhất (mục 9, E18); định nghĩa W1–W4 (mục 13, E19); quy tắc LF và raw capture (mục 8, E22); danh sách binary nền (mục 14, E24).
-- Hồ sơ được commit ở trạng thái DỰ THẢO (xem H0); chờ OWNER chốt các PROPOSAL.
+- Cập nhật 2026-11-22 (theo GSD Core, E31–E43): mã 66 NO_INPUT, enum lớp lỗi và quy tắc đối chiếu đĩa trước khi phân loại (mục 9); kiểm lời tự báo cho mọi run từ Bước 3 (mục 16); tách thang leo năng lực và thang nhà cung cấp, thêm bước tách task trước khi leo (mục 16); ngưỡng gói task và luật đọc trước khi sửa cho tuyến free (mục 16); Git Bash không có `jq` (mục 14); E14 đã chốt (mục 15).
+- Đã nạp vào repo ở TK-0036 (05_memory/upstream/). File này là bản đề xuất cập nhật 2026-11-22; LEAD đồng bộ vào bản trong repo.
 
 ## 1. Ngân sách context và hạn mức theo tuyến
 Nhãn: GỘP (vào 04_control/MODEL_CATALOG.md) | Đợt: Đợt 2 (trước khi giao task cho tuyến free) | PROPOSAL: không
@@ -66,12 +67,13 @@ Nhãn: GIỮ (phần phòng ngừa) | Đợt: Đ1 | PROPOSAL: E9, E22
 - Chứng minh khả nghịch LF → CRLF chỉ áp cho dữ liệu cũ của TK-0027 (đã ghi nhận 7/7 hash khớp), không thành luật thường trực.
 
 ## 9. Bảng lỗi thống nhất và ngắt mạch tuyến
-Nhãn: GIỮ (bảng lỗi), HOÃN (K6, ngắt mạch chung) | Đợt: Đ3a (bảng lỗi), Đợt 2 (ngắt mạch tuyến free, mục 17), Đợt 3 (ngắt mạch chung) | PROPOSAL: E18, E13
+Nhãn: GIỮ (bảng lỗi), HOÃN (K6, ngắt mạch chung) | Đợt: Đ3a, TK-0042 (bảng lỗi, enum lớp lỗi, mã 66), Đợt 2 (script phân loại, ngắt mạch tuyến free, mục 17), Đợt 3 (ngắt mạch chung) | PROPOSAL: E18, E13, E35, E36
 - Bảng lỗi đặt ở 01_plan/SPEC_TOOLS.md#CONVENTIONS khi được chốt. E5 là mặc định; trần của lỗi hạ tầng là ngoại lệ có tên.
 
 | Loại lỗi | Ví dụ | Mã thoát | Tính loop logic | Trần thử | Khi chạm trần |
 | --- | --- | --- | --- | --- | --- |
-| Đạt | verify PASS | 0 | — | — | — |
+| Đạt | verify PASS, có ít nhất một đơn vị được kiểm | 0 | — | — | — |
+| Không có gì để kiểm (thêm 2026-11-22, E36) | diff rỗng, không file nào trong phạm vi, danh sách file bị `gh` cắt | 66 | Không | 0 | Cổng gác: chặn; cổng quan sát: ghi log |
 | Logic | test FAIL | 1 | Có | max_loops 3; tuyến free 2 lần liên tiếp | BLOCKED; tuyến free thì leo bậc |
 | Bịa | CLAIM_MISMATCH (mục 16) | 1 | Có | 1 | Leo bậc ngay; ghi ROUTE_CHECKS |
 | Môi trường, quyền | thiếu gói, quyền đọc ghi | 2 | Không | 2 (E5) | BLOCKED, báo LEAD |
@@ -86,6 +88,11 @@ Nhãn: GIỮ (bảng lỗi), HOÃN (K6, ngắt mạch chung) | Đợt: Đ3a (b�
   - 503 quá tải: chờ 30s → 60s → 120s, tối đa 3 lần, rồi chuyển tuyến.
   - Mất kết nối hoặc timeout lượt gọi: bỏ phần đầu ra dở dang, thử lại 1 lần từ checkpoint, rồi chuyển tuyến.
 - Ngắt mạch chung (K6): tuyến gặp 503 từ 3 lần trong 30 phút thì tạm ngưng 60 phút; ghi thời điểm ngắt và mở lại. Riêng tuyến free áp sớm từ Đợt 2 (mục 17).
+- Bổ sung 2026-11-22 (E35, theo GSD Core):
+  - Lớp lỗi là một enum duy nhất, dùng chung cho bộ phân loại và mọi nơi kiểm lớp lỗi; quy ước ghi ở TK-0042.
+  - Run kết thúc bất thường thì đối chiếu sản phẩm trên đĩa (commit, file, kết quả run) **trước** khi phân loại lỗi, để không chạy lại phần đã commit. Có commit mà thiếu kết quả run thì tiếp tục từ đĩa, không chạy lại từ đầu.
+  - Thân trả về rỗng là lỗi không xác định (mã 3), không phải thành công.
+  - Script phân loại ưu tiên mã HTTP từ relay hoặc 9Router; chỉ dùng chuỗi nhận diện ("rate limit", "quota", "too many requests"…) khi không có mã. Làm ở Đợt 2.
 
 ## 10. Tách chỉ số độ sẵn sàng và chất lượng
 Nhãn: GIỮ | Đợt: Đ1 | PROPOSAL: E8, E19
@@ -146,32 +153,42 @@ Nhãn: GIỮ | Đợt: Đ1 | PROPOSAL: E9, E24
 - Không duyệt yêu cầu có cờ require_escalated hoặc lệnh cài phần mềm hệ thống (winget, choco).
 - Có sẵn danh sách thư mục an toàn được cấp quyền.
 - Danh sách binary nền đã duyệt (E24, 2026-11-21): Git, Python, pwsh 7.4, 9Router, Codex CLI, [LEAD bổ sung]. Binary mới (ví dụ gitleaks, Docker, Windows Sandbox) cần DEC. Công cụ Python mới cài qua pip. Thay cho cách hiểu "không binary ngoài", vốn mâu thuẫn với việc mục này khuyên dùng PowerShell 7.
+- Lưu ý 2026-11-22: Git Bash đi kèm Git nên có `bash`, `perl`, `timeout`; không có `jq`. Script của GSD Core dùng `jq` (ví dụ `sync-rulesets.sh`) phải viết lại bằng Python, hoặc thêm `jq` qua DEC theo E24.
 
 ## 15. Quyền riêng của OWNER
 Nhãn: GIỮ (viết lại) | Đợt: [ĐỢT: LEAD chốt] | PROPOSAL: E11
 - Chỉ OWNER: merge PR; đẩy hoặc sửa main; tạo, sửa, xóa thẻ git; đổi cấu hình nhạy cảm, bí mật, quyền; cấp miễn trừ.
 - Tác tử vẫn đẩy nhánh của mình và mở PR (WORKER.md luật 12, REVIEWER.md luật 8).
 - Thi hành (bổ sung 2026-11-21): luật này không có rào kỹ thuật khi tác tử dùng chung tài khoản với OWNER (DEC-0019). Cần tài khoản tác tử riêng (E14) và ruleset cấm tạo thẻ, cập nhật main, chỉ OWNER bypass. validate ở PR không thấy các hành động này (H2 mục 2).
+- Cập nhật 2026-11-22: E14 đã chốt tách tài khoản (DEC-0031). Ruleset bật ở O1.1–O1.4 (Bước 1); chuyển thành file JSON và script áp ở TK-0054 (E43). Luật thẻ cần chặn cả tạo, sửa, xóa; chỉ OWNER bypass.
 
 ## 16. Phân hạng task và thang leo tuyến
-Nhãn: GIỮ | Đợt: Đợt 2 | PROPOSAL: E17
+Nhãn: GIỮ | Đợt: Đợt 2 (riêng kiểm lời tự báo: Bước 3, E40) | PROPOSAL: E17, E31, E34, E35, E38, E40, E42
 - Hạng task ghi trong task spec, do LEAD Planning gán; script đọc và chặn giao sai hạng.
   - T0 — cơ học: định dạng, đổi tên, sửa lint, cập nhật tài liệu theo mẫu.
   - T1 — logic nhỏ: một file sản phẩm, test do Planning viết sẵn; WORKER không viết test cho chính nó.
   - T2 — thiết kế hoặc nhiều file, cần tự viết test, chạm hợp đồng dùng chung.
 - Thang leo tuyến: tuyến free → tuyến trả phí rẻ → tuyến mạnh. Task spec ghi sẵn tuyến kế tiếp.
+- Cập nhật 2026-11-22 (E34, E35, E42, theo GSD Core):
+  - Hai thang tách nhau. Lỗi năng lực (FAIL logic, CLAIM_MISMATCH) thì leo tuyến. Lỗi hạn mức (429, hết quota) thì đổi nhà cung cấp, vì tuyến mạnh hơn trên cùng tài khoản bị giới hạn vẫn bị giới hạn.
+  - Trần leo mặc định 1 bậc mỗi task (`max_escalations`); lỗi crash không leo, báo ngay.
+  - Trước khi leo, thử tách task thành tối đa 3 bước con. Thứ tự: thử lại có điều chỉnh → tách → leo → báo BLOCK. Ngân sách sửa 2 lần mỗi task.
+  - Không bỏ task (PRUNE) mà không có BLOCK lên LEAD.
+  - Thang nhà cung cấp cạn thì báo lỗi kèm danh sách mọi tuyến đã thử; không âm thầm thử lại tuyến cuối.
 - Leo bậc khi gặp một trong các điều kiện:
   - 2 lần FAIL logic liên tiếp trên tuyến free.
   - 1 lần CLAIM_MISMATCH.
   - Quá khung thời gian task (mục 17).
-  - Hết trần lỗi hạ tầng của tuyến (mục 9).
-- Phép kiểm bịa (CLAIM_MISMATCH), do script chạy sau mỗi lượt WORKER:
+  - Hết trần lỗi hạ tầng của tuyến (mục 9). Từ 2026-11-22 trường hợp này đi theo thang nhà cung cấp (đổi nhà cung cấp), không phải thang năng lực.
+- Phép kiểm bịa (CLAIM_MISMATCH), do script chạy sau mỗi lượt WORKER. Cập nhật 2026-11-22 (E40): áp cho mọi run, mọi tuyến, từ Bước 3 (schema ở TK-0042, phép kiểm ở TK-0043), không chờ Đợt 2. SHA khai báo phải nằm trên đúng nhánh của task:
   - File WORKER nói đã tạo hoặc sửa có tồn tại và có trong diff.
   - Diff không rỗng khi WORKER báo đã xong.
   - Lệnh, test WORKER nói đã chạy có trong raw capture.
   - Bất kỳ phép nào lệch thì ghi CLAIM_MISMATCH; đây là lỗi năng lực, không thử lại cùng tuyến.
 - Đầu ra của WORKER trên tuyến free: chỉ patch. Harness tự áp; patch không áp được thì loại, không cần LEAD đọc.
+- Luật đọc trước khi sửa cho tuyến free (thêm 2026-11-22, E38, theo `gsd-read-guard` của GSD): model không phải Claude hay sửa file mà không đọc trước, bị từ chối rồi thử lại mãi, đốt hạn mức. Gói ngữ cảnh đã chứa file trong write_scope; luật nhắc WORKER dùng bản đó thay vì ghi đè mù.
 - Gói ngữ cảnh tối thiểu cho tuyến context nhỏ:
+  - Cỡ gói (thêm 2026-11-22, E31): không quá khoảng 50% ngân sách context của tuyến; task kiểu TDD khoảng 40%. Đây là ngưỡng khởi đầu lấy từ GSD Core, hiệu chỉnh bằng số liệu Đợt 1.
   - File trong write_scope, test liên quan, chữ ký hàm của module xung quanh do script trích, không đưa nguyên repo.
   - Không mang lịch sử hội thoại sang vòng sau. Mỗi vòng dựng lại từ checkpoint đã xác nhận, ghi chú phản tư ≤ 3 câu của vòng trước, đầu và đuôi output FAIL (mục 7).
   - Cấp 3 tuần tự hợp với tuyến context nhỏ: mỗi bước là một lượt gọi riêng, trạng thái truyền qua file và checkpoint.

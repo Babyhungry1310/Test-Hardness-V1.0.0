@@ -1,13 +1,14 @@
-Bản tham khảo 2026-11-22. Nguồn hiện hành: SRC-0003 P6d, DEC-0032.
+B?n tham kh?o 2026-11-22. Ngu?n hi?n h?nh: SRC-0003 P6d, DEC-0032.
 
 # H1 — Brainstorm và tra cứu bên ngoài
 
-- Trạng thái: DỰ THẢO; chưa mục nào có hiệu lực.
+- Trạng thái: DỰ THẢO cho các mục chưa có trạng thái. Mục đã chốt (DEC-0031, DSC-20261121-kzn1) ghi trạng thái ở H0 mục 3.
 - Ngày ghi: 2026-11-16. Nguồn: phiên DISCUSS "Vai trò Fable trong giai đoạn Brainstorm", model claude-fable-5-2.
 - Repo liên quan tại ngày ghi: Test-Hardness-V1.0.0, main @ 8dcf58b, khung 1.0.1.
 - Biên tập lại: 2026-11-19, theo thẩm định Kaizen.
 - Cập nhật 2026-11-21: điều kiện kích hoạt bước tiếp nhận; E1 gắn với E3; làm rõ "scan" của 06_sources/.
-- Hồ sơ được commit ở trạng thái DỰ THẢO (xem H0); chờ OWNER chốt các PROPOSAL.
+- Cập nhật 2026-11-22: nguồn mẫu quét cho 06_sources/ (E39).
+- Đã nạp vào repo ở TK-0036 (05_memory/upstream/). File này là bản đề xuất cập nhật 2026-11-22; LEAD đồng bộ vào bản trong repo.
 
 ## 1. Vai ADVISOR trong phiên DISCUSS
 Nhãn: GIỮ | Đợt: Đợt 4, cùng E3 | PROPOSAL: E1
@@ -34,6 +35,7 @@ Nhãn: GỘP (vào 06_sources/ và LEAD.md luật 34) | Đợt: [ĐỢT: LEAD ch
 - Kết quả trả về là bản tóm tắt kỹ thuật sạch, không mang HTML thô.
 - Kết quả vào repo qua 06_sources/ sau scan.
   - Loại quét: [LEAD chốt: secret (detect-secrets, E23), nội dung yêu cầu hành động (injection), hay cả hai].
+  - Bổ sung 2026-11-22 (E39): bộ mẫu injection và quét base64 có thể lấy từ GSD Core (`prompt-injection-scan.sh`, `base64-scan.sh`), chép kèm NOTICE MIT và thay phần mã thoát. Bước 3 (TK-0045) dùng ở mức cảnh báo cho PR; 06_sources/ dùng ở mức chặn từ Đợt 2.
   - Người chạy: script, không phải LEAD đọc bằng mắt.
   - Mốc: trước đây dự kiến CYC-06; nay là việc của Đợt 2 trong KE_HOACH_KAIZEN.md.
 - Tới khi có scan, OWNER duyệt bằng mắt trước khi đưa vào. Đây là một cổng chờ OWNER (H0 mục 2), nên giữ số lần tra cứu ít.
