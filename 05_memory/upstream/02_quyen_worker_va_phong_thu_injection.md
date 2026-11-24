@@ -1,12 +1,15 @@
+Bản tham khảo 2026-11-22. Nguồn hiện hành: SRC-0003 P6d, DEC-0032.
+Sanitize TK-0058 (2026-11-24): đổi cụm động từ kích hoạt auto-merge thành "chế độ auto-merge" (cùng cách TK-0036; nghĩa không đổi; tránh rule dangerous_automerge).
+
 # H2 — Quyền WORKER, REVIEWER và phòng thủ injection
 
-- Trạng thái: DỰ THẢO; chưa mục nào có hiệu lực.
+- Trạng thái: DỰ THẢO cho các mục chưa có trạng thái. Mục đã chốt (DEC-0031, DSC-20261121-kzn1) ghi trạng thái ở H0 mục 3.
 - Ngày ghi: 2026-11-16. Nguồn: phiên DISCUSS "Tư vấn hướng giải quyết cho giai đoạn Planning — Quyền Worker và phòng thủ injection", model claude-fable-5-2.
 - Repo liên quan tại ngày ghi: Test-Hardness-V1.0.0, main @ 8dcf58b.
 - Biên tập lại: 2026-11-19, theo thẩm định Kaizen.
 - Cập nhật 2026-11-21: bảng lỗi thống nhất (E18); mã 3 chặn (E16); "không rõ model" chuyển sang preflight (E21); thẻ, ép đẩy, merge, auto-merge chuyển khỏi validate ở PR; ngoại lệ sửa test có khai báo (E20); cấp quyền theo batch (E26); một lần chạy lại verify (E6); ngưỡng leo bậc cho tuyến free (E17).
-- Sanitize TK-0036 2026-11-21: đổi cụm kích hoạt automerge (tiếng Việt) → "chế độ auto-merge" (mô tả rủi ro; tránh rule dangerous_automerge).
-- Hồ sơ được commit ở trạng thái DỰ THẢO (xem H0); chờ OWNER chốt các PROPOSAL.
+- Cập nhật 2026-11-22: E14 đã chốt tách tài khoản (DEC-0031); bổ sung từ GSD Core: mã 66 và khai báo ON_CRASH (E36, E37), luật lệch kế hoạch chỉ trong write_scope (E4), sổ chỉ thêm dòng (E38), kiểm lời tự báo cho mọi run (E40); nơi chạy verify cần chốt (mục 6).
+- Đã nạp vào repo ở TK-0036 (05_memory/upstream/). File này là bản đề xuất cập nhật 2026-11-22; LEAD đồng bộ vào bản trong repo.
 
 ## 1. Điều OWNER đã chốt ngày 2026-11-16, kèm phần bổ sung
 Nhãn: GIỮ | Đợt: Đ3b | PROPOSAL: E4, E5
@@ -15,11 +18,15 @@ Nhãn: GIỮ | Đợt: Đ3b | PROPOSAL: E4, E5
   - Dừng ngay, báo cả LEAD và OWNER, không tự động hóa: sửa vùng 🔒; đổi quyền, bí mật, cấu hình nhạy cảm; sửa hoặc đẩy main; xóa file, thư mục; truy cập mạng ngoài chưa khai báo.
   - Tách tài khoản tác tử khỏi tài khoản OWNER: để riêng, không ưu tiên lần này. Xem lại theo E14.
 - Lưu ý 2026-11-21: mục 6 lấy chính việc dùng chung tài khoản làm lý do cho cách ly verify, và E11 không thi hành được nếu không tách tài khoản. Khuyến nghị chốt E14 trước E11 và E6.
+- Cập nhật 2026-11-22: E14 đã chốt **tách tài khoản** (DEC-0031, thay DEC-0019; RSK-0004 hạn xử lý 2026-11-26). Dòng "để riêng, không ưu tiên" ở trên chỉ còn giá trị lịch sử.
 - Bổ sung (E5):
   - Lỗi không tính loop có trần: tối đa 2 lần thử. Trần riêng của lỗi hạ tầng (429, 503, mất kết nối) là ngoại lệ có tên, ghi trong bảng lỗi thống nhất E18 (H3-9).
   - Phân loại bằng mã thoát: 0 đạt, 1 FAIL, 2 lỗi môi trường, 3 không xác định.
   - Mã 3 là đổi quy ước 0/1/2 ở 01_plan/SPEC_TOOLS.md#CONVENTIONS và các script đã có.
   - Hook gặp mã 3 (E16), khuyến nghị: chặn, run ra BLOCKED kèm chẩn đoán, theo nguyên tắc "đóng khi lỗi" ở mục 4. Đổi CONVENTIONS và hook trong cùng một PR upgrade/ để không có khoảng hook chưa hiểu mã 3.
+  - Bổ sung 2026-11-22 (E36, E37, theo GSD Core):
+    - Thêm mã 66 NO_INPUT: chạy xong nhưng không có gì trong phạm vi (ví dụ diff rỗng). Phép kiểm không bao giờ trả 0 khi không kiểm được đơn vị nào.
+    - Mỗi hook khai `ON_CRASH` ở đầu file: hook gác (validate, quét secret, write_scope) chặn khi tự lỗi; hook quan sát (cảnh báo, đo) cho qua. Thiếu khai báo là lỗi khi nạp.
 - Ngưỡng leo bậc cho tuyến free (E17): 2 FAIL logic liên tiếp hoặc 1 CLAIM_MISMATCH thì task chuyển lên tuyến trên, không dùng hết max_loops trên tuyến free. Chi tiết ở H3-16.
 - Cách hiểu đề xuất:
   - "Xóa file, thư mục": xóa thứ đã có trước task hoặc nằm ngoài write_scope. Dọn file tạm do chính phiên tạo là việc thường.
@@ -36,12 +43,17 @@ Nhãn: GIỮ một phần; phần còn lại GỘP (vào validate ở PR hoặc 
   - Ghi ra ngoài write_scope, kể cả file sản phẩm khác.
   - Đổi cấu hình công cụ tác tử, hook (tools/hooks/), CI (.github/) có trong repo.
   - Ghi ra ngoài worktree của phiên và <project>.local; đụng worktree hoặc nhánh của task khác.
+  - Xóa dòng trong file sổ (DEC, RSK, REQ, run): sổ chỉ thêm dòng (E38, kiểm ở TK-0044). STATE.md không thuộc phép này vì được viết lại có chủ đích.
   - Sửa, xóa, bỏ qua test có sẵn hoặc nới lệnh verify. Ngoại lệ (E20): task spec đã khai trước danh sách test được đổi kèm lý do, và được duyệt ở PLAN_GO. Đây là lối cho trường hợp test của task trước khóa cứng hành vi mà task sau phải đổi (sự cố S1).
 - Không bắt được ở PR, vì không nằm trong diff (sửa 2026-11-21):
   - Thẻ git, ép đẩy, rebase hoặc ghi đè lịch sử, merge, chế độ auto-merge; cấu hình Git cục bộ.
-  - Chặn trước: ruleset phía GitHub cấm tạo thẻ và cập nhật main, chỉ OWNER bypass. Cần tài khoản tác tử riêng (E14) để ruleset phân biệt được tác tử với OWNER.
+  - Chặn trước: ruleset phía GitHub cấm tạo, sửa, xóa thẻ và cập nhật main, chỉ OWNER bypass. E14 đã chốt tách tài khoản (DEC-0031) nên ruleset phân biệt được tác tử với OWNER. Ruleset bật bằng giao diện ở O1.1–O1.4, sau đó lưu thành file JSON và áp bằng script ở TK-0054 (E43).
   - Phát hiện sau: github_audit và preflight đầu phiên.
 - Danh sách điểm dừng đặt trong một file template; WORKER.md chỉ trỏ tới. WORKER.md đang ở trần 50 dòng (C7). Template là một phần ngữ cảnh bắt buộc của WORKER, nằm trong gói ngữ cảnh do script dựng.
+- Bổ sung 2026-11-22 cho template (TK-0042, theo luật lệch kế hoạch của executor GSD):
+  - Trong write_scope, WORKER được tự sửa lỗi, tự thêm phần thiết yếu còn thiếu, tự gỡ chặn; mỗi lần lệch kế hoạch ghi vào kết quả run.
+  - Ngoài write_scope, hoặc cần đổi kiến trúc, thì dừng và báo BLOCK; không tự mở rộng phạm vi.
+  - Gói không cài được thì không thử tên gần giống, không đổi tên gói; dừng và báo (chống gói bịa tên).
 
 ## 3. Đánh giá các hướng cấp quyền
 Nhãn: GIỮ | Đợt: Đ3b | PROPOSAL: E26
@@ -68,12 +80,13 @@ Nhãn: GIỮ | Đợt: Đ3b | PROPOSAL: không
 - Cấu hình công cụ do OWNER làm: lệnh được chạy không hỏi.
 - Script trước khi LEAD đọc: phạm vi diff, schema, giới hạn độ dài, quét.
 - Máy chạy lại verify một lần (mục 6); REVIEWER đọc kết quả đó và kiểm định độc lập về nội dung.
-- GitHub phía máy chủ: lớp cuối; hiện yếu vì dùng chung tài khoản (DEC-0019, RSK-0004). Repo dry run là public nên ruleset dùng được ở gói GitHub Free (CHƯA XÁC MINH với repo mẹ).
+- GitHub phía máy chủ: lớp cuối. DEC-0019 (dùng chung tài khoản) đã bị thay bởi DEC-0031; lớp này đủ mạnh khi O1.1–O1.4 xong. Repo dry run là public nên ruleset dùng được ở gói GitHub Free (CHƯA XÁC MINH với repo mẹ).
 
 ## 6. Chạy verify cách ly mức nhẹ
 Nhãn: GIỮ | Đợt: Đ3b | PROPOSAL: E6
 - Áp cho mọi lần chạy verify.
 - Một lần chạy lại do máy (bổ sung 2026-11-21): điều phối viên hoặc script chạy lại verify một lần, sinh raw capture kèm hash (H4-4). LEAD và REVIEWER đọc kết quả đó, không tự chạy lại trừ khi cần chẩn đoán. Lý do: mỗi lần chạy là một lần phơi thông tin đăng nhập với code không tin cậy và tốn token.
+- Nơi chạy lần đó (cập nhật 2026-11-22): SRC-0003 chọn cách ly mức nhẹ trên máy (TK-0046) và CI `check.yml` chỉ cảnh báo (TK-0045); KE_HOACH_KAIZEN đề xuất chạy verify trên CI, nơi không có thông tin đăng nhập của OWNER. Cần chốt ở TK-0053. Nếu chạy trên CI, job phải khẳng định đang chạy trên runner do GitHub cung cấp (E43).
 - Lý do cách ly: trên máy chỉ có thông tin đăng nhập GitHub của OWNER. Code test do WORKER viết chạy dưới quyền người dùng đó và về kỹ thuật dùng được thông tin ấy.
 - Mức nhẹ:
   - Kiểm cơ học trước khi chạy: diff chỉ nằm trong write_scope; không thêm thư viện ngoài danh sách đã khai.
@@ -94,11 +107,15 @@ Nhãn: GIỮ | Đợt: Đ3b | PROPOSAL: không
 - E4: danh sách điểm dừng cuối cùng và cách hiểu "xóa file, thư mục".
 - E5, E16, E18: trần lần thử, cách hook xử lý mã thoát 3, bảng lỗi thống nhất.
 - E6: làm mức nhẹ và một lần chạy lại do máy; mở RSK cho phần còn lại.
-- E14: xét lại DEC-0019; khuyến nghị chốt trước E11 và E6.
+- E14: ĐÃ CHỐT tách tài khoản (DEC-0031).
 - E17: ngưỡng leo bậc cho tuyến free.
 - E20: ngoại lệ sửa test có khai báo.
 - E21: chuyển xác minh model thực tế sang preflight và relay.
 - E26: cấp quyền theo batch ở PLAN_GO.
+- E36, E37: mã 66 và khai báo ON_CRASH theo từng hook (chốt ở TK-0053, DEC-0032).
+- E38: sổ chỉ thêm dòng kiểm bằng diff; tên file bí mật không phân biệt hoa thường.
+- E40: kiểm lời tự báo cho mọi run từ Bước 3.
+- Nơi chạy verify chính thức: trên máy (TK-0046) hay trên CI (mục 6).
 
 ## Đã loại
 - Chỉ dừng sau max_loops cho mọi loại dừng → không an toàn; dừng vì quyền, phạm vi, quyết định phải dừng ngay.
