@@ -1,14 +1,9 @@
 # Bao cao TK-0039
 
-Khung gio phien: 2026-11-24 19:24-20:21 +07:00.
+Khung gio phien: 2026-11-24 19:24-20:46 +07:00.
 
-`cmdkey /list` (muc GitHub):
-- `gh:github.com:conchonomoconmeo-AIAIAI` - Generic
-- `gh:github.com:` - Generic
-- Babyhungry1310: khong co
+Task card chuan: `06_sources/SRC-0003_kaizen-chi-tiet-dot1.md`, YAML TK-0039, `origin/main fe7357e`. Khong copy card vao `02_work/tasks/CYC-08`.
 
-`gh auth status` (token da che):
-- github.com; account `conchonomoconmeo-AIAIAI`, active, keyring.
-- Git operations: https; token: `[REDACTED]`; scopes: gist, read:org, repo, workflow.
+Evidence day du: `03_output/CYC-08/checks/TK-0039_R1_L01_verify.txt` va `03_output/CYC-08/checks/TK-0039_R1_L02_verify_scan.txt`. L02 ghi lenh, stdout va exit code cho verify va tung scan; verify exit 0, 30 checks, 0 violations; scan ALLOW 5/5.
 
-Preflight dat: origin/main `fe7357e`; khong co PR khac mo. Nam DEC moi file them mot dong `- 2026-11-24 | RETIRED`; diff moi file `1/0`, khong BOM. Verify exit 0: 30 checks, 0 violations. Scan: ALLOW 5 DEC. Run schema: `[]`. CSV: 37 dong, model `codex/gpt-6-luna`. PR #106 da mo.
+Run schema: `[]`. CSV `P6D/usage_TK-0039_R1.csv` duoc dua vao PR; 37 data rows, model `codex/gpt-6-luna`. Nam DEC khong doi trong review-fix; diff so voi `origin/main` van moi file `1/0`. PR #106 cap nhat, chua merge.

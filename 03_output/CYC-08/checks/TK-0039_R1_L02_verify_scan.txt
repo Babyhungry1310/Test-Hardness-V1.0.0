@@ -1,0 +1,24 @@
+Task card: 06_sources/SRC-0003_kaizen-chi-tiet-dot1.md, YAML TK-0039 (origin/main fe7357e)
+L02 REVIEW-FIX EVIDENCE
+$ python tools/scan.py 04_control/decisions/DEC-0007_cyc-01-reviewer-claude.md
+{"level":"ALLOW","ruleset":"scan-core-1","sha256":"a0fc4617ede63f6293e470368ec0c5a0cba0966f7b0bf4d3ffe9f7e38a8bb14d","reasons":[],"decoded_skipped":0}
+EXIT_CODE=0
+$ python tools/scan.py 04_control/decisions/DEC-0012_cyc-02-reviewer-gemini.md
+{"level":"ALLOW","ruleset":"scan-core-1","sha256":"381e1bbf1ba973d1fbdb1740fa3bef4b027ef4c1866c91cd6ad7883628937291","reasons":[],"decoded_skipped":0}
+EXIT_CODE=0
+$ python tools/scan.py 04_control/decisions/DEC-0014_cyc-02-pr20-not-a-review-round.md
+{"level":"ALLOW","ruleset":"scan-core-1","sha256":"8e6483b677db65e5c42307fbe75a504b15633812b532fadc0e62f90fb4e3756a","reasons":[],"decoded_skipped":0}
+EXIT_CODE=0
+$ python tools/scan.py 04_control/decisions/DEC-0028_tk-0018-source-handoff.md
+{"level":"ALLOW","ruleset":"scan-core-1","sha256":"6e37606bcca7bec8a9738071b831758e3f421f1b2906dbf2589b32e631bf7b75","reasons":[],"decoded_skipped":1}
+EXIT_CODE=0
+$ python tools/scan.py 04_control/decisions/DEC-0029_split-tk-0033-session-detector.md
+{"level":"ALLOW","ruleset":"scan-core-1","sha256":"fdeb1854dadcfc2831d444e5a487722138b866f1a1a4e78bfa5e161a38b9895c","reasons":[],"decoded_skipped":1}
+EXIT_CODE=0
+$ python tools/verify_doc_artifact.py 04_control/decisions/DEC-0007_cyc-01-reviewer-claude.md 04_control/decisions/DEC-0012_cyc-02-reviewer-gemini.md 04_control/decisions/DEC-0014_cyc-02-pr20-not-a-review-round.md 04_control/decisions/DEC-0028_tk-0018-source-handoff.md 04_control/decisions/DEC-0029_split-tk-0033-session-detector.md --regex "## Status \(newest first\)\r?\n- \d{4}-\d{2}-\d{2} \| RETIRED\b" --append-only-vs origin/main
+PASS: 5 file, 30 phép kiểm, 0 vi phạm
+EXIT_CODE=0
+
+RUN_SCHEMA: Draft202012Validator; schema=harness/schemas/run.schema.json; run=02_work/runs/TK-0039_R1_DONE.md
+OUTPUT=[]
+EXIT_CODE=0

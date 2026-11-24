@@ -13,19 +13,23 @@ outputs:
   - 04_control/decisions/DEC-0029_split-tk-0033-session-detector.md
   - 02_work/runs/TK-0039_R1_DONE.md
   - 03_output/CYC-08/checks/TK-0039_R1_L01_verify.txt
+  - 03_output/CYC-08/checks/TK-0039_R1_L02_verify_scan.txt
   - P6D/BAO_CAO_TK-0039.md
   - P6D/XONG_TK-0039.txt
   - P6D/usage_TK-0039_R1.csv
 evidence:
   - 03_output/CYC-08/checks/TK-0039_R1_L01_verify.txt
+  - 03_output/CYC-08/checks/TK-0039_R1_L02_verify_scan.txt
 done_check:
-  - "1 → 5 DEC status RETIRED, one new line each"
-  - "2 → 5 DEC diff numstat = 1 0; no BOM"
-  - "3 → verify: 5 files, 30 checks, 0 violations"
-  - "4 → scan.py: ALLOW on 5 DEC"
-  - "5 → P6D usage CSV: 37 rows; model codex/gpt-6-luna"
+  - "1 \u2192 task card: 06_sources/SRC-0003_kaizen-chi-tiet-dot1.md, YAML TK-0039, origin/main fe7357e"
+  - "2 \u2192 5 DEC diff numstat = 1 0; files unchanged in review-fix"
+  - "3 \u2192 L02 verify: 5 files, 30 checks, 0 violations"
+  - "4 \u2192 L02 scan evidence: ALLOW on all 5 DEC files"
+  - "5 \u2192 run.schema errors []"
+  - "6 \u2192 P6D/usage_TK-0039_R1.csv committed: 37 data rows, codex/gpt-6-luna"
 loops:
   - "L01 | PASS | passed=30 failed=0"
+  - "L02 | PASS | passed=30 failed=0"
 deviations:
   assumptions: []
   differences: []
@@ -33,6 +37,6 @@ deviations:
 escalate: "no"
 escalation: {spec: "", problem: "", proposal: ""}
 touched_protected: "yes"
-keywords: [retired, decisions, cyc-08]
+keywords: [retired, decisions, cyc-08, review-fix]
 usage: []
 ---
