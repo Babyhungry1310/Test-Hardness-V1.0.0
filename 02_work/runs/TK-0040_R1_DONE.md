@@ -23,14 +23,14 @@ done_check:
   - "2 → ROUTE_CHECKS records usageHistory for grok, Luna, and accepted Gemini antigravity route"
   - "3 → STATE max-words 300 PASS; 236 words"
   - "4 → E20-E26 and H0 unchanged; owner deferral recorded in differences"
-  - "5 → gate G7 failed on task-card regex in L01; L02 gate passed"
+  - "5 → L01 FAIL G7/F57 on task-card regex; L02 gate passed"
 loops:
-  - "L01 | FAIL | G7/F57 | passed=0 failed=1"
+  - "L01 | FAIL | passed=0 failed=1"
   - "L02 | PASS | passed=1 failed=0"
 deviations: {assumptions: [], differences: ["O2.1 hoãn tới cửa sổ trước Bước 3; H0 không đổi"], unverified: []}
-escalate: no
+escalate: "no"
 escalation: {spec: "", problem: "", proposal: ""}
-touched_protected: no
+touched_protected: "no"
 keywords: [catalog, state, model, cyc-08]
 usage: []
 ---
