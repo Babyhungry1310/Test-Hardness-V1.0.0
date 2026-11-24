@@ -741,11 +741,15 @@ read_also:
   - harness/schemas/model_catalog.schema.json
 line_budget: 250
 verify: >-
-  python tools/verify_doc_artifact.py 04_control/MODEL_CATALOG.md --contains "grok-4.5" --contains "DeepSeek" --contains "Nano" --contains "UNQUALIFIED"
-  && python tools/verify_doc_artifact.py 04_control/STATE.md
+  python tools/verify_doc_artifact.py 04_control/MODEL_CATALOG.md --contains "grok-4.5" --contains "gpt-6-luna" --contains "DeepSeek" --contains "Nano" --contains "UNQUALIFIED"
+  --regex "code: \"grok-4\\.5\"\\n(?:\\s+\\w+: [^\\n]*\\n){0,3}?\\s+group: grok\\b"
+  --regex "code: \"gpt-6-luna\"\\n(?:\\s+\\w+: [^\\n]*\\n){0,3}?\\s+group: gpt\\b"
+  && python tools/verify_doc_artifact.py 04_control/STATE.md --max-words 300
   && python tools/verify_doc_artifact.py 05_memory/upstream/00_tong_quan_upstream.md --regex "^- E2[0-6] \\| "
 done_when:
-  - "Catalog co grok-4.5, DeepSeek, Nvidia Nano (--contains x4)"
+  - "Catalog co grok-4.5, gpt-6-luna, DeepSeek, Nvidia Nano (--contains x5)"
+  - "grok-4.5 co group grok, gpt-6-luna co group gpt (--regex x2; DEC-0033 Consequences)"
+  - "STATE <= 300 tu sau khi rut muc 3 (--max-words 300)"
   - "Terra/gemini alias khong gay SAME_MODEL sai (kiem o cong REVIEWER)"
   - "STATE muc 3 gon sau retire (kiem o cong REVIEWER; verify chi kiem file hop le)"
   - "H0 nhom E B3 co trang thai theo O2.1 (--regex dong E; doi chieu O2.1 o cong REVIEWER)"
