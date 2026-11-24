@@ -1,0 +1,7 @@
+﻿verify_command: python tools/verify_doc_artifact.py tools/verify_doc_artifact.py tools/validate_task_schema.py tools/usage_9router.py tools/tests/test_verify_doc_artifact.py tools/tests/test_validate_task_schema.py --no-links --sha256 tools/verify_doc_artifact.py=3472fb9dd453ed05fd02b40b3575803c670c436b7c8e0828bb93295cdf781129 --sha256 tools/validate_task_schema.py=83fe4cb554de31f7a7cee4dc299c65cb749047d1da692bdc1e3f68cbf3444b61 --sha256 tools/usage_9router.py=86818ce2b0f2d91928b5f149a9e2649d4f6cf5262366829cdaef039122deb7f5
+verify_output: PASS: 5 file, 13 phép kiểm, 0 vi phạm
+pytest_command: python -m pytest -q tools/tests/test_verify_doc_artifact.py tools/tests/test_validate_task_schema.py
+..................... [100%]
+21 passed in 1.80s
+run_verify_command: python tools/verify_doc_artifact.py 02_work/runs/TK-0059_R1_DONE.md 03_output/CYC-08/checks/TK-0059_R1_L02_pytest.txt --no-links
+run_verify_output: PASS: 2 file, 5 phép kiểm, 0 vi phạm
