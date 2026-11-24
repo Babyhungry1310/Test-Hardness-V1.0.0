@@ -1,7 +1,7 @@
 ---
 schema: 1
 id: MODEL_CATALOG
-updated: 2026-11-18
+updated: "2026-11-24"
 models:
   - code: "claude-fable-5-2"
     provider: unverified
@@ -14,7 +14,7 @@ models:
     price_source: none
     availability: confirmed
     availability_evidence: DSC-20261112-012x
-    updated: 2026-11-14
+    updated: "2026-11-14"
   - code: "claude-opus-4-6-thinking"
     provider: unverified
     provider_source: none
@@ -26,7 +26,7 @@ models:
     price_source: none
     availability: unconfirmed
     availability_evidence: none
-    updated: 2026-11-14
+    updated: "2026-11-14"
   - code: "claude-sonnet-4-6"
     provider: unverified
     provider_source: none
@@ -38,7 +38,7 @@ models:
     price_source: none
     availability: unconfirmed
     availability_evidence: none
-    updated: 2026-11-14
+    updated: "2026-11-14"
   - code: "claude-sonnet-5-5"
     provider: unverified
     provider_source: none
@@ -50,7 +50,7 @@ models:
     price_source: none
     availability: confirmed
     availability_evidence: RVW-CYC-01
-    updated: 2026-11-14
+    updated: "2026-11-14"
   - code: "gemini-3.8-flash-k"
     provider: unverified
     provider_source: none
@@ -62,31 +62,31 @@ models:
     price_source: none
     availability: confirmed
     availability_evidence: 02_work/runs/TK-0001_R1_BLOCKED.md
-    updated: 2026-11-14
+    updated: "2026-11-14"
   - code: "gemini-3.8-flash-n"
     provider: unverified
     provider_source: none
     group: gemini
-    group_source: "DEC-0012#CONTEXT"
+    group_source: "DEC-0033#RATIONALE"
     aliases: ["ag/gemini-3.8-flash", "ag/gemini-3.8-flash-high"]
     recommended_roles: [REVIEWER]
     capability_source: none
     price_source: none
     availability: confirmed
     availability_evidence: RVW-CYC-02
-    updated: 2026-11-14
+    updated: "2026-11-14"
   - code: "gpt-5.6-luna"
     provider: unverified
     provider_source: none
     group: codex
-    group_source: "DEC-0012#CONTEXT"
+    group_source: "DEC-0033#RATIONALE"
     aliases: ["cx/gpt-5.6-luna", "gpt-5.6-luna[1m]"]
     recommended_roles: [WORKER]
     capability_source: none
     price_source: none
     availability: confirmed
     availability_evidence: 02_work/runs/TK-0003_R1_DONE.md
-    updated: 2026-11-14
+    updated: "2026-11-14"
   - code: "gpt-5.6-sol"
     provider: unverified
     provider_source: none
@@ -98,7 +98,7 @@ models:
     price_source: none
     availability: unconfirmed
     availability_evidence: none
-    updated: 2026-11-14
+    updated: "2026-11-14"
   - code: "gpt-5.6-terra"
     provider: unverified
     provider_source: none
@@ -110,19 +110,19 @@ models:
     price_source: none
     availability: unconfirmed
     availability_evidence: none
-    updated: 2026-11-14
+    updated: "2026-11-14"
   - code: "gpt-6.1-sol"
     provider: unverified
     provider_source: none
     group: codex
-    group_source: "DEC-0014#CONTEXT"
+    group_source: "DEC-0033#RATIONALE"
     aliases: ["cx/gpt-6.1-sol"]
     recommended_roles: [WORKER]
     capability_source: none
     price_source: none
     availability: confirmed
     availability_evidence: 02_work/runs/TK-0002_R1_DONE.md
-    updated: 2026-11-14
+    updated: "2026-11-14"
   - code: "gpt-6.1-terra"
     provider: unverified
     provider_source: none
@@ -134,7 +134,7 @@ models:
     price_source: none
     availability: confirmed
     availability_evidence: 02_work/runs/TK-0005_R1_DONE.md
-    updated: 2026-11-14
+    updated: "2026-11-14"
   - code: "grok-4.3"
     provider: unverified
     provider_source: none
@@ -146,7 +146,7 @@ models:
     price_source: none
     availability: unconfirmed
     availability_evidence: none
-    updated: 2026-11-14
+    updated: "2026-11-14"
   - code: "grok-4.6"
     provider: unverified
     provider_source: none
@@ -158,7 +158,7 @@ models:
     price_source: none
     availability: unconfirmed
     availability_evidence: none
-    updated: 2026-11-14
+    updated: "2026-11-14"
   - code: "grok-4.7"
     provider: unverified
     provider_source: none
@@ -170,7 +170,67 @@ models:
     price_source: none
     availability: unconfirmed
     availability_evidence: none
-    updated: 2026-11-14
+    updated: "2026-11-14"
+  - code: "grok-4.5"
+    provider: xai
+    provider_source: "ROUTE_CHECKS"
+    group: grok
+    group_source: "DEC-0033#RATIONALE"
+    aliases: ["xai/grok-4.5"]
+    recommended_roles: [WORKER]
+    capability_source: none
+    price_source: none
+    availability: confirmed
+    availability_evidence: "ROUTE_CHECKS"
+    updated: "2026-11-24"
+  - code: "gpt-6-luna"
+    provider: codex
+    provider_source: "ROUTE_CHECKS"
+    group: gpt
+    group_source: "DEC-0033#RATIONALE"
+    aliases: ["cx/gpt-6-luna"]
+    recommended_roles: [WORKER, REVIEWER]
+    capability_source: none
+    price_source: none
+    availability: confirmed
+    availability_evidence: "ROUTE_CHECKS"
+    updated: "2026-11-24"
+  - code: "deepseek-v3"
+    provider: deepseek
+    provider_source: "UNQUALIFIED"
+    group: deepseek
+    group_source: "DEC-0033#RATIONALE"
+    aliases: ["DeepSeek"]
+    recommended_roles: []
+    capability_source: none
+    price_source: none
+    availability: unconfirmed
+    availability_evidence: none
+    updated: "2026-11-24"
+  - code: "nvidia-nano"
+    provider: nvidia
+    provider_source: "UNQUALIFIED"
+    group: nvidia
+    group_source: "DEC-0033#RATIONALE"
+    aliases: ["Nvidia Nano"]
+    recommended_roles: []
+    capability_source: none
+    price_source: none
+    availability: unconfirmed
+    availability_evidence: none
+    updated: "2026-11-24"
+  - code: "gemini-3.8-flash"
+    provider: antigravity
+    provider_source: "ROUTE_CHECKS"
+    group: gemini
+    group_source: "DEC-0033#RATIONALE"
+    aliases: []
+    recommended_roles: []
+    capability_source: none
+    price_source: none
+    availability: confirmed
+    availability_evidence: "ROUTE_CHECKS"
+    updated: "2026-11-24"
   - code: "grok-build-0.1"
     provider: unverified
     provider_source: none
@@ -182,8 +242,10 @@ models:
     price_source: none
     availability: unconfirmed
     availability_evidence: none
-    updated: 2026-11-14
+    updated: "2026-11-14"
 ---
+
+
 <!-- ANCHOR: ROUTE_CHECKS -->
 ## Route checks (newest first)
 - 2026-11-18T09:56Z | route: cx/gpt-6.1-sol | actual: gpt-6.1-sol | kind: agent-tools | result: OK | source: own-session response.completed.model; native 01a1ee15-2a43-7df2-a314-c94e24a42525; launch 4481162e-bfc9-4968-89df-1db364946f47 | note: TK-0018 phase-zero Read passed; isolated transport
