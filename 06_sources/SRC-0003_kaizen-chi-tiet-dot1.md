@@ -160,8 +160,18 @@ Mọi mã P5 dưới đây giữ nguyên nghĩa. Định nghĩa chép từ `06_s
 | B2a | ĐỔI | `after: B1b3` (P6d) | `after: B1b4` | — | DEC-0033 | Đ2 |
 | B3a1 | ĐỔI | `tasks: TK-0059` | `tasks: TK-0061` | — | DEC-0033 | Đ3 |
 | L5.1 | ĐỔI | Chạy lại 3×2, so trực tiếp với L1.1 | Đo theo cặp: khung @ `7ad7aa6` và khung sau TK-0050, cùng cặp model; 12 lượt | — | DEC-0033 mục B | Đ5 |
+| TK-0062 | THÊM | — | Chuyển 5 DEC RETIRED (0007, 0012, 0014, 0028, 0029) vào `04_control/decisions/superseded/`; mỗi đổi tên = 1 path (thẻ đầy đủ) | — | DEC-0034; L3 | Đ3 (B3p1) |
+| TK-0063 | THÊM | — | DEC-0008 thêm Status RETIRED và chuyển vào `superseded/` (thẻ đầy đủ) | — | DEC-0034; L4 | Đ3 (B3p2) |
+| TK-0064 | THÊM | — | Đưa `preflight_phieu.py`, `gate.py` + 2 test vào `tools/` (thẻ đầy đủ) | E33, E43 | DEC-0034; D6 | Đ3 (B3p3) |
+| TK-0065 | THÊM | — | Sửa mẫu quét `zone3_openai_token` để không bắt mã `RSK-nnnn_…` (F48) (thẻ đầy đủ) | E23 | DEC-0034; D6 | Đ3 (B3p4) |
+| O3.6 | THÊM | — | PR Planning P3b: thẻ YAML Bước 3 (TK-0061, TK-0042…0047, TK-0055, TK-0056); sau B3p4, trước B3a0 | — | DEC-0034; D8; L5 | Đ3 |
+| TK-0061 | ĐỔI · batch | B3a1 sau TK-0042 | B3a0 sau O3.6, trước TK-0042; thêm sửa CRLF trước regex (F53) | E33, E43 | DEC-0034; D9 | Đ3 (B3a0) |
+| B3a | ĐỔI | `after: B2c` | `after: B3a0` | — | DEC-0034; D9 | Đ3 |
+| B3a2 | ĐỔI | `after: B3a1` | `after: B3a` | — | DEC-0034; D9 | Đ3 |
+| O2.1 | ĐỔI · cổng | Trước TK-0042 | Đã chốt 2026-11-24 (QUYET_DINH_OWNER_CUA_SO_B3, nội dung ở DEC-0034); TK-0040 giữ nguyên H0, P3a ghi trạng thái | — | DEC-0034 | Đ3 |
+| O2.4 | THÊM | — | OWNER chốt dòng REVIEW_SECTION_9 gộp vào HARNESS mục 9 và VERSION mới cho TK-0041 (đã chốt: dòng 1–3, VERSION 1.0.2) | — | DEC-0034 | Đ2 |
 
-Các dòng B2a, TK-0039, B3b, B3e đổi thứ tự so với P5, có `supersedes`, ghi vào DEC-0032. Các dòng TK-0060, TK-0059, TK-0061, B1b3a, B1b4, B2a, B3a1, L5.1 thêm ở cửa sổ trước Bước 2, ghi vào DEC-0033.
+Các dòng B2a, TK-0039, B3b, B3e đổi thứ tự so với P5, có `supersedes`, ghi vào DEC-0032. Các dòng TK-0060, TK-0059, TK-0061, B1b3a, B1b4, B2a, B3a1, L5.1 thêm ở cửa sổ trước Bước 2, ghi vào DEC-0033. Các dòng TK-0062…TK-0065, O3.6, TK-0061 (batch), B3a, B3a2, O2.1 (cổng), O2.4 thêm ở cửa sổ trước Bước 3, ghi vào DEC-0034.
 
 
 ## Bảng truy vết E27–E43
@@ -205,9 +215,13 @@ Các dòng B2a, TK-0039, B3b, B3e đổi thứ tự so với P5, có `supersedes
 | TK-0039 | Đ2 | lead/ | T1 | WORKER (đề xuất: ag/gemini-3.8-flash) `Q-GEMINI-TIER` | REVIEWER (đề xuất: cx/gpt-6.1-terra) | W1 | [TK-0059] | B2a | nhẹ |
 | TK-0040 | Đ2 | lead/ | T1 | WORKER (đề xuất: ag/gemini-3.8-flash) `Q-GEMINI-TIER` | REVIEWER (đề xuất: xai/grok-4.5) | W2 | [TK-0039] | B2b | nhẹ |
 | TK-0041 | Đ2 | upgrade/ | T2 | WORKER (đề xuất: xai/grok-4.5) | REVIEWER (đề xuất: ag/gemini-3.8-flash) | W1 | [TK-0040] | B2c | nhẹ–vừa |
-| TK-0042 | Đ3a | upgrade/ | T2 | WORKER (đề xuất: xai/grok-4.5) | REVIEWER (đề xuất: ag/gemini-3.8-flash) | W1 | [TK-0041] | B3a | vừa |
-| TK-0061 | Đ3 | upgrade/ | T2 | WORKER (chọn theo DEC-0033) | REVIEWER (chọn theo DEC-0033) | W1 | [TK-0042] | B3a1 | vừa |
-| TK-0055 | Đ3 | upgrade/ | T2 | WORKER (đề xuất: xai/grok-4.5) | REVIEWER (đề xuất: ag/gemini-3.8-flash) | W1 | [TK-0061] | B3a2 | vừa |
+| TK-0062 | Đ3 | task/ | T1 | WORKER (chọn theo DEC-0033) | REVIEWER (chọn theo DEC-0034) | W1 | [TK-0041] | B3p1 | nhẹ |
+| TK-0063 | Đ3 | task/ | T1 | WORKER (chọn theo DEC-0033) | REVIEWER (chọn theo DEC-0034) | W1 | [TK-0062] | B3p2 | nhẹ |
+| TK-0064 | Đ3 | task/ | T1 | WORKER (chọn theo DEC-0033) | REVIEWER (chọn theo DEC-0034) | W1 | [TK-0063] | B3p3 | nhẹ |
+| TK-0065 | Đ3 | task/ | T2 | WORKER (chọn theo DEC-0033) | REVIEWER (chọn theo DEC-0034) | W1 | [TK-0064] | B3p4 | nhẹ–vừa |
+| TK-0061 | Đ3 | upgrade/ | T2 | WORKER (chọn theo DEC-0033) | REVIEWER (chọn theo DEC-0034) | W1 | [TK-0065] | B3a0 | vừa |
+| TK-0042 | Đ3a | upgrade/ | T2 | WORKER (đề xuất: xai/grok-4.5) | REVIEWER (đề xuất: ag/gemini-3.8-flash) | W1 | [TK-0061] | B3a | vừa |
+| TK-0055 | Đ3 | upgrade/ | T2 | WORKER (đề xuất: xai/grok-4.5) | REVIEWER (đề xuất: ag/gemini-3.8-flash) | W1 | [TK-0042] | B3a2 | vừa |
 | TK-0043 | Đ3 | task/ | T2 | WORKER (đề xuất: xai/grok-4.5) | REVIEWER (đề xuất: ag/gemini-3.8-flash) | W1 | [TK-0055] | B3b | nặng |
 | TK-0044 | Đ3 | task/ | T2 | WORKER (đề xuất: cx/gpt-6.1-terra) | REVIEWER (đề xuất: ag/gemini-3.8-flash) | W2 | [TK-0043] | B3c | vừa–nặng |
 | TK-0045 | Đ3 | task/ | T2 | WORKER (đề xuất: xai/grok-4.5) | REVIEWER (đề xuất: ag/gemini-3.8-flash) | W1 | [TK-0044] | B3d | nặng |
@@ -224,7 +238,7 @@ Các dòng B2a, TK-0039, B3b, B3e đổi thứ tự so với P5, có `supersedes
 
 **Tỉ lệ Gemini:** không gắn cứng. Mỗi lượt giao ghi `SO_GIAO_VIEC.md`; cột “thực nhận” là nguồn tính ~50% WORKER Gemini và LEAD 2:1.
 
-Thẻ YAML đầy đủ trong mục 4 chỉ cho B1b–Bước 2 (Q-E). Bước 3–5: xem **Bảng delta**; thẻ YAML viết ở đầu mỗi Bước sau L1.1.
+Thẻ YAML đầy đủ trong mục 4 cho B1b–Bước 2 (Q-E) và TK-0062…TK-0065 của cửa sổ trước Bước 3 (DEC-0034). Thẻ Bước 3 còn lại viết ở PR Planning P3b (O3.6).
 
 ---
 
@@ -242,9 +256,13 @@ Thẻ YAML đầy đủ trong mục 4 chỉ cho B1b–Bước 2 (Q-E). Bước 3
     - B2a | tasks: TK-0039 | after: B1b4
     - B2b | tasks: TK-0040 | after: B2a
     - B2c | tasks: TK-0041 | after: B2b
-    - B3a | tasks: TK-0042 | after: B2c
-    - B3a1 | tasks: TK-0061 | after: B3a
-    - B3a2 | tasks: TK-0055 | after: B3a1
+    - B3p1 | tasks: TK-0062 | after: B2c
+    - B3p2 | tasks: TK-0063 | after: B3p1
+    - B3p3 | tasks: TK-0064 | after: B3p2
+    - B3p4 | tasks: TK-0065 | after: B3p3
+    - B3a0 | tasks: TK-0061 | after: B3p4, O3.6
+    - B3a | tasks: TK-0042 | after: B3a0
+    - B3a2 | tasks: TK-0055 | after: B3a
     - B3b | tasks: TK-0043 | after: B3a2
     - B3c | tasks: TK-0044 | after: B3b
     - B3d | tasks: TK-0045 | after: B3c, O3.1
@@ -258,7 +276,7 @@ Thẻ YAML đầy đủ trong mục 4 chỉ cho B1b–Bước 2 (Q-E). Bước 3
     - B5b | tasks: TK-0052 | after: B5a
 <!-- /code:text -->
 
-Một chuỗi thẳng từ B1b tới B5b; O-task chen ở B1b (L1.1) và B3d (O3.1).
+Một chuỗi thẳng từ B1b tới B5b; O-task chen ở B1b (L1.1), B3a0 (O3.6, PR thẻ Bước 3) và B3d (O3.1).
 
 
 <!-- code:mermaid -->
@@ -267,7 +285,10 @@ Một chuỗi thẳng từ B1b tới B5b; O-task chen ở B1b (L1.1) và B3d (O3
       L11((L1.1)) --> B1b
       B1b --> B1b2[B1b2 TK-0057] --> B1b3[B1b3 TK-0058]
       B1b3 --> B1b3a[B1b3a TK-0060] --> B1b4[B1b4 TK-0059] --> B2a[B2a TK-0039] --> B2b[B2b TK-0040] --> B2c[B2c TK-0041]
-      B2c --> B3a[B3a TK-0042] --> B3a1[B3a1 TK-0061] --> B3a2[B3a2 TK-0055]
+      B2c --> B3p1[B3p1 TK-0062] --> B3p2[B3p2 TK-0063] --> B3p3[B3p3 TK-0064] --> B3p4[B3p4 TK-0065]
+      B3p4 --> B3a0[B3a0 TK-0061]
+      O36((O3.6)) --> B3a0
+      B3a0 --> B3a[B3a TK-0042] --> B3a2[B3a2 TK-0055]
       B3a2 --> B3b[B3b TK-0043] --> B3c[B3c TK-0044] --> B3d[B3d TK-0045]
       O31((O3.1)) --> B3d
       B3d --> B3d2[B3d2 TK-0056] --> B3e[B3e TK-0046] --> B3f[B3f TK-0047]
@@ -294,7 +315,8 @@ Một chuỗi thẳng từ B1b tới B5b; O-task chen ở B1b (L1.1) và B3d (O3
 | O1.4 | OWNER | Bật secret scanning và push protection | GitHub settings | Cả hai bật | Trước L1.1 |
 | L1.1 | LEAD | Chạy 3 phiên chuẩn × 2; thu usage theo vai; chụp môi trường **local only** | `03_output/CYC-08/checks/baseline_session_spec.md` (sau TK-0038) | Artifact local (không commit path máy/secret) | TK-0038 merged; O1.1–O1.4 hoàn tất |
 | O1.5 | OWNER | Xác nhận baseline + điểm đo | Bảng local L1.1 | Đồng ý dùng cho Đ5 | Trước Bước 2 kết luận nền |
-| O2.1 | OWNER | Chốt nhóm E B3 + cột Thay | H0 | Trạng thái E | Trước TK-0042 |
+| O2.1 | OWNER | Chốt nhóm E B3 + cột Thay | H0 | Trạng thái E | Đã chốt 2026-11-24 (trước TK-0040); nội dung DEC-0034 |
+| O2.4 | OWNER | Chốt dòng REVIEW_SECTION_9 gộp vào HARNESS mục 9 + VERSION mới | QUYET_DINH_OWNER_CUA_SO_B3 | Dòng 1–3; VERSION 1.0.2 | Trước TK-0041 (đã chốt) |
 | O2.2 | OWNER | Chốt đúng 5 DEC retire (mặc định đề xuất dưới) + đích ACTIVE | Q5 | Danh sách khóa | Trước TK-0039 |
 | O2.3 | OWNER | Merge TK-0039, TK-0040, TK-0041 tuần tự (3 merge) | PR | Bước 2 xong | — |
 | O3.1 | OWNER | Lệnh trực tiếp cho PR chạm `.github/` | PREFLIGHT / chat | Lệnh văn bản | **Trước mở PR TK-0045** |
@@ -307,6 +329,7 @@ Một chuỗi thẳng từ B1b tới B5b; O-task chen ở B1b (L1.1) và B3d (O3
 | O5.2–O5.3 | OWNER | Đ5-C: duyệt Kaizen 2; nhóm E về mẹ; CI required; điểm dừng &lt;15% token LEAD | TK-0052 outputs | Đóng Đợt 1 | — |
 | O3.4 | OWNER | chạy `git config core.hooksPath tools/hooks` trên máy chạy tác tử | Sau khi TK-0056 merge | Hook pre-push chạy được trên máy tác tử | Sau TK-0056 merge |
 | O3.5 | OWNER | merge TK-0059, TK-0055, TK-0056 | Trước B3f | Ba task trên main | Trước B3f |
+| O3.6 | OWNER | merge PR Planning P3b (thẻ YAML Bước 3) | PR `lead/` | Thẻ TK-0061, TK-0042…0047, TK-0055, TK-0056 trên main | Sau B3p4, trước B3a0 |
 
 
 ---
@@ -798,6 +821,156 @@ depends_on:
 fixes: ""
 ```
 
+
+### TK-0062 — B3p1 · `task/`
+
+```yaml
+schema: 1
+id: TK-0062
+cycle: CYC-08
+origin: DEC-0034
+assignee: W1
+goal: Chuyen 5 DEC RETIRED (0007, 0012, 0014, 0028, 0029) vao 04_control/decisions/superseded bang git mv, khong sua noi dung
+write_scope:
+  - 04_control/decisions/superseded/DEC-0007_cyc-01-reviewer-claude.md
+  - 04_control/decisions/superseded/DEC-0012_cyc-02-reviewer-gemini.md
+  - 04_control/decisions/superseded/DEC-0014_cyc-02-pr20-not-a-review-round.md
+  - 04_control/decisions/superseded/DEC-0028_tk-0018-source-handoff.md
+  - 04_control/decisions/superseded/DEC-0029_split-tk-0033-session-detector.md
+constraints:
+  - "Lenh OWNER L3 (QUYET_DINH_OWNER_CUA_SO_B3); touched_protected: yes"
+  - "Chi git mv; khong sua mot dong noi dung; moi doi ten tinh 1 path (DEC-0033 E, Q7)"
+  - "Con tro theo ma (DEC-0007...) giu nguyen; con tro duong dan cu con trong tai lieu ACTIVE ngoai file run va the da xong thi dung, bao OWNER"
+inputs:
+  - 04_control/decisions/
+read_also:
+  - harness/rules/LEAD.md
+line_budget: 10
+verify: >-
+  python tools/verify_doc_artifact.py 04_control/decisions/superseded/DEC-0007_cyc-01-reviewer-claude.md 04_control/decisions/superseded/DEC-0012_cyc-02-reviewer-gemini.md 04_control/decisions/superseded/DEC-0014_cyc-02-pr20-not-a-review-round.md 04_control/decisions/superseded/DEC-0028_tk-0018-source-handoff.md 04_control/decisions/superseded/DEC-0029_split-tk-0033-session-detector.md --no-links --regex "## Status \(newest first\)\r?\n- \d{4}-\d{2}-\d{2} \| RETIRED\b"
+  && python -c "import pathlib,sys;sys.exit(any(pathlib.Path(p).exists() for p in ['04_control/decisions/DEC-0007_cyc-01-reviewer-claude.md','04_control/decisions/DEC-0012_cyc-02-reviewer-gemini.md','04_control/decisions/DEC-0014_cyc-02-pr20-not-a-review-round.md','04_control/decisions/DEC-0028_tk-0018-source-handoff.md','04_control/decisions/DEC-0029_split-tk-0033-session-detector.md']))"
+done_when:
+  - "5 file nam o superseded/, Status moi nhat RETIRED (--regex)"
+  - "Khong con file o duong dan cu (python -c)"
+  - "gate.py G1: 5 rename, do giong >= 95%; noi dung khong doi"
+size: "1 session · 5 files"
+depends_on:
+  - TK-0041
+fixes: ""
+log_level: LOOP
+max_loops: 2
+```
+
+### TK-0063 — B3p2 · `task/`
+
+```yaml
+schema: 1
+id: TK-0063
+cycle: CYC-08
+origin: DEC-0034
+assignee: W1
+goal: DEC-0008 them dong Status RETIRED va chuyen vao 04_control/decisions/superseded
+write_scope:
+  - 04_control/decisions/superseded/DEC-0008_reviewer-outside-9router.md
+constraints:
+  - "Lenh OWNER L4; touched_protected: yes"
+  - "Chi them dung 1 dong Status ngay duoi ## Status (newest first); khong sua dong khac; git mv tinh 1 path"
+  - "DEC-0008 dua tren DEC-0007 da RETIRED (DEC-0033 Consequences)"
+inputs:
+  - 04_control/decisions/DEC-0008_reviewer-outside-9router.md
+read_also:
+  - harness/schemas/STATUS_GRAMMAR.md
+line_budget: 5
+verify: >-
+  python tools/verify_doc_artifact.py 04_control/decisions/superseded/DEC-0008_reviewer-outside-9router.md --no-links --regex "## Status \(newest first\)\r?\n- \d{4}-\d{2}-\d{2} \| RETIRED\b"
+  && python -c "import pathlib,sys;sys.exit(pathlib.Path('04_control/decisions/DEC-0008_reviewer-outside-9router.md').exists())"
+done_when:
+  - "DEC-0008 o superseded/, Status moi nhat RETIRED (--regex)"
+  - "Chi them 1 dong so voi ban cu (gate.py G3 sau doi ten)"
+size: "1 session · 1 file"
+depends_on:
+  - TK-0062
+fixes: ""
+log_level: LOOP
+max_loops: 2
+```
+
+### TK-0064 — B3p3 · `task/`
+
+```yaml
+schema: 1
+id: TK-0064
+cycle: CYC-08
+origin: DEC-0034
+assignee: W1
+goal: Dua nguyen trang preflight_phieu.py, gate.py va 2 file test vao tools/ de cong may chay tu repo
+write_scope:
+  - tools/preflight_phieu.py
+  - tools/gate.py
+  - tools/tests/test_preflight_phieu.py
+  - tools/tests/test_gate.py
+constraints:
+  - "Chep nguyen van ban v2 theo muc luc; hai script khong sua mot dong nao"
+  - "Moi file test chi sua dung dong sys.path.insert: bo phan noi them thu muc tools (giong TK-0059)"
+  - "Ghi file bang Python UTF-8, LF, khong BOM (F56)"
+  - "Khong cham vung khoa; touched_protected: no"
+inputs:
+  - tools/scan.py
+read_also:
+  - tools/README.md
+line_budget: 10
+verify: >-
+  python tools/verify_doc_artifact.py tools/preflight_phieu.py tools/gate.py tools/tests/test_preflight_phieu.py tools/tests/test_gate.py --no-links
+  --sha256 tools/preflight_phieu.py=e7bda6bfb6aa865a52cf091d30783c70598ac49daae54229b4def9367287e64f
+  --sha256 tools/gate.py=81385d9fa9b062a93b3d10e774304e64edd6a19b6b7604fa86b2f14fc07b8567
+  && python -m pytest -q tools/tests/test_preflight_phieu.py tools/tests/test_gate.py
+done_when:
+  - "Hai script trung sha256 ban v2 (--sha256)"
+  - "Hai file test chi khac ban v2 o dong sys.path; pytest 47 passed tren Windows"
+size: "1 session · 4 files"
+depends_on:
+  - TK-0063
+fixes: ""
+log_level: LOOP
+max_loops: 2
+```
+
+### TK-0065 — B3p4 · `task/`
+
+```yaml
+schema: 1
+id: TK-0065
+cycle: CYC-08
+origin: DEC-0034
+assignee: W1
+goal: Sua mau quet zone3_openai_token de khong bat ma ban ghi RSK-nnnn_ ma van BLOCK khoa sk- that (F48)
+write_scope:
+  - tools/scan_rules.json
+  - tools/tests/test_scan_core.py
+constraints:
+  - "Mau moi (?<![A-Za-z0-9])sk-[A-Za-z0-9_-]{20,}; khong doi muc BLOCK, group, ten rule"
+  - "Test duong: sk- cong 24 ky tu o dau dong, sau dau cach, sau dau =, sau dau _ van BLOCK; test am: chuoi RSK-0004 cong hau to dai ALLOW"
+  - "Khong sua rule khac; khong sua scan.py; touched_protected: no"
+inputs:
+  - tools/scan_rules.json
+  - tools/tests/test_scan_core.py
+read_also:
+  - tools/scan.py
+line_budget: 60
+verify: >-
+  python -m pytest -q tools/tests/test_scan_core.py tools/tests/test_scan_adversarial.py tools/tests/test_scan_limits.py
+  && python tools/scan.py 06_sources/SRC-0003_kaizen-chi-tiet-dot1.md
+done_when:
+  - "Toan bo test_scan_*.py dat; co test duong (4 vi tri) va test am RSK-0004"
+  - "scan.py tren SRC-0003 ra ALLOW (het 3 hit F48)"
+  - "Test duong khong bi yeu di: REVIEWER doi chieu tung vi tri (kiem o cong REVIEWER)"
+size: "1 session · 2 files"
+depends_on:
+  - TK-0064
+fixes: ""
+log_level: LOOP
+max_loops: 2
+```
 
 ### Bước 3–5 — không thẻ YAML trong P6d (Q-E)
 

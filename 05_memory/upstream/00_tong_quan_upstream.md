@@ -1,4 +1,4 @@
-B?n tham kh?o 2026-11-22. Ngu?n hi?n h?nh: SRC-0003 P6d, DEC-0032.
+Bản tham khảo 2026-11-22. Nguồn hiện hành: SRC-0003 P6d, DEC-0032.
 
 # H0 — Hồ sơ đề xuất cập nhật khung (Upstream)
 
@@ -104,13 +104,13 @@ Cột cuối "Thay": luật hoặc mục bị thay, xóa khi chốt; [LEAD đi�
 - E17 | PROPOSAL | Phân hạng task T0 (cơ học), T1 (logic nhỏ, test có sẵn), T2 (thiết kế, nhiều file) trong task spec; thang leo tuyến free → trả phí rẻ → mạnh; leo bậc khi 2 FAIL logic liên tiếp, 1 CLAIM_MISMATCH, hoặc quá khung thời gian (H3-16, H3-17). Bổ sung 2026-11-22: CLAIM_MISMATCH áp cho mọi run từ Bước 3 (E40); tách hai thang leo (E34, E35); thử tách task trước khi leo (E42). | Thay: [LEAD điền]
 - E18 | PROPOSAL | Bảng lỗi thống nhất đặt ở SPEC_TOOLS#CONVENTIONS: loại lỗi → mã thoát → có tính loop → trần thử → xử lý khi chạm trần (H3-9). E5 là mặc định; trần của lỗi hạ tầng là ngoại lệ có tên. | Thay: phần trần thử rời rạc ở H2-1 và H3-9
 - E19 | PROPOSAL | Định nghĩa W1–W4; ROUTE_CHECKS ghi chỉ số theo hạng task (đạt lần đầu, CLAIM_MISMATCH, độ trễ, lỗi hạ tầng, Cost per Accepted Task tính cả lần thử hỏng và token LEAD); tuyến vượt ngưỡng tự về UNQUALIFIED cho hạng đó (H3-13, H4-7). | Thay: "[CẦN ĐỊNH NGHĨA]" của W1–W4
-- E20 | PROPOSAL | validate cho phép sửa test có sẵn khi task spec đã khai trước danh sách test được đổi và lý do, được duyệt ở PLAN_GO (H2-2). | Thay: [LEAD điền]
-- E21 | PROPOSAL | Model thực tế do preflight hoặc relay xác minh từ metadata response, không phải điểm dừng của WORKER; mỗi phần tử của khóa model là mã catalog của một model thực tế đã xác minh trong run (H2-2, H4-1). | Thay: điểm dừng "không xác định được model thực tế"
-- E22 | PROPOSAL | Bằng chứng: bản thô kèm hash ở <project>.local; commit bản đã che kèm hash của cả hai; end-of-file-fixer, mixed-line-ending loại 03_output/**/checks/; quy tắc LF chỉ áp file khung tự viết, raw capture lưu nguyên byte (H3-8, H4-4, H4-10, H4-11). | Thay: [LEAD điền]
-- E23 | PROPOSAL | Quét secret ở pre-push vì repo public: đẩy nhánh đã là công khai; preflight hoặc github_audit kiểm lại phòng hook bị bỏ qua (H4-10). | Thay: mốc "trước khi mở PR" ở H4-10
-- E24 | PROPOSAL | Danh sách binary nền đã duyệt (Git, Python, pwsh 7.4, 9Router, Codex CLI, [LEAD bổ sung]); binary mới cần DEC; công cụ Python mới cài qua pip (H3-14). | Thay: câu "cần binary ngoài, trái H3 mục 14" ở H4
-- E25 | QUESTION | Cho một PR upgrade/ gom nhiều DEC đã chốt và chỉ tăng harness/VERSION khi phát hành, thay vì mỗi PR một lần? Đây là đổi ràng buộc cố định ở README mục 6. | Thay: ràng buộc "mỗi PR upgrade/ tăng VERSION"
-- E26 | PROPOSAL | Lượt duyệt PLAN_GO là lần cấp quyền cho cả batch; manifest quyền mỗi task do script suy từ write_scope, lệnh verify, đầu vào đã nêu (H2-3, H2-4). | Thay: "lượt merge task của OWNER là lần cấp quyền"
+- E20 | PROPOSAL | validate cho phép sửa test có sẵn khi task spec đã khai trước danh sách test được đổi và lý do, được duyệt ở PLAN_GO (H2-2). | Thay: [LEAD điền] | Trạng thái 2026-11-25 (O2.1, DEC-0034): ACCEPTED → TK-0043
+- E21 | PROPOSAL | Model thực tế do preflight hoặc relay xác minh từ metadata response, không phải điểm dừng của WORKER; mỗi phần tử của khóa model là mã catalog của một model thực tế đã xác minh trong run (H2-2, H4-1). | Thay: điểm dừng "không xác định được model thực tế" | Trạng thái 2026-11-25 (O2.1, DEC-0034): ACCEPTED (DEC-0033 A, V-RESP do LEAD)
+- E22 | PROPOSAL | Bằng chứng: bản thô kèm hash ở <project>.local; commit bản đã che kèm hash của cả hai; end-of-file-fixer, mixed-line-ending loại 03_output/**/checks/; quy tắc LF chỉ áp file khung tự viết, raw capture lưu nguyên byte (H3-8, H4-4, H4-10, H4-11). | Thay: [LEAD điền] | Trạng thái 2026-11-25 (O2.1, DEC-0034): HOÃN Đợt 2 (cần hạ tầng .local)
+- E23 | PROPOSAL | Quét secret ở pre-push vì repo public: đẩy nhánh đã là công khai; preflight hoặc github_audit kiểm lại phòng hook bị bỏ qua (H4-10). | Thay: mốc "trước khi mở PR" ở H4-10 | Trạng thái 2026-11-25 (O2.1, DEC-0034): ACCEPTED → TK-0045, TK-0056
+- E24 | PROPOSAL | Danh sách binary nền đã duyệt (Git, Python, pwsh 7.4, 9Router, Codex CLI, [LEAD bổ sung]); binary mới cần DEC; công cụ Python mới cài qua pip (H3-14). | Thay: câu "cần binary ngoài, trái H3 mục 14" ở H4 | Trạng thái 2026-11-25 (O2.1, DEC-0034): ACCEPTED → TK-0046
+- E25 | QUESTION | Cho một PR upgrade/ gom nhiều DEC đã chốt và chỉ tăng harness/VERSION khi phát hành, thay vì mỗi PR một lần? Đây là đổi ràng buộc cố định ở README mục 6. | Thay: ràng buộc "mỗi PR upgrade/ tăng VERSION" | Trạng thái 2026-11-25 (O2.1, DEC-0034): REJECTED: giữ "mỗi PR upgrade/ tăng VERSION một lần"
+- E26 | PROPOSAL | Lượt duyệt PLAN_GO là lần cấp quyền cho cả batch; manifest quyền mỗi task do script suy từ write_scope, lệnh verify, đầu vào đã nêu (H2-3, H2-4). | Thay: "lượt merge task của OWNER là lần cấp quyền" | Trạng thái 2026-11-25 (O2.1, DEC-0034): ACCEPTED một phần (đã áp qua Q5/D6); manifest bằng script hoãn Đợt 2
 
 ### Cơ chế lấy từ GSD Core (thêm 2026-11-22)
 Nguồn: GSD_CORE_DE_XUAT_KAIZEN.md (M1–M17). Task theo PHUONG_AN_TICH_HOP_GSD_DOT1.md. Chốt ở TK-0053 (B1b), DEC-0032.
