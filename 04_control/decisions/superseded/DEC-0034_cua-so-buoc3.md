@@ -14,6 +14,7 @@ affects: [DEC-0033, "06_sources/SRC-0003_kaizen-chi-tiet-dot1.md", "04_control/S
 keywords: [cua-so-buoc3, reviewer, preflight, gate, f50-f57]
 ---
 ## Status (newest first)
+- 2026-11-25 | SUPERSEDED_BY DEC-0035
 - 2026-11-25 | ACTIVE
 <!-- ANCHOR: CONTEXT -->
 ## Context
