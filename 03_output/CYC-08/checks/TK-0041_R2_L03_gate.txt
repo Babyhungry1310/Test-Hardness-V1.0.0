@@ -1,0 +1,5 @@
+$ python C:\\Users\\linhdh\\orca\\Du lieu Update Harness - 21.11.26\\P6D\\tools\\gate.py --repo C:\Users\linhdh\orca\workspaces\Test-Hardness-V1.0.0\upgrade-1.0.2-tk0041 --base 72159cf645bc75ccd84cf377e46a3990d528a41f --head 89905835f3318b3f85a74d224b4196d52ce607ac --branch task/TK-0041-R1 --task TK-0041 --scope harness/HARNESS.md harness/rules/LEAD.md harness/VERSION harness/tools/README.md --run-verify --json-out 03_output/CYC-08/checks/TK-0041_R2_L03_gate.json
+GATE TK-0041 72159cf645bc..89905835f331: KHÔNG ĐẠT · FAIL: G5 · WARN: -
+  G5 FAIL: harness/HARNESS.md: QUARANTINE ['dangerous_automerge', 'impersonation_owner_approved']; harness/rules/LEAD.md: QUARANTINE ['dangerous_automerge', 'impersonation_owner_approved', 'impersonation_owner_approved']; harness/tools/README.md: QUARANTINE ['impersonation_owner_approved', 'override_vi_all', 'override_vi_follow', 'impersonation_owner_approved', 'dangerous_git_push_describe', 'dangerous_push_main', 'dangerous_automerge', 'dangerous_send_env', 'zone2_email', 'impersonation_owner_approved', 'impersonation_owner_approved']
+
+exit_code=1
