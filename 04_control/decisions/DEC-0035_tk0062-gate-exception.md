@@ -24,6 +24,7 @@ keywords: [cua-so-buoc3, reviewer, preflight, gate, f50-f57, gate-exception, tk-
 - OWNER chọn ngoại lệ gate v4 tạm thời, khóa bằng SHA, cho TK-0062 và TK-0063 ngày 2026-11-25.
 <!-- END: CONTEXT -->
 <!-- ANCHOR: OPTIONS -->
+## Options considered
 - A (chọn): cho TK-0062 và TK-0063 dùng gate v4 do Claude cung cấp, xác minh SHA256 trước khi chạy; vẫn so với `origin/main`.
 - B: dừng chuỗi và lập thay đổi LEAD để đưa gate vào `origin/main` trước B3p1.
 <!-- END: OPTIONS -->
@@ -46,7 +47,7 @@ keywords: [cua-so-buoc3, reviewer, preflight, gate, f50-f57, gate-exception, tk-
 
 ### C. Preflight và cổng máy
 - PREFLIGHT bằng `preflight_phieu.py`; thẻ nhắc mã O, D, L thì phiếu phải trích quyết định tương ứng. (F57, F55)
-- Quy tắc chuẩn: `gate.py` chạy từ checkout `origin/main`, không từ nhánh tác tử. Ngoại lệ chỉ áp dụng TK-0062 và TK-0063: dùng `tools/gate.py` từ gói `preflight_gate_P6D_v4.zip` do Claude cung cấp khi SHA256 khớp `81385d9fa9b062a93b3d10e774304e64edd6a19b6b7604fa86b2f14fc07b8567`; `--base` vẫn là `origin/main`. Sai hash thì dừng và báo OWNER. Ngoại lệ hết sau khi TK-0064 merge. (OWNER chọn A, 2026-11-25)
+- Quy tắc chuẩn: `gate.py` chạy từ checkout `origin/main`, không từ nhánh tác tử. Ngoại lệ chỉ áp dụng TK-0062 và TK-0063: dùng `tools/gate.py` từ gói `preflight_gate_P6D_v4.zip` do Claude cung cấp khi SHA256 của tệp `tools/gate.py` (không phải ZIP) khớp `81385d9fa9b062a93b3d10e774304e64edd6a19b6b7604fa86b2f14fc07b8567`; `--base` vẫn là `origin/main`. Sai hash thì dừng và báo OWNER. Ngoại lệ hết sau khi TK-0064 merge. (OWNER chọn A, 2026-11-25)
 - Merge PR Planning P3a là `Go` cho mọi phiếu WORKER không chạm 🔒 của cửa sổ này. (OWNER D6, 2026-11-24)
 
 ### D. Nội dung và đồ thị

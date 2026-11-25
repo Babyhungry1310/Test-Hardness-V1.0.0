@@ -904,7 +904,7 @@ max_loops: 2
 schema: 1
 id: TK-0064
 cycle: CYC-08
-origin: DEC-0034
+origin: DEC-0035
 assignee: W1
 goal: Dua nguyen trang preflight_phieu.py, gate.py va 2 file test vao tools/ de cong may chay tu repo
 write_scope:
@@ -944,7 +944,7 @@ max_loops: 2
 schema: 1
 id: TK-0065
 cycle: CYC-08
-origin: DEC-0034
+origin: DEC-0035
 assignee: W1
 goal: Sua mau quet zone3_openai_token de khong bat ma ban ghi RSK-nnnn_ ma van BLOCK khoa sk- that (F48)
 write_scope:
