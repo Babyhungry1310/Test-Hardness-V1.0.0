@@ -510,7 +510,9 @@ Phần thân viết bằng lời (`RATIONALE`, bài học trong digest, nội du
 
 ## 5. Rà mục 9: thiếu, thừa, nên gộp
 
-Dòng 1, 2, 3: OWNER đã chọn giao thêm cho script có sẵn, không tách script mới (mục 8, câu 2). Dòng 4–7: LEAD đề xuất, thuộc quyết định kỹ thuật nội bộ. `harness/HARNESS.md` mục 9 chưa được sửa theo các dòng này.
+### REVIEW_SECTION_9
+
+Dòng 1–3 đã gộp vào `harness/HARNESS.md` mục 9 và `harness/rules/LEAD.md` ở TK-0041 (VERSION 1.0.2).
 
 <!-- ANCHOR: REVIEW_SECTION_9 -->
 | # | Loại | Đề xuất | Lý do |

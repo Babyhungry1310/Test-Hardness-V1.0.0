@@ -1,0 +1,39 @@
+COMMAND 1: python tools/verify_doc_artifact.py harness/VERSION harness/HARNESS.md harness/rules/LEAD.md harness/tools/README.md
+EXIT: 0
+STDOUT:
+PASS: 4 file, 14 phép kiểm, 0 vi phạm
+STDERR:
+
+
+COMMAND 2: python tools/verify_doc_artifact.py harness/tools/README.md --heading REVIEW_SECTION_9
+EXIT: 0
+STDOUT:
+PASS: 1 file, 5 phép kiểm, 0 vi phạm
+STDERR:
+
+
+COMMAND 3: python tools/verify_doc_artifact.py harness/HARNESS.md --contains vượt 10 --contains trang chủ đề --contains khung file run --contains CORE.md --contains SRC
+EXIT: 0
+STDOUT:
+PASS: 1 file, 9 phép kiểm, 0 vi phạm
+STDERR:
+
+
+COMMAND 4: python tools/verify_doc_artifact.py harness/rules/LEAD.md --contains vượt 10 --contains trang chủ đề --contains khung file run --contains CORE.md
+EXIT: 0
+STDOUT:
+PASS: 1 file, 8 phép kiểm, 0 vi phạm
+STDERR:
+
+
+COMMAND 5: python tools/verify_doc_artifact.py harness/tools/README.md --contains đã gộp vào
+EXIT: 0
+STDOUT:
+PASS: 1 file, 5 phép kiểm, 0 vi phạm
+STDERR:
+
+
+CHECK changed_paths: PASS
+changed=["harness/HARNESS.md", "harness/rules/LEAD.md", "harness/tools/README.md"]
+CHECK VERSION_diff_empty_from_9e1c397: PASS
+CHECK_SUMMARY passed=7 failed=0

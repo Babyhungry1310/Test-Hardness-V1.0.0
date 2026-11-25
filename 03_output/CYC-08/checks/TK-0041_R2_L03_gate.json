@@ -1,0 +1,52 @@
+{
+  "summary": "GATE TK-0041 72159cf645bc..89905835f331: KHÔNG ĐẠT · FAIL: G5 · WARN: -",
+  "base": "72159cf645bc75ccd84cf377e46a3990d528a41f",
+  "head": "89905835f3318b3f85a74d224b4196d52ce607ac",
+  "items": [
+    {
+      "check": "G1",
+      "level": "PASS",
+      "msg": "4 path trong scope; 7 file run/bằng chứng"
+    },
+    {
+      "check": "G2",
+      "level": "PASS",
+      "msg": "1 commit đều của conchonomoconmeo-AIAIAI"
+    },
+    {
+      "check": "G3",
+      "level": "PASS",
+      "msg": "sổ chỉ thêm dòng; Status DEC đúng ngữ pháp"
+    },
+    {
+      "check": "G4",
+      "level": "PASS",
+      "msg": "không BOM, không CRLF"
+    },
+    {
+      "check": "G5",
+      "level": "FAIL",
+      "msg": "harness/HARNESS.md: QUARANTINE ['dangerous_automerge', 'impersonation_owner_approved']; harness/rules/LEAD.md: QUARANTINE ['dangerous_automerge', 'impersonation_owner_approved', 'impersonation_owner_approved']; harness/tools/README.md: QUARANTINE ['impersonation_owner_approved', 'override_vi_all', 'override_vi_follow', 'impersonation_owner_approved', 'dangerous_git_push_describe', 'dangerous_push_main', 'dangerous_automerge', 'dangerous_send_env', 'zone2_email', 'impersonation_owner_approved', 'impersonation_owner_approved']"
+    },
+    {
+      "check": "G7",
+      "level": "PASS",
+      "msg": "verify mã 0: PASS: 4 file, 14 phép kiểm, 0 vi phạm | PASS: 1 file, 5 phép kiểm, 0 vi phạm"
+    },
+    {
+      "check": "G9",
+      "level": "PASS",
+      "msg": "run: ['02_work/runs/TK-0041_R1_DONE.md']"
+    },
+    {
+      "check": "G10",
+      "level": "PASS",
+      "msg": "1 file run qua run.schema.json"
+    },
+    {
+      "check": "G8",
+      "level": "PASS",
+      "msg": "nhánh task/TK-0041-R1"
+    }
+  ]
+}

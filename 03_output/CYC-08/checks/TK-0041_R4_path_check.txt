@@ -1,0 +1,17 @@
+COMMAND: git diff --name-only origin/main...HEAD -- harness/
+STDOUT:
+harness/HARNESS.md
+harness/VERSION
+harness/rules/LEAD.md
+harness/tools/README.md
+
+EXPECTED:
+harness/HARNESS.md
+harness/VERSION
+harness/rules/LEAD.md
+harness/tools/README.md
+
+COMMAND: git diff --quiet 9e1c3978a72b7467be407b89d1c0eccdfd1eabd4 -- harness/VERSION
+EXIT: 0
+
+RESULT: PASS

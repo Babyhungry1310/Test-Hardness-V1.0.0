@@ -1,0 +1,7 @@
+{
+  "schema": "harness/schemas/run.schema.json",
+  "run": "02_work/runs/TK-0041_R1_DONE.md",
+  "branch": "task/TK-0041-R1",
+  "errors": [],
+  "result": "PASS"
+}

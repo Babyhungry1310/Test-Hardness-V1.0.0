@@ -1,0 +1,368 @@
+{
+  "base": "72159cf645bc75ccd84cf377e46a3990d528a41f",
+  "head_commit": "89905835f3318b3f85a74d224b4196d52ce607ac",
+  "head_worktree": "uncommitted section-9 correction attempt; see git diff",
+  "scanner": "scan.py and scan_rules.json from base",
+  "files": [
+    {
+      "path": "harness/HARNESS.md",
+      "base": {
+        "exit_code": 1,
+        "level": "QUARANTINE",
+        "ruleset": "scan-core-1",
+        "sha256": "31ecf387af33e1e21d189e63f73321707d96cce79253832238a71516a04ca3ae",
+        "reasons": [
+          {
+            "rule": "dangerous_automerge",
+            "group": "dangerous_action",
+            "position": 6437,
+            "layer": 0
+          },
+          {
+            "rule": "impersonation_owner_approved",
+            "group": "impersonation",
+            "position": 53356,
+            "layer": 0
+          }
+        ],
+        "decoded_skipped": 4
+      },
+      "head": {
+        "exit_code": 1,
+        "level": "QUARANTINE",
+        "ruleset": "scan-core-1",
+        "sha256": "c17527556c0908b1ce00ce157d49b9ea64d2968c6b345516a5a8a851d0e3e554",
+        "reasons": [
+          {
+            "rule": "dangerous_automerge",
+            "group": "dangerous_action",
+            "position": 6437,
+            "layer": 0
+          },
+          {
+            "rule": "impersonation_owner_approved",
+            "group": "impersonation",
+            "position": 53575,
+            "layer": 0
+          }
+        ],
+        "decoded_skipped": 4
+      },
+      "comparison": {
+        "inherited": [
+          [
+            "dangerous_automerge",
+            "dangerous_action",
+            0
+          ],
+          [
+            "impersonation_owner_approved",
+            "impersonation",
+            0
+          ]
+        ],
+        "new_in_head": [],
+        "removed_in_head": []
+      }
+    },
+    {
+      "path": "harness/rules/LEAD.md",
+      "base": {
+        "exit_code": 1,
+        "level": "QUARANTINE",
+        "ruleset": "scan-core-1",
+        "sha256": "ded73b2a87b5739a9bbab6d505a04d75ed020701f1df504254acd196185d0957",
+        "reasons": [
+          {
+            "rule": "dangerous_automerge",
+            "group": "dangerous_action",
+            "position": 9467,
+            "layer": 0
+          },
+          {
+            "rule": "impersonation_owner_approved",
+            "group": "impersonation",
+            "position": 9767,
+            "layer": 0
+          },
+          {
+            "rule": "impersonation_owner_approved",
+            "group": "impersonation",
+            "position": 13012,
+            "layer": 0
+          }
+        ],
+        "decoded_skipped": 3
+      },
+      "head": {
+        "exit_code": 1,
+        "level": "QUARANTINE",
+        "ruleset": "scan-core-1",
+        "sha256": "30d90f688bbcfe611bdf3eaae053142677761b25180a53c32b466e04f415c329",
+        "reasons": [
+          {
+            "rule": "dangerous_automerge",
+            "group": "dangerous_action",
+            "position": 9467,
+            "layer": 0
+          },
+          {
+            "rule": "impersonation_owner_approved",
+            "group": "impersonation",
+            "position": 9767,
+            "layer": 0
+          },
+          {
+            "rule": "impersonation_owner_approved",
+            "group": "impersonation",
+            "position": 13207,
+            "layer": 0
+          }
+        ],
+        "decoded_skipped": 3
+      },
+      "comparison": {
+        "inherited": [
+          [
+            "dangerous_automerge",
+            "dangerous_action",
+            0
+          ],
+          [
+            "impersonation_owner_approved",
+            "impersonation",
+            0
+          ]
+        ],
+        "new_in_head": [],
+        "removed_in_head": []
+      }
+    },
+    {
+      "path": "harness/VERSION",
+      "base": {
+        "exit_code": 0,
+        "level": "ALLOW",
+        "ruleset": "scan-core-1",
+        "sha256": "44e161e4495cac2cf7858043e9e6418e9579f0ddcfae826f9a372622968ce066",
+        "reasons": [],
+        "decoded_skipped": 0
+      },
+      "head": {
+        "exit_code": 0,
+        "level": "ALLOW",
+        "ruleset": "scan-core-1",
+        "sha256": "9fd28642d3aca191e5c7fc2383cfd6fabb2aac8743f029dabb8989ac584e31bc",
+        "reasons": [],
+        "decoded_skipped": 0
+      },
+      "comparison": {
+        "inherited": [],
+        "new_in_head": [],
+        "removed_in_head": []
+      }
+    },
+    {
+      "path": "harness/tools/README.md",
+      "base": {
+        "exit_code": 1,
+        "level": "QUARANTINE",
+        "ruleset": "scan-core-1",
+        "sha256": "65a1ea96b011776e4a2d1d15b3656268f22927200ba820ea95a4c67c7e3fe2e4",
+        "reasons": [
+          {
+            "rule": "impersonation_owner_approved",
+            "group": "impersonation",
+            "position": 3258,
+            "layer": 0
+          },
+          {
+            "rule": "override_vi_all",
+            "group": "override",
+            "position": 21674,
+            "layer": 0
+          },
+          {
+            "rule": "override_vi_follow",
+            "group": "override",
+            "position": 21716,
+            "layer": 0
+          },
+          {
+            "rule": "impersonation_owner_approved",
+            "group": "impersonation",
+            "position": 21884,
+            "layer": 0
+          },
+          {
+            "rule": "dangerous_git_push_describe",
+            "group": "dangerous_action",
+            "position": 21987,
+            "layer": 0
+          },
+          {
+            "rule": "dangerous_push_main",
+            "group": "dangerous_action",
+            "position": 22069,
+            "layer": 0
+          },
+          {
+            "rule": "dangerous_automerge",
+            "group": "dangerous_action",
+            "position": 22102,
+            "layer": 0
+          },
+          {
+            "rule": "dangerous_send_env",
+            "group": "dangerous_action",
+            "position": 22125,
+            "layer": 0
+          },
+          {
+            "rule": "zone2_email",
+            "group": "zone2",
+            "position": 22507,
+            "layer": 0
+          },
+          {
+            "rule": "impersonation_owner_approved",
+            "group": "impersonation",
+            "position": 32881,
+            "layer": 0
+          },
+          {
+            "rule": "impersonation_owner_approved",
+            "group": "impersonation",
+            "position": 33155,
+            "layer": 0
+          }
+        ],
+        "decoded_skipped": 2
+      },
+      "head": {
+        "exit_code": 1,
+        "level": "QUARANTINE",
+        "ruleset": "scan-core-1",
+        "sha256": "ee9ddd23ab10ed8d1895be184aae64618ca82bf9a44253fda82c655eb8a07ddb",
+        "reasons": [
+          {
+            "rule": "impersonation_owner_approved",
+            "group": "impersonation",
+            "position": 3258,
+            "layer": 0
+          },
+          {
+            "rule": "override_vi_all",
+            "group": "override",
+            "position": 21674,
+            "layer": 0
+          },
+          {
+            "rule": "override_vi_follow",
+            "group": "override",
+            "position": 21716,
+            "layer": 0
+          },
+          {
+            "rule": "impersonation_owner_approved",
+            "group": "impersonation",
+            "position": 21884,
+            "layer": 0
+          },
+          {
+            "rule": "dangerous_git_push_describe",
+            "group": "dangerous_action",
+            "position": 21987,
+            "layer": 0
+          },
+          {
+            "rule": "dangerous_push_main",
+            "group": "dangerous_action",
+            "position": 22069,
+            "layer": 0
+          },
+          {
+            "rule": "dangerous_automerge",
+            "group": "dangerous_action",
+            "position": 22102,
+            "layer": 0
+          },
+          {
+            "rule": "dangerous_send_env",
+            "group": "dangerous_action",
+            "position": 22125,
+            "layer": 0
+          },
+          {
+            "rule": "zone2_email",
+            "group": "zone2",
+            "position": 22507,
+            "layer": 0
+          },
+          {
+            "rule": "impersonation_owner_approved",
+            "group": "impersonation",
+            "position": 32881,
+            "layer": 0
+          },
+          {
+            "rule": "impersonation_owner_approved",
+            "group": "impersonation",
+            "position": 33155,
+            "layer": 0
+          }
+        ],
+        "decoded_skipped": 2
+      },
+      "comparison": {
+        "inherited": [
+          [
+            "dangerous_automerge",
+            "dangerous_action",
+            0
+          ],
+          [
+            "dangerous_git_push_describe",
+            "dangerous_action",
+            0
+          ],
+          [
+            "dangerous_push_main",
+            "dangerous_action",
+            0
+          ],
+          [
+            "dangerous_send_env",
+            "dangerous_action",
+            0
+          ],
+          [
+            "impersonation_owner_approved",
+            "impersonation",
+            0
+          ],
+          [
+            "override_vi_all",
+            "override",
+            0
+          ],
+          [
+            "override_vi_follow",
+            "override",
+            0
+          ],
+          [
+            "zone2_email",
+            "zone2",
+            0
+          ]
+        ],
+        "new_in_head": [],
+        "removed_in_head": []
+      }
+    }
+  ],
+  "g5": "WARN",
+  "new_findings": false,
+  "head_hit_count": 16
+}

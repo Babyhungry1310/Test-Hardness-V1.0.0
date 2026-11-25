@@ -1,0 +1,7 @@
+$ python tools/verify_doc_artifact.py harness/VERSION harness/HARNESS.md harness/rules/LEAD.md harness/tools/README.md
+PASS: 4 file, 14 phép kiểm, 0 vi phạm
+
+$ python tools/verify_doc_artifact.py harness/tools/README.md --heading REVIEW_SECTION_9
+PASS: 1 file, 5 phép kiểm, 0 vi phạm
+
+\n

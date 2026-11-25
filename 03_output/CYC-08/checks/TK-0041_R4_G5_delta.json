@@ -1,0 +1,154 @@
+{
+  "source_ref": "origin/main",
+  "scanner_sha256": "b581b8703207d7aab3db12810e413290bb4e1e5b788faf2b82c3b8a1bfccc10a",
+  "rules_sha256": "232fd5d76c661a27f8748c21a3f1f2377b23a29113d271efb93a88b786b226dd",
+  "files": {
+    "harness/HARNESS.md": {
+      "base": {
+        "level": "QUARANTINE",
+        "sha256": "31ecf387af33e1e21d189e63f73321707d96cce79253832238a71516a04ca3ae",
+        "counts": {
+          "dangerous_automerge": 1,
+          "impersonation_owner_approved": 1
+        },
+        "total": 2
+      },
+      "head": {
+        "level": "QUARANTINE",
+        "sha256": "9afc114b06e686368cb7e30458c1c20c283b30ccf050e66fcaf1b892a7e76ba6",
+        "counts": {
+          "dangerous_automerge": 1,
+          "impersonation_owner_approved": 1
+        },
+        "total": 2
+      }
+    },
+    "harness/rules/LEAD.md": {
+      "base": {
+        "level": "QUARANTINE",
+        "sha256": "ded73b2a87b5739a9bbab6d505a04d75ed020701f1df504254acd196185d0957",
+        "counts": {
+          "dangerous_automerge": 1,
+          "impersonation_owner_approved": 2
+        },
+        "total": 3
+      },
+      "head": {
+        "level": "QUARANTINE",
+        "sha256": "1866af6789a6bd6570e0218929498103d6e6609f4adbd212364ffdb95152a065",
+        "counts": {
+          "dangerous_automerge": 1,
+          "impersonation_owner_approved": 2
+        },
+        "total": 3
+      }
+    },
+    "harness/tools/README.md": {
+      "base": {
+        "level": "QUARANTINE",
+        "sha256": "65a1ea96b011776e4a2d1d15b3656268f22927200ba820ea95a4c67c7e3fe2e4",
+        "counts": {
+          "impersonation_owner_approved": 4,
+          "override_vi_all": 1,
+          "override_vi_follow": 1,
+          "dangerous_git_push_describe": 1,
+          "dangerous_push_main": 1,
+          "dangerous_automerge": 1,
+          "dangerous_send_env": 1,
+          "zone2_email": 1
+        },
+        "total": 11
+      },
+      "head": {
+        "level": "QUARANTINE",
+        "sha256": "248c2fef84e99c23642c8d90cdaac27b774a2c8fef87ca441e2451603de7ae19",
+        "counts": {
+          "impersonation_owner_approved": 4,
+          "override_vi_all": 1,
+          "override_vi_follow": 1,
+          "dangerous_git_push_describe": 1,
+          "dangerous_push_main": 1,
+          "dangerous_automerge": 1,
+          "dangerous_send_env": 1,
+          "zone2_email": 1
+        },
+        "total": 11
+      }
+    }
+  },
+  "by_file_rule": {
+    "harness/HARNESS.md": {
+      "dangerous_automerge": {
+        "base": 1,
+        "head": 1,
+        "delta": 0
+      },
+      "impersonation_owner_approved": {
+        "base": 1,
+        "head": 1,
+        "delta": 0
+      }
+    },
+    "harness/rules/LEAD.md": {
+      "dangerous_automerge": {
+        "base": 1,
+        "head": 1,
+        "delta": 0
+      },
+      "impersonation_owner_approved": {
+        "base": 2,
+        "head": 2,
+        "delta": 0
+      }
+    },
+    "harness/tools/README.md": {
+      "dangerous_automerge": {
+        "base": 1,
+        "head": 1,
+        "delta": 0
+      },
+      "dangerous_git_push_describe": {
+        "base": 1,
+        "head": 1,
+        "delta": 0
+      },
+      "dangerous_push_main": {
+        "base": 1,
+        "head": 1,
+        "delta": 0
+      },
+      "dangerous_send_env": {
+        "base": 1,
+        "head": 1,
+        "delta": 0
+      },
+      "impersonation_owner_approved": {
+        "base": 4,
+        "head": 4,
+        "delta": 0
+      },
+      "override_vi_all": {
+        "base": 1,
+        "head": 1,
+        "delta": 0
+      },
+      "override_vi_follow": {
+        "base": 1,
+        "head": 1,
+        "delta": 0
+      },
+      "zone2_email": {
+        "base": 1,
+        "head": 1,
+        "delta": 0
+      }
+    }
+  },
+  "base_hits": 16,
+  "head_hits": 16,
+  "inherited_hits": 16,
+  "new_hits": 0,
+  "new_hit_details": [],
+  "verdict": "WARN",
+  "criterion": "base-head delta; inherited hits may remain, new hits must be zero"
+}
