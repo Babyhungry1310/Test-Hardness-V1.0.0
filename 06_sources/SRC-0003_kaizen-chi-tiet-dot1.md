@@ -827,7 +827,7 @@ fixes: ""
 schema: 1
 id: TK-0062
 cycle: CYC-08
-origin: DEC-0034
+origin: DEC-0035
 assignee: W1
 goal: Chuyen 5 DEC RETIRED (0007, 0012, 0014, 0028, 0029) vao 04_control/decisions/superseded bang git mv, khong sua noi dung
 write_scope:
@@ -839,10 +839,12 @@ write_scope:
 constraints:
   - "Lenh OWNER L3 (QUYET_DINH_OWNER_CUA_SO_B3); touched_protected: yes"
   - "Chi git mv; khong sua mot dong noi dung; moi doi ten tinh 1 path (DEC-0033 E, Q7)"
+  - "Temporary G1 gate exception per DEC-0035: verify gate.py SHA256 81385d9fa9b062a93b3d10e774304e64edd6a19b6b7604fa86b2f14fc07b8567; keep --base origin/main"
   - "Con tro theo ma (DEC-0007...) giu nguyen; con tro duong dan cu con trong tai lieu ACTIVE ngoai file run va the da xong thi dung, bao OWNER"
 inputs:
   - 04_control/decisions/
 read_also:
+  - 04_control/decisions/DEC-0035_tk0062-gate-exception.md
   - harness/rules/LEAD.md
 line_budget: 10
 verify: >-
@@ -866,7 +868,7 @@ max_loops: 2
 schema: 1
 id: TK-0063
 cycle: CYC-08
-origin: DEC-0034
+origin: DEC-0035
 assignee: W1
 goal: DEC-0008 them dong Status RETIRED va chuyen vao 04_control/decisions/superseded
 write_scope:
@@ -874,10 +876,12 @@ write_scope:
 constraints:
   - "Lenh OWNER L4; touched_protected: yes"
   - "Chi them dung 1 dong Status ngay duoi ## Status (newest first); khong sua dong khac; git mv tinh 1 path"
+  - "Temporary G1 gate exception per DEC-0035: verify gate.py SHA256 81385d9fa9b062a93b3d10e774304e64edd6a19b6b7604fa86b2f14fc07b8567; keep --base origin/main"
   - "DEC-0008 dua tren DEC-0007 da RETIRED (DEC-0033 Consequences)"
 inputs:
   - 04_control/decisions/DEC-0008_reviewer-outside-9router.md
 read_also:
+  - 04_control/decisions/DEC-0035_tk0062-gate-exception.md
   - harness/schemas/STATUS_GRAMMAR.md
 line_budget: 5
 verify: >-

@@ -14,7 +14,7 @@ affects: [DEC-0033, "06_sources/SRC-0003_kaizen-chi-tiet-dot1.md", "04_control/S
 keywords: [cua-so-buoc3, reviewer, preflight, gate, f50-f57]
 ---
 ## Status (newest first)
-- 2026-11-25 | ACTIVE
+- 2026-11-25 | SUPERSEDED_BY DEC-0035
 <!-- ANCHOR: CONTEXT -->
 ## Context
 - Bước 2 xong: TK-0039 (#106), TK-0040 (#108), TK-0041 (#109); sửa thẻ TK-0040 (#107).
