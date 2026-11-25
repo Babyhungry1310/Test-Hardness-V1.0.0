@@ -286,8 +286,7 @@ Một chuỗi thẳng từ B1b tới B5b; O-task chen ở B1b (L1.1), B3a0 (O3.6
       B1b --> B1b2[B1b2 TK-0057] --> B1b3[B1b3 TK-0058]
       B1b3 --> B1b3a[B1b3a TK-0060] --> B1b4[B1b4 TK-0059] --> B2a[B2a TK-0039] --> B2b[B2b TK-0040] --> B2c[B2c TK-0041]
       B2c --> B3p1[B3p1 TK-0062] --> B3p2[B3p2 TK-0063] --> B3p3[B3p3 TK-0064] --> B3p4[B3p4 TK-0065]
-      B3p4 --> B3a0[B3a0 TK-0061]
-      O36((O3.6)) --> B3a0
+      B3p4 --> O36((O3.6)) --> B3a0[B3a0 TK-0061]
       B3a0 --> B3a[B3a TK-0042] --> B3a2[B3a2 TK-0055]
       B3a2 --> B3b[B3b TK-0043] --> B3c[B3c TK-0044] --> B3d[B3d TK-0045]
       O31((O3.1)) --> B3d
@@ -910,7 +909,7 @@ write_scope:
   - tools/tests/test_preflight_phieu.py
   - tools/tests/test_gate.py
 constraints:
-  - "Chep nguyen van ban v2 theo muc luc; hai script khong sua mot dong nao"
+  - "Chep nguyen van ban v4 theo muc luc; hai script khong sua mot dong nao"
   - "Moi file test chi sua dung dong sys.path.insert: bo phan noi them thu muc tools (giong TK-0059)"
   - "Ghi file bang Python UTF-8, LF, khong BOM (F56)"
   - "Khong cham vung khoa; touched_protected: no"
@@ -925,8 +924,8 @@ verify: >-
   --sha256 tools/gate.py=81385d9fa9b062a93b3d10e774304e64edd6a19b6b7604fa86b2f14fc07b8567
   && python -m pytest -q tools/tests/test_preflight_phieu.py tools/tests/test_gate.py
 done_when:
-  - "Hai script trung sha256 ban v2 (--sha256)"
-  - "Hai file test chi khac ban v2 o dong sys.path; pytest 47 passed tren Windows"
+  - "Hai script trung sha256 ban v4 (--sha256)"
+  - "Hai file test chi khac ban v4 o dong sys.path; pytest 47 passed tren Windows"
 size: "1 session · 4 files"
 depends_on:
   - TK-0063
