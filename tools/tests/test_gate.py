@@ -1,5 +1,6 @@
 import contextlib
 import hashlib
+import importlib.util
 import io
 import json
 import os
@@ -324,6 +325,166 @@ class TestWindowsConsole(GateBase):
             sys.stdout = old
         self.assertEqual(rc, 0)
         self.assertIn("ĐẠT", raw.getvalue().decode("utf-8"))
+
+
+EMAIL = "t" + "@example.invalid"
+RULES_JSON = '{"ruleset": "t", "rules": [{"rule": "zone3_openai_token", "level": "BLOCK"}, {"rule": "zone2_email", "level": "WARN"}]}'
+
+
+class TestV5ScanDelta(GateBase):
+    TOKEN_LINE = TestScan.TOKEN_LINE
+
+    def base_has(self, text, rules=False):
+        self.git("checkout", "-q", "main")
+        self.write("docs/a.md", text)
+        if rules:
+            self.write("tools/scan_rules.json", RULES_JSON)
+        self.commit("base hit", AGENT)
+        self.git("checkout", "-q", "task/TK-0099-R1")
+        self.git("rebase", "-q", "main")
+
+    def test_inherited_hit_passes(self):
+        self.base_has("ok\n" + self.TOKEN_LINE)
+        self.write("docs/a.md", "ok\n" + self.TOKEN_LINE + "dòng mới\n")
+        self.add_run()
+        self.commit("TK-0099", AGENT)
+        rc, items = self.run_gate()
+        self.assertEqual(items["G5"]["level"], "PASS", items["G5"])
+        self.assertIn("kế thừa 1, mới 0", items["G5"]["msg"])
+
+    def test_inherited_plus_new_fails(self):
+        self.base_has("ok\n" + self.TOKEN_LINE)
+        self.write("docs/a.md", "ok\n" + self.TOKEN_LINE * 2)
+        self.add_run()
+        self.commit("TK-0099", AGENT)
+        rc, items = self.run_gate()
+        self.assertEqual(items["G5"]["level"], "FAIL")
+        self.assertIn("kế thừa 1, mới 1", items["G5"]["msg"])
+
+    def test_renamed_file_inherits_from_old_path(self):
+        self.base_has("ok\n" + self.TOKEN_LINE)
+        self.git("mv", "docs/a.md", "docs/c.md")
+        self.add_run()
+        self.commit("TK-0099", AGENT)
+        rc, items = self.run_gate("--scope", "docs/a.md")
+        self.assertEqual(items["G5"]["level"], "PASS", items["G5"])
+
+    def test_new_warn_rule_on_inherited_block_is_warn(self):
+        self.base_has("ok\n" + self.TOKEN_LINE, rules=True)
+        self.write("docs/a.md", "ok\n" + self.TOKEN_LINE + "liên hệ " + EMAIL + "\n")
+        self.add_run()
+        self.commit("TK-0099", AGENT)
+        rc, items = self.run_gate()
+        self.assertEqual(items["G5"]["level"], "WARN", items["G5"])
+        self.assertIn("zone2_email:1", items["G5"]["msg"])
+
+
+class TestV5MultiAccept(GateBase):
+    def setUp(self):
+        super().setUp()
+        self.write("docs/a.md", "ok\n" + TestScan.TOKEN_LINE + "liên hệ " + EMAIL + "\n")
+        self.add_run()
+        self.commit("TK-0099", AGENT)
+
+    def test_all_rules_exact_passes(self):
+        rc, items = self.run_gate("--accept-scan", "docs/a.md=zone3_openai_token:1", "--accept-scan", "docs/a.md=zone2_email:1")
+        self.assertEqual(items["G5"]["level"], "PASS", items["G5"])
+        self.assertIn("OWNER chấp nhận", items["G5"]["msg"])
+
+    def test_missing_rule_fails(self):
+        rc, items = self.run_gate("--accept-scan", "docs/a.md=zone3_openai_token:1")
+        self.assertEqual(items["G5"]["level"], "FAIL")
+
+    def test_wrong_count_fails(self):
+        rc, items = self.run_gate("--accept-scan", "docs/a.md=zone3_openai_token:1", "--accept-scan", "docs/a.md=zone2_email:2")
+        self.assertEqual(items["G5"]["level"], "FAIL")
+
+    def test_path_not_in_diff_fails(self):
+        rc, items = self.run_gate("--accept-scan", "docs/a.md=zone3_openai_token:1", "--accept-scan", "docs/a.md=zone2_email:1",
+                                  "--accept-scan", "docs/khong_co.md=zone2_email:1")
+        self.assertEqual(items["G5"]["level"], "FAIL")
+        self.assertIn("docs/khong_co.md", items["G5"]["msg"])
+
+    def test_duplicate_rule_is_usage_error(self):
+        with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
+            rc = gate.main(["--repo", str(self.repo), "--base", "main", "--head", "task/TK-0099-R1", "--task", "TK-0099",
+                            "--accept-scan", "docs/a.md=zone2_email:1", "--accept-scan", "docs/a.md=zone2_email:1"])
+        self.assertEqual(rc, 2)
+
+
+class TestV5AnsiEvidence(GateBase):
+    def test_ansi_in_evidence_warns(self):
+        self.write("docs/a.md", "ok 7\n")
+        self.write("03_output/CYC-08/checks/TK-0099_R1_L01_verify.txt", "\x1b[32m3 passed\x1b[0m\nEXIT_CODE=0\n")
+        self.add_run()
+        self.commit("TK-0099", AGENT)
+        rc, items = self.run_gate()
+        self.assertEqual(items["G4"]["level"], "WARN", items["G4"])
+        self.assertIn("ANSI", items["G4"]["msg"])
+
+    def test_plain_evidence_passes(self):
+        self.write("docs/a.md", "ok 8\n")
+        self.write("03_output/CYC-08/checks/TK-0099_R1_L01_verify.txt", "3 passed\nEXIT_CODE=0\n")
+        self.add_run()
+        self.commit("TK-0099", AGENT)
+        rc, items = self.run_gate()
+        self.assertEqual(items["G4"]["level"], "PASS", items["G4"])
+
+
+PASSING = "def test_ok():\n    assert True\n"
+FAILING = "def test_bad():\n    assert False\n"
+
+
+@unittest.skipUnless(importlib.util.find_spec("pytest") is not None, "cần pytest")
+class TestV5ToolsTests(GateBase):
+    def base_tests(self, **files):
+        self.git("checkout", "-q", "main")
+        for name, body in files.items():
+            self.write(f"tools/tests/{name}.py", body)
+        self.commit("base tests", AGENT)
+        self.git("checkout", "-q", "task/TK-0099-R1")
+        self.git("rebase", "-q", "main")
+
+    def test_no_tools_change_no_g11(self):
+        self.write("docs/a.md", "ok 9\n")
+        self.add_run()
+        self.commit("TK-0099", AGENT)
+        rc, items = self.run_gate("--run-tools-tests")
+        self.assertNotIn("G11", items)
+
+    def test_tools_change_without_flag_warns(self):
+        self.write("tools/check_a.py", CHECK_A + "# đổi\n")
+        self.add_run()
+        self.commit("TK-0099", AGENT)
+        rc, items = self.run_gate()
+        self.assertEqual(items["G11"]["level"], "WARN", items["G11"])
+
+    def test_new_failure_fails(self):
+        self.base_tests(test_ok=PASSING)
+        self.write("tools/tests/test_new.py", FAILING)
+        self.add_run()
+        self.commit("TK-0099", AGENT)
+        rc, items = self.run_gate("--run-tools-tests")
+        self.assertEqual(items["G11"]["level"], "FAIL", items["G11"])
+        self.assertIn("test_new.py::test_bad", items["G11"]["msg"])
+
+    def test_inherited_failure_passes(self):
+        self.base_tests(test_ok=PASSING, test_old=FAILING)
+        self.write("tools/check_a.py", CHECK_A + "# đổi\n")
+        self.add_run()
+        self.commit("TK-0099", AGENT)
+        rc, items = self.run_gate("--run-tools-tests")
+        self.assertEqual(items["G11"]["level"], "PASS", items["G11"])
+        self.assertIn("kế thừa 1", items["G11"]["msg"])
+
+    def test_collection_error_new_fails(self):
+        self.base_tests(test_ok=PASSING)
+        self.write("tools/tests/test_broken.py", "import khong_co_module_nay\n")
+        self.add_run()
+        self.commit("TK-0099", AGENT)
+        rc, items = self.run_gate("--run-tools-tests")
+        self.assertEqual(items["G11"]["level"], "FAIL", items["G11"])
+        self.assertIn("test_broken.py", items["G11"]["msg"])
 
 
 class TestRunFile(GateBase):
