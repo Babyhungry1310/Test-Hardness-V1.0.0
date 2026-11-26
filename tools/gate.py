@@ -14,6 +14,10 @@ TEXT_EXT = (".md", ".py", ".json", ".yml", ".yaml", ".txt", ".toml", ".ini", ".c
 STATUS_LINE = re.compile(r"^- \d{4}-\d{2}-\d{2} \| ")
 DEC_STATUS = re.compile(r"^- \d{4}-\d{2}-\d{2} \| (?:ACTIVE|SUPERSEDED_BY DEC-\d{4}|RETIRED)$")
 WORKER_EXTRA = (re.compile(r"^02_work/runs/TK-\d{4}_R\d+_[A-Z]+\.md$"), re.compile(r"^03_output/CYC-\d{2}/checks/[^/]+$"))
+ANSI_ESC = re.compile(rb"\x1b\[[0-9;?]*[A-Za-z]")
+GATE_VERSION = "v5"
+TOOLS_TEST_TRIGGERS = ("tools/", "04_control/MODEL_CATALOG.md")
+SEVERITY = {"ALLOW": 0, "WARN": 1, "QUARANTINE": 2, "BLOCK": 3}
 BRANCH_OK = re.compile(r"^(?:task/TK-\d{4}-R\d+|lead/[A-Za-z0-9._-]+|upgrade/[A-Za-z0-9._-]+|review/CYC-\d{2}-R\d+-[a-z0-9]{4})$")
 
 
@@ -143,7 +147,7 @@ def check_ledgers(g, base, head, files, allow_edit):
 
 
 def check_encoding(g, head, files):
-    bad = []
+    bad, ansi = [], []
     for f in files:
         if f["status"] == "D" or not f["path"].endswith(TEXT_EXT):
             continue
@@ -163,7 +167,14 @@ def check_encoding(g, head, files):
                 data.decode("utf-8")
             except UnicodeDecodeError:
                 bad.append(f"{f['path']}: không phải UTF-8")
-    g.add("G4", "FAIL" if bad else "PASS", "; ".join(bad) if bad else "UTF-8, không BOM, không CRLF, không NUL")
+            if ANSI_ESC.search(data):
+                ansi.append(f["path"])
+    if bad:
+        g.add("G4", "FAIL", "; ".join(bad))
+    elif ansi:
+        g.add("G4", "WARN", f"mã màu ANSI trong file (chạy lại với --color=no hoặc lọc ESC): {ansi}")
+    else:
+        g.add("G4", "PASS", "UTF-8, không BOM, không CRLF, không NUL, không mã ANSI")
 
 
 def export_tools(g, base, dest):
@@ -181,50 +192,109 @@ def export_tools(g, base, dest):
 
 
 def parse_accept(values):
+    """PATH=RULE:SỐ_HIT, lặp được; nhiều quy tắc cho cùng một PATH được gộp. Số hit là số hit MỚI (head trừ base)."""
     acc = {}
     for v in values or []:
         path, _, rest = v.partition("=")
         rule, _, count = rest.partition(":")
-        acc[path] = (rule, int(count) if count else None)
+        if not path or not rule:
+            raise RuntimeError(f"--accept-scan sai dạng PATH=RULE:SỐ_HIT: {v}")
+        rules = acc.setdefault(path, {})
+        if rule in rules:
+            raise RuntimeError(f"--accept-scan lặp quy tắc {rule} cho {path}")
+        rules[rule] = int(count) if count else None
     return acc
 
 
+def load_rule_levels(tool_dir):
+    p = Path(tool_dir) / "tools" / "scan_rules.json"
+    try:
+        data = json.loads(p.read_text(encoding="utf-8-sig"))
+    except (OSError, ValueError):
+        return {}
+    return {r.get("rule"): r.get("level") for r in data.get("rules", []) if isinstance(r, dict) and r.get("rule")}
+
+
+def scan_blob(scan, tmp, data, name):
+    target = Path(tmp) / "in" / name
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_bytes(data)
+    r = subprocess.run([sys.executable, "-I", str(scan), str(target)], capture_output=True, text=True, encoding="utf-8")
+    try:
+        return json.loads(r.stdout.strip().splitlines()[-1])
+    except (ValueError, IndexError):
+        return None
+
+
+def count_rules(res):
+    counts = {}
+    for x in (res or {}).get("reasons", []):
+        rule = x.get("rule")
+        counts[rule] = counts.get(rule, 0) + 1
+    return counts
+
+
+def fmt_counts(counts):
+    return ", ".join(f"{k}:{v}" for k, v in sorted(counts.items())) or "-"
+
+
 def check_scan(g, base, head, files, accept):
+    """G5 chấm theo chênh lệch base–head: hit có sẵn ở bản base của cùng file là kế thừa, không FAIL."""
     with tempfile.TemporaryDirectory() as tmp:
         scan = export_tools(g, base, tmp)
         if scan is None:
             g.add("G5", "WARN", f"{base} không có tools/scan.py")
             return
-        bad, ok_notes, warns = [], [], []
+        levels = load_rule_levels(tmp)
+        bad, warns, notes, inherited = [], [], [], []
+        unused = {p for p in accept if p not in {f["path"] for f in files}}
         for f in files:
             if f["status"] == "D" or not f["path"].endswith(TEXT_EXT):
                 continue
-            data = g.blob(head, f["path"])
-            target = Path(tmp) / "in" / Path(f["path"]).name
-            target.parent.mkdir(parents=True, exist_ok=True)
-            target.write_bytes(data)
-            r = subprocess.run([sys.executable, "-I", str(scan), str(target)], capture_output=True, text=True, encoding="utf-8")
-            try:
-                res = json.loads(r.stdout.strip().splitlines()[-1])
-            except (ValueError, IndexError):
+            res = scan_blob(scan, tmp, g.blob(head, f["path"]), "head_" + Path(f["path"]).name)
+            if res is None:
                 bad.append(f"{f['path']}: scan không trả JSON")
                 continue
-            if res.get("level") == "ALLOW":
+            head_level = res.get("level", "BLOCK")
+            if head_level == "ALLOW":
                 continue
-            rules = [x.get("rule") for x in res.get("reasons", [])]
+            head_counts = count_rules(res)
+            base_counts, base_level = {}, "ALLOW"
+            old = g.blob(base, f["old"]) if f["status"] != "A" else None
+            if old is not None:
+                bres = scan_blob(scan, tmp, old, "base_" + Path(f["old"]).name)
+                if bres is None:
+                    bad.append(f"{f['path']}: scan bản base không trả JSON")
+                    continue
+                base_counts, base_level = count_rules(bres), bres.get("level", "ALLOW")
+            new = {r: n - base_counts.get(r, 0) for r, n in head_counts.items() if n > base_counts.get(r, 0)}
+            kept = sum(min(n, base_counts.get(r, 0)) for r, n in head_counts.items())
+            tag = f"{f['path']}: {head_level}, kế thừa {kept}, mới {sum(new.values())}"
+            if not new:
+                inherited.append(tag)
+                continue
+            sev = max(SEVERITY.get(levels.get(r) or head_level, 3) for r in new)
+            if head_level == "QUARANTINE" and base_level != "QUARANTINE":
+                sev = max(sev, SEVERITY["QUARANTINE"])
             want = accept.get(f["path"])
-            if want and set(rules) == {want[0]} and (want[1] is None or len(rules) == want[1]):
-                ok_notes.append(f"{f['path']}: {res['level']} {len(rules)}× {want[0]} (OWNER chấp nhận)")
-            elif res.get("level") == "WARN":
-                warns.append(f"{f['path']}: WARN {sorted(set(rules))} (cần OWNER chấp nhận, BAN_GIAO 3.5)")
+            if want is not None:
+                if set(want) == set(new) and all(c is None or c == new[r] for r, c in want.items()):
+                    notes.append(f"{tag} [{fmt_counts(new)}] (OWNER chấp nhận)")
+                else:
+                    bad.append(f"{tag} [{fmt_counts(new)}] ≠ chấp nhận [{fmt_counts({r: c if c is not None else '*' for r, c in want.items()})}]")
+            elif sev >= SEVERITY["QUARANTINE"]:
+                bad.append(f"{tag} [{fmt_counts(new)}]")
             else:
-                bad.append(f"{f['path']}: {res.get('level')} {rules}")
+                warns.append(f"{tag} [{fmt_counts(new)}] (WARN, cần OWNER chấp nhận)")
+        for p in sorted(unused):
+            bad.append(f"--accept-scan nêu {p} nhưng file không có trong diff")
+    tail = [s for s in (("kế thừa: " + "; ".join(inherited)) if inherited else "", "; ".join(notes)) if s]
     if bad:
-        g.add("G5", "FAIL", "; ".join(bad + warns))
+        g.add("G5", "FAIL", "; ".join(bad + warns + tail))
     elif warns:
-        g.add("G5", "WARN", "; ".join(warns + ok_notes))
+        g.add("G5", "WARN", "; ".join(warns + tail))
     else:
-        g.add("G5", "PASS", "scan bằng tools/ của base: ALLOW" + (f"; {'; '.join(ok_notes)}" if ok_notes else ""))
+        g.add("G5", "PASS", "scan bằng tools/ của base: không có hit mới" + (f"; {'; '.join(tail)}" if tail else ""))
 
 
 def check_frozen(g, head, frozen):
@@ -260,6 +330,57 @@ def check_verify(g, head, card, timeout):
     finally:
         g.git("worktree", "remove", "--force", str(wt))
         shutil.rmtree(tmp, ignore_errors=True)
+
+
+def pytest_failures(g, ref, timeout):
+    """Chạy tools/tests trong worktree tạm của ref; trả (mã, tập test hỏng hoặc lỗi thu thập, dòng tóm tắt)."""
+    tmp = tempfile.mkdtemp(prefix="gate_t_")
+    wt = Path(tmp) / "wt"
+    rc, _ = g.git("worktree", "add", "--detach", str(wt), ref)
+    if rc != 0:
+        shutil.rmtree(tmp, ignore_errors=True)
+        return None, set(), f"không tạo được worktree cho {ref[:12]}"
+    try:
+        cmd = [sys.executable, "-m", "pytest", "-q", "--tb=no", "-rfE", "--color=no", "-p", "no:cacheprovider",
+               "--continue-on-collection-errors", "tools/tests"]
+        r = subprocess.run(cmd, cwd=wt, capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=timeout)
+        failed = set()
+        for line in r.stdout.splitlines():
+            m = re.match(r"^(FAILED|ERROR) (\S+)", line)
+            if m:
+                failed.add(m.group(2))
+        lines = [l for l in r.stdout.strip().splitlines() if l.strip()]
+        return r.returncode, failed, (lines[-1] if lines else (r.stderr.strip().splitlines() or [""])[-1])
+    except subprocess.TimeoutExpired:
+        return None, set(), f"tools/tests quá {timeout}s"
+    finally:
+        g.git("worktree", "remove", "--force", str(wt))
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def check_tools_tests(g, base, head, files, run_tests, timeout):
+    """G11: PR chạm tools/ hoặc MODEL_CATALOG.md phải chạy cả tools/tests; chấm theo chênh lệch (test hỏng mới = 0)."""
+    touched = [f["path"] for f in files if f["path"].startswith(TOOLS_TEST_TRIGGERS) or f["old"].startswith(TOOLS_TEST_TRIGGERS)]
+    if not touched:
+        return
+    if not run_tests:
+        g.add("G11", "WARN", f"PR chạm {touched[:3]} nhưng chưa chạy tools/tests (thêm --run-tools-tests)")
+        return
+    hrc, hfail, hsum = pytest_failures(g, head, timeout)
+    brc, bfail, bsum = pytest_failures(g, base, timeout)
+    if hrc is None or brc is None:
+        g.add("G11", "FAIL", f"head: {hsum}; base: {bsum}")
+        return
+    new = sorted(hfail - bfail)
+    fixed = sorted(bfail - hfail)
+    kept = sorted(hfail & bfail)
+    info = f"head: {hsum} | base: {bsum}" + (f" | kế thừa {len(kept)} hỏng: {kept[:5]}" if kept else "") + (f" | đã sửa {len(fixed)}: {fixed[:5]}" if fixed else "")
+    if new:
+        g.add("G11", "FAIL", f"test hỏng mới {len(new)}: {new[:10]} | {info}")
+    elif hrc not in (0, 1) and hrc != brc:
+        g.add("G11", "FAIL", f"pytest trên head mã {hrc} (base mã {brc}) | {info}")
+    else:
+        g.add("G11", "PASS", f"không có test hỏng mới | {info}")
 
 
 def check_run_schema(g, base, head, files):
@@ -336,6 +457,7 @@ def run(args):
     check_run_file(g, files, branch, args.task)
     check_run_schema(g, base, head, files)
     check_branch(g, branch)
+    check_tools_tests(g, base, head, files, args.run_tools_tests, args.timeout)
     fails = sorted({i["check"] for i in g.items if i["level"] == "FAIL"})
     warns = sorted({i["check"] for i in g.items if i["level"] == "WARN"})
     line = f"GATE {args.task or '-'} {base[:12]}..{head[:12]}: {'ĐẠT' if not fails else 'KHÔNG ĐẠT'} · FAIL: {','.join(fails) or '-'} · WARN: {','.join(warns) or '-'}"
@@ -344,7 +466,7 @@ def run(args):
         if i["level"] != "PASS":
             print(f"  {i['check']} {i['level']}: {i['msg']}")
     if args.json_out:
-        Path(args.json_out).write_text(json.dumps({"summary": line, "base": base, "head": head, "items": g.items}, ensure_ascii=False, indent=2), encoding="utf-8", newline="\n")
+        Path(args.json_out).write_text(json.dumps({"summary": line, "gate_version": GATE_VERSION, "base": base, "head": head, "items": g.items}, ensure_ascii=False, indent=2), encoding="utf-8", newline="\n")
     return 1 if fails and not args.warn_only else 0
 
 
@@ -371,9 +493,10 @@ def main(argv=None):
     p.add_argument("--no-worker-extras", action="store_true")
     p.add_argument("--agent", default="conchonomoconmeo-AIAIAI")
     p.add_argument("--allow-edit", action="append")
-    p.add_argument("--accept-scan", action="append", help="PATH=RULE:SỐ_HIT")
+    p.add_argument("--accept-scan", action="append", help="PATH=RULE:SỐ_HIT_MỚI; lặp để chấp nhận nhiều quy tắc cho một file")
     p.add_argument("--frozen", action="append", help="PATH=SHA256_12")
     p.add_argument("--run-verify", action="store_true")
+    p.add_argument("--run-tools-tests", action="store_true", help="G11: chạy tools/tests ở base và head, chấm theo chênh lệch")
     p.add_argument("--timeout", type=int, default=600)
     p.add_argument("--json-out")
     p.add_argument("--warn-only", action="store_true")

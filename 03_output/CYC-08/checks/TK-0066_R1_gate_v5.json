@@ -1,0 +1,58 @@
+{
+  "summary": "GATE TK-0066 9d00ba76728e..f8e029bdfd1d: ĐẠT · FAIL: - · WARN: -",
+  "gate_version": "v5",
+  "base": "9d00ba76728ec438c3268e57ae0a7863da1364de",
+  "head": "f8e029bdfd1dad1ca09e899577e76eb346a109e8",
+  "items": [
+    {
+      "check": "G1",
+      "level": "PASS",
+      "msg": "2 path trong scope; 2 file run/bằng chứng"
+    },
+    {
+      "check": "G2",
+      "level": "PASS",
+      "msg": "1 commit đều của conchonomoconmeo-AIAIAI"
+    },
+    {
+      "check": "G3",
+      "level": "PASS",
+      "msg": "sổ chỉ thêm dòng; Status DEC đúng ngữ pháp"
+    },
+    {
+      "check": "G4",
+      "level": "PASS",
+      "msg": "UTF-8, không BOM, không CRLF, không NUL, không mã ANSI"
+    },
+    {
+      "check": "G5",
+      "level": "PASS",
+      "msg": "scan bằng tools/ của base: không có hit mới; kế thừa: tools/tests/test_gate.py: WARN, kế thừa 3, mới 0"
+    },
+    {
+      "check": "G7",
+      "level": "PASS",
+      "msg": "verify mã 0: PASS: 2 file, 6 phép kiểm, 0 vi phạm | \u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m.\u001b[0m\u001b[32m                                 [100%]\u001b[0m | \u001b[32m\u001b[32m\u001b[1m40 passed\u001b[0m\u001b[32m in 117.25s (0:01:57)\u001b[0m\u001b[0m"
+    },
+    {
+      "check": "G9",
+      "level": "PASS",
+      "msg": "run: ['02_work/runs/TK-0066_R1_DONE.md']"
+    },
+    {
+      "check": "G10",
+      "level": "PASS",
+      "msg": "1 file run qua run.schema.json"
+    },
+    {
+      "check": "G8",
+      "level": "PASS",
+      "msg": "nhánh task/TK-0066-R1"
+    },
+    {
+      "check": "G11",
+      "level": "PASS",
+      "msg": "không có test hỏng mới | head: 1 failed, 423 passed in 448.76s (0:07:28) | base: 1 failed, 407 passed in 393.54s (0:06:33) | kế thừa 1 hỏng: ['tools/tests/test_model_check.py::test_live_catalog_passes']"
+    }
+  ]
+}
