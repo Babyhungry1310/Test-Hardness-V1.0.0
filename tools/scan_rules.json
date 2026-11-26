@@ -96,7 +96,7 @@
       "rule": "zone3_openai_token",
       "group": "zone3",
       "level": "BLOCK",
-      "pattern": "sk-[A-Za-z0-9_-]{20,}"
+      "pattern": "(?<![A-Za-z0-9])sk-[A-Za-z0-9_-]{20,}"
     },
     {
       "rule": "zone3_github_token",
