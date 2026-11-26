@@ -975,6 +975,46 @@ log_level: LOOP
 max_loops: 2
 ```
 
+### TK-0066 — B3p5 · `task/`
+
+```yaml
+schema: 1
+id: TK-0066
+cycle: CYC-08
+origin: DEC-0035
+assignee: W1
+goal: Thay tools/gate.py va tools/tests/test_gate.py bang ban v5 (G5 cham chenh lech base-head, accept-scan nhieu quy tac, G4 canh bao ANSI, G11 tools/tests chenh lech)
+write_scope:
+  - tools/gate.py
+  - tools/tests/test_gate.py
+constraints:
+  - "Chep nguyen van ban v5 tu goi preflight_gate_P6D_v5.zip; khong sua dong nao"
+  - "Ghi file bang Python UTF-8, LF, khong BOM (F56)"
+  - "Gate cua PR nay chay bang tools/gate.py v4 tu checkout origin/main; G5 chap nhan tools/tests/test_gate.py=zone2_email:3 (ke thua, khong phai hit moi)"
+  - "Khong cham vung khoa; touched_protected: no"
+inputs:
+  - tools/gate.py
+  - tools/tests/test_gate.py
+read_also:
+  - tools/README.md
+line_budget: 10
+verify: >-
+  python tools/verify_doc_artifact.py tools/gate.py tools/tests/test_gate.py --no-links
+  --sha256 tools/gate.py=89520378b4962a7e040db8c09c08d3cb8eae8e9f489413a6f5aa916088406f0c
+  --sha256 tools/tests/test_gate.py=0a957f10d268b0c82628effa6adb7edb3db3b70ada5d94e92b72e78734fa93ed
+  && python -m pytest -q tools/tests/test_gate.py
+done_when:
+  - "Hai file trung sha256 ban v5 (--sha256)"
+  - "pytest tools/tests/test_gate.py 40 passed tren Windows"
+  - "Chay thu gate.py v5 cua nhanh voi --run-tools-tests tren chinh PR nay: G5, G11 khong co hit/test hong moi (bang chung)"
+size: "1 session · 2 files"
+depends_on:
+  - TK-0065
+fixes: ""
+log_level: LOOP
+max_loops: 2
+```
+
 ### Bước 3–5 — không thẻ YAML trong P6d (Q-E)
 
 Chỉ áp **Bảng delta** (và đồ thị batch). Thẻ YAML đủ trường cho TK-0042…TK-0052 / TK-0055/0056/0059 viết ở đầu mỗi Bước, PR `lead/` riêng, sau khi có số đo L1.1.
