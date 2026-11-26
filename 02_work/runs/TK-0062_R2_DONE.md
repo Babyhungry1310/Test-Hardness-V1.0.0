@@ -3,7 +3,7 @@ schema: 1
 task: TK-0062
 run: 2
 outcome: DONE
-model: "xai/grok-4.5"
+model: "codex/gpt-6-luna"
 branch: task/TK-0062-R2
 outputs:
   - 04_control/decisions/superseded/DEC-0007_cyc-01-reviewer-claude.md
