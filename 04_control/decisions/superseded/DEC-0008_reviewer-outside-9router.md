@@ -14,6 +14,7 @@ affects: [DEC-0007]
 keywords: [model-assignment, reviewer]
 ---
 ## Status (newest first)
+- 2026-11-26 | RETIRED
 - 2026-11-13 | ACTIVE
 <!-- ANCHOR: CONTEXT -->
 ## Context
