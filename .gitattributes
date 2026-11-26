@@ -24,3 +24,9 @@
 *.ttf binary
 *.mp3 binary
 *.mp4 binary
+
+# Bằng chứng lịch sử ghi trên Windows (CRLF / UTF-16); giữ nguyên byte, không chuyển đổi (F24)
+03_output/CYC-03/checks/TK-0018_R1_L01_*.txt -text -working-tree-encoding
+03_output/CYC-06/checks/TK-0023_R1_L01_*.txt -text -working-tree-encoding
+03_output/CYC-07/checks/TK-0036_R1_L01_verify.txt -text -working-tree-encoding
+03_output/CYC-08/checks/TK-0036_R1_L02_verify.txt -text -working-tree-encoding
