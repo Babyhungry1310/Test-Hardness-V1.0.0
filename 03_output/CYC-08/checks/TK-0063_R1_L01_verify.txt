@@ -1,0 +1,2 @@
+PASS: 1 file, 4 phép kiểm, 0 vi phạm
+EXIT_CODE=0
