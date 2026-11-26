@@ -1,0 +1,29 @@
+{
+  "tools/gate.py": {
+    "level": "ALLOW",
+    "rules": {},
+    "sha256": "81385d9fa9b062a93b3d10e774304e64edd6a19b6b7604fa86b2f14fc07b8567"
+  },
+  "tools/preflight_phieu.py": {
+    "level": "ALLOW",
+    "rules": {},
+    "sha256": "e7bda6bfb6aa865a52cf091d30783c70598ac49daae54229b4def9367287e64f"
+  },
+  "tools/tests/test_gate.py": {
+    "level": "BLOCK",
+    "rules": {
+      "zone2_email": 3,
+      "zone3_openai_token": 1
+    },
+    "sha256": "c1c5abd4554791bad3cad2d3de56985a522091cdcc87aba9e44e9e1b72a0c684"
+  },
+  "tools/tests/test_preflight_phieu.py": {
+    "level": "BLOCK",
+    "rules": {
+      "dangerous_automerge": 1,
+      "zone3_openai_token": 1,
+      "zone2_email": 2
+    },
+    "sha256": "71825941a765e67f749a1b7a5f95feb62c7b2926848b0224d1c405c209192838"
+  }
+}
