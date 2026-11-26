@@ -61,3 +61,6 @@ target/
 node_modules/
 .venv/
 venv/
+
+# Thư mục trao đổi giữa tác tử, nằm ngoài repo; không commit (F58)
+P6D/
