@@ -1,0 +1,26 @@
+{
+  "luat_main_tren_test_main": {
+    "dangerous_automerge": 1,
+    "dangerous_git_push_describe": 1,
+    "dangerous_push_main": 1,
+    "dangerous_send_env": 1,
+    "impersonation_owner_approved": 1,
+    "override_vi_all": 1,
+    "override_vi_follow": 1,
+    "zone2_email": 2
+  },
+  "luat_main_tren_test_nhanh": {
+    "dangerous_automerge": 1,
+    "dangerous_git_push_describe": 1,
+    "dangerous_push_main": 1,
+    "dangerous_send_env": 1,
+    "impersonation_owner_approved": 1,
+    "override_vi_all": 1,
+    "override_vi_follow": 1,
+    "zone2_email": 2
+  },
+  "luat_nhanh_tren_SRC-0003": "ALLOW",
+  "luat_main_tren_SRC-0003": {
+    "zone3_openai_token": 3
+  }
+}

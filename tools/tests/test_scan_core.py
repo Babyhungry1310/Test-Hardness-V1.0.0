@@ -239,6 +239,27 @@ def test_zone3_is_block(tmp_path):
         assert "zone3" in groups(data)
 
 
+def openai_key():
+    return "sk" + "-" + "Aa1_" * 6
+
+
+def test_f48_openai_token_block_positions(tmp_path):
+    key = openai_key()
+    texts = (key + " " + MARKER, "ref " + key + " " + MARKER, "KEY=" + key + " " + MARKER, "env_" + key + " " + MARKER)
+    for index, text in enumerate(texts):
+        res, data = scan(write_file(tmp_path, "pos{0}.txt".format(index), text), hidden=(text,))
+        assert res.returncode == 1
+        assert data["level"] == "BLOCK"
+        assert "zone3_openai_token" in rules_of(data)
+
+
+def test_f48_risk_record_name_allow(tmp_path):
+    text = "Xem RS" + "K-0004_agent-tag-and-merge-bypass trong 04_control/risks."
+    res, data = scan(write_file(tmp_path, "rsk.txt", text))
+    assert res.returncode == 0
+    assert data["level"] == "ALLOW"
+    assert "zone3_openai_token" not in rules_of(data)
+
 def test_case13_byte_identical_and_ruleset(tmp_path):
     path = write_file(tmp_path, "same.txt", OVERRIDE + " " + MARKER)
     first = invoke(path)

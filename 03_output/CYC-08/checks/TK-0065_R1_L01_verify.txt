@@ -1,0 +1,5 @@
+.....................................................                    [100%]
+53 passed in 57.82s
+{"level":"ALLOW","ruleset":"scan-core-1","sha256":"800d1223a2143f42467d3488be6a4cc488028ed0fa762f38b7171aaf802387fc","reasons":[],"decoded_skipped":32}
+NEGATIVE_CHECK: 1 failed, 1 passed, 17 deselected in 7.35s
+EXIT_CODE=0
