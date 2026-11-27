@@ -173,6 +173,7 @@ Mọi mã P5 dưới đây giữ nguyên nghĩa. Định nghĩa chép từ `06_s
 | TK-0066 | THÊM | — | Thay `tools/gate.py` và `tools/tests/test_gate.py` bằng bản v5 (G5 chênh lệch base–head; `--accept-scan` nhiều quy tắc; G4 cảnh báo ANSI; G11 `tools/tests` chênh lệch) (thẻ đầy đủ) | — | DEC-0036 A7 | Đ3 (B3p5) |
 | B3p5 | THÊM | — | `B3p5 \| tasks: TK-0066 \| after: B3p4` | — | DEC-0036 A7 | Đ3 |
 | B3a0 | ĐỔI · `supersedes: B3a0 (DEC-0034)` | `after: B3p4, O3.6` | `after: B3p5, O3.6` | — | DEC-0036 A7 | Đ3 |
+| TK-0061 | ĐỔI · nhánh | `upgrade/` (bảng 1) | `task/`, không tăng VERSION: chỉ sửa `tools/`; C12 đòi VERSION khớp `harness/HARNESS.md` | — | DEC-0037 B8 | Đ3 |
 
 Các dòng B2a, TK-0039, B3b, B3e đổi thứ tự so với P5, có `supersedes`, ghi vào DEC-0032. Các dòng TK-0060, TK-0059, TK-0061, B1b3a, B1b4, B2a, B3a1, L5.1 thêm ở cửa sổ trước Bước 2, ghi vào DEC-0033. Các dòng TK-0062…TK-0065, O3.6, TK-0061 (batch), B3a, B3a2, O2.1 (cổng), O2.4 thêm ở cửa sổ trước Bước 3, ghi vào DEC-0034. Các dòng TK-0066, B3p5, B3a0 (ĐỔI) ghi vào DEC-0036.
 
@@ -223,7 +224,7 @@ Các dòng B2a, TK-0039, B3b, B3e đổi thứ tự so với P5, có `supersedes
 | TK-0064 | Đ3 | task/ | T1 | WORKER (chọn theo DEC-0033) | REVIEWER (chọn theo DEC-0034) | W1 | [TK-0063] | B3p3 | nhẹ |
 | TK-0065 | Đ3 | task/ | T2 | WORKER (chọn theo DEC-0033) | REVIEWER (chọn theo DEC-0034) | W1 | [TK-0064] | B3p4 | nhẹ–vừa |
 | TK-0066 | Đ3 | task/ | T1 | WORKER (chọn theo DEC-0033) | REVIEWER (chọn theo DEC-0036) | W1 | [TK-0065] | B3p5 | nhẹ |
-| TK-0061 | Đ3 | upgrade/ | T2 | WORKER (chọn theo DEC-0033) | REVIEWER (chọn theo DEC-0034) | W1 | [TK-0065] | B3a0 | vừa |
+| TK-0061 | Đ3 | task/ | T2 | WORKER (chọn theo DEC-0033) | REVIEWER (chọn theo DEC-0034) | W1 | [TK-0065] | B3a0 | vừa |
 | TK-0042 | Đ3a | upgrade/ | T2 | WORKER (đề xuất: xai/grok-4.5) | REVIEWER (đề xuất: ag/gemini-3.8-flash) | W1 | [TK-0061] | B3a | vừa |
 | TK-0055 | Đ3 | upgrade/ | T2 | WORKER (đề xuất: xai/grok-4.5) | REVIEWER (đề xuất: ag/gemini-3.8-flash) | W1 | [TK-0042] | B3a2 | vừa |
 | TK-0043 | Đ3 | task/ | T2 | WORKER (đề xuất: xai/grok-4.5) | REVIEWER (đề xuất: ag/gemini-3.8-flash) | W1 | [TK-0055] | B3b | nặng |
@@ -1015,6 +1016,459 @@ done_when:
 size: "1 session · 2 files"
 depends_on:
   - TK-0065
+fixes: ""
+log_level: LOOP
+max_loops: 2
+```
+
+### TK-0061 — B3a0 · `task/`
+
+```yaml
+schema: 1
+id: TK-0061
+cycle: CYC-08
+origin: DEC-0037
+assignee: W1
+goal: Them 3 kiem ngu nghia vao tools/validate_task_schema.py (--base-ref; ma O co trong bang O va do thi khong vong; path trong goal thuoc write_scope); tools/verify_doc_artifact.py doi CRLF thanh LF truoc regex (F53) va bat BOM, ky tu vo (F56)
+write_scope:
+  - tools/validate_task_schema.py
+  - tools/tests/test_validate_task_schema.py
+  - tools/verify_doc_artifact.py
+  - tools/tests/test_verify_doc_artifact.py
+constraints:
+  - "Nhanh task/ (DEC-0037 B8: chi sua tools/, khong tang VERSION; C12); touched_protected: no"
+  - "--base-ref <ref>: the co id da co tren ref ma goal, write_scope hoac done_when khac thi FAIL ID_MEANING_CHANGED (F03); the moi khong bi kiem"
+  - "Ma O nhac trong constraints, inputs phai co trong bang O (muc 3) cua cung file, neu khong FAIL O_UNKNOWN; do thi batch (after:) gom ca nut O khong co vong, neu co FAIL GRAPH_CYCLE"
+  - "Moi duong dan dang thu_muc/ten.duoi trong goal phai thuoc write_scope, neu khong FAIL GOAL_PATH_OUT_OF_SCOPE"
+  - "verify_doc_artifact: doi CRLF thanh LF truoc --regex; BOM dau file FAIL BOM; chuoi vo UTF-8 doc nham cp1252 (vd 'â†’', 'Ã¡') FAIL MOJIBAKE; khong doi hanh vi cac co hien co"
+  - "Ma thoat theo SPEC_TOOLS#CONVENTIONS hien hanh; khong sua test cu (E20)"
+  - "Code theo HARNESS 8.4: khong comment, khong docstring; ghi file bang Python UTF-8 LF"
+inputs:
+  - tools/validate_task_schema.py
+  - tools/verify_doc_artifact.py
+  - 06_sources/SRC-0003_kaizen-chi-tiet-dot1.md
+read_also:
+  - 01_plan/SPEC_TOOLS.md#CONVENTIONS
+  - 04_control/decisions/DEC-0037_the-buoc3.md
+line_budget: 350
+verify: >-
+  python -m pytest -q --tb=line tools/tests/test_validate_task_schema.py tools/tests/test_verify_doc_artifact.py
+  && python -c "import json,subprocess,sys;r=subprocess.run([sys.executable,'tools/validate_task_schema.py','--schema','harness/schemas/task.schema.json','--base-ref','origin/main','--json','06_sources/SRC-0003_kaizen-chi-tiet-dot1.md'],capture_output=True,text=True,encoding='utf-8');d=json.loads(r.stdout);bad=[f for f in d['findings'] if not (f['task']=='TK-0045' and f['rule']=='SCHEMA' and '.github/' in f['message'])];assert not bad,bad"
+done_when:
+  - "Test moi cho ID_MEANING_CHANGED, O_UNKNOWN, GRAPH_CYCLE, GOAL_PATH_OUT_OF_SCOPE, CRLF, BOM, MOJIBAKE: moi ma mot ca duong mot ca am; PASS tren Windows"
+  - "Toan bo test cu cua hai file PASS khong sua"
+  - "validate_task_schema --base-ref origin/main tren SRC-0003: khong vi pham nao ngoai vi pham da biet F01 cua TK-0045 (.github/, het khi TK-0055 merge)"
+size: "1 session · 4 files"
+depends_on:
+  - TK-0066
+fixes: ""
+log_level: LOOP
+max_loops: 2
+```
+
+### TK-0042 — B3a · `upgrade/`
+
+```yaml
+schema: 1
+id: TK-0042
+cycle: CYC-08
+origin: DEC-0037
+assignee: W1
+goal: Ghi quy uoc ma thoat va bang loi vao 01_plan/SPEC_TOOLS.md (E5, E16, E18); harness/schemas/run.schema.json MINOR them khoa tuy chon models, evidence_kind, self_check (E7 mot phan, E21, E40); chi van ban va schema
+write_scope:
+  - harness/schemas/run.schema.json
+  - harness/schemas/EVOLUTION.md
+  - 01_plan/SPEC_TOOLS.md
+  - harness/VERSION
+  - harness/HARNESS.md
+constraints:
+  - "Nhanh upgrade/; harness/VERSION 1.0.2 -> 1.0.3; dong 'Phien ban' trong harness/HARNESS.md sua cung so (C12)"
+  - "Lenh OWNER 🔒 cho harness/ truoc khi mo PR; touched_protected: yes"
+  - "E5 (DEC-0037 B1): ma 0 dat, 1 FAIL, 2 loi dung hoac moi truong, 3 khong ro; loi quyen, moi truong khong tinh loop, toi da 2 lan thu; ma 66 do TK-0055 them"
+  - "E16 (DEC-0037 B3): hook gap ma 3 thi chan, bao BLOCKED kem chan doan"
+  - "E37 (DEC-0032, DEC-0037 B8): ghi quy uoc ON_CRASH vao SPEC_TOOLS#CONVENTIONS: moi hook khai ON_CRASH; hook gac = chan, hook quan sat = cho qua; thieu khai bao la loi (hanh vi hook o TK-0045)"
+  - "E18 (DEC-0037 B4): bang loi trong SPEC_TOOLS#CONVENTIONS: loai loi, ma thoat, co tinh loop, tran thu, xu ly khi cham tran; E5 la mac dinh"
+  - "E7 mot phan (DEC-0037 B2): chi them khoa models (danh sach chuoi) va evidence_kind; KHONG them raw capture"
+  - "E40: them khoa tuy chon self_check; ghi ma CLAIM_MISMATCH trong bang loi (validate thi hanh o TK-0043)"
+  - "run.schema chi them truong tuy chon (MINOR, EVOLUTION.md); khong doi, khong xoa truong cu; ghi dong thay doi vao EVOLUTION.md; harness/HARNESS.md chi sua neu bang kiem C can ten CLAIM_MISMATCH"
+  - "Khong them file run nao vao danh sach FAIL so voi schema cu (24/55 run lich su da FAIL tu truoc, DEC-0037 A4)"
+  - "Khong viet tools/*.py trong task nay"
+  - "SPEC_TOOLS#CONVENTIONS: them detect-secrets vao danh sach thu vien ngoai (E23, E24; DEC-0037 A6) cho TK-0045, TK-0056"
+inputs:
+  - harness/schemas/run.schema.json
+  - harness/schemas/EVOLUTION.md
+  - 01_plan/SPEC_TOOLS.md
+  - harness/VERSION
+read_also:
+  - 01_plan/SPEC_TOOLS.md#CONVENTIONS
+  - harness/MODEL_POLICY.md#SAME_MODEL
+  - 04_control/decisions/DEC-0037_the-buoc3.md
+line_budget: 350
+verify: >-
+  python tools/verify_doc_artifact.py 01_plan/SPEC_TOOLS.md --no-links --contains "E5" --contains "E16" --contains "E18" --contains "BLOCKED" --contains "CLAIM_MISMATCH" --contains "ON_CRASH"
+  && python tools/verify_doc_artifact.py harness/schemas/EVOLUTION.md --no-links --contains "evidence_kind"
+  && python tools/verify_doc_artifact.py harness/VERSION --no-links --regex "^1\.0\.3\s*$"
+  && python -c "import re;v=open('harness/VERSION',encoding='utf-8').read().strip();h=open('harness/HARNESS.md',encoding='utf-8').read();assert re.search(r'^\| Phi\S+ b\S+ \| '+re.escape(v)+r' ',h,re.M),v"
+  && python -c "import json,glob,subprocess,jsonschema;from ruamel.yaml import YAML;y=YAML(typ='safe');n=json.load(open('harness/schemas/run.schema.json',encoding='utf-8'));o=json.loads(subprocess.run(['git','show','origin/main:harness/schemas/run.schema.json'],capture_output=True,check=True).stdout);L=lambda f:y.load(open(f,encoding='utf-8').read().split('---')[1]);B=lambda s:{f for f in glob.glob('02_work/runs/*.md') if list(jsonschema.Draft202012Validator(s).iter_errors(L(f)))};k={'models','evidence_kind','self_check'};assert not B(n)-B(o);assert k<=set(n['properties']);assert not k&set(n['required'])"
+done_when:
+  - "SPEC_TOOLS#CONVENTIONS co ma 0/1/2/3, quy tac E16, ON_CRASH (E37) va bang loi E18 kem CLAIM_MISMATCH (--contains)"
+  - "run.schema co 3 khoa tuy chon moi, khong khoa nao bat buoc; khong them run FAIL so voi schema tren origin/main (python -c)"
+  - "EVOLUTION.md ghi thay doi MINOR; harness/VERSION = 1.0.3 va khop HARNESS.md (C12)"
+size: "1 session · 5 files"
+depends_on:
+  - TK-0061
+fixes: ""
+log_level: LOOP
+max_loops: 2
+```
+
+### TK-0055 — B3a2 · `upgrade/`
+
+```yaml
+schema: 1
+id: TK-0055
+cycle: CYC-08
+origin: DEC-0037
+assignee: W1
+goal: Sua $defs/path trong harness/schemas/task.schema.json cho phep tien to .github/ (F01, Q-B); tao harness/exit_codes.json so ma thoat mot nguon (E36) kem lop loi (E35 phan enum)
+write_scope:
+  - harness/schemas/task.schema.json
+  - tools/tests/test_task_schema_path.py
+  - harness/exit_codes.json
+  - harness/VERSION
+  - harness/HARNESS.md
+constraints:
+  - "Nhanh upgrade/; harness/VERSION 1.0.3 -> 1.0.4; dong 'Phien ban' trong harness/HARNESS.md sua cung so, khong sua gi khac trong HARNESS.md (C12)"
+  - "Lenh OWNER 🔒 cho harness/ truoc khi mo PR; touched_protected: yes"
+  - "Pattern moi dung: ^(?:\\.github/)?[A-Za-z0-9_][A-Za-z0-9_./-]*$ (dong delta TK-0055); chi mo rong, khong thu hep"
+  - "Test 4 ca: .github/workflows/verify.yml hop le; .secrets.baseline, .git/config, ../x khong hop le; them 1 ca hoi quy: path thuong van hop le"
+  - "exit_codes.json: dung tap ma 0 OK, 1 FAIL, 2 USAGE_OR_ENV, 3 UNKNOWN, 66 NO_INPUT (E5 DEC-0037 B1, E36); moi ma co ten va mo ta; pham vi rong tra 66"
+  - "Quy uoc ON_CRASH da ghi o TK-0042; con tro tu SPEC_TOOLS toi exit_codes.json ghi o TK-0046 (DEC-0037 B8)"
+  - "Moi the trong SRC-0003 van qua schema moi"
+inputs:
+  - harness/schemas/task.schema.json
+  - harness/VERSION
+  - harness/HARNESS.md
+read_also:
+  - 01_plan/SPEC_TOOLS.md#CONVENTIONS
+  - 04_control/decisions/DEC-0037_the-buoc3.md
+line_budget: 250
+verify: >-
+  python -m pytest -q --tb=line tools/tests/test_task_schema_path.py
+  && python -c "import json;d=json.load(open('harness/exit_codes.json',encoding='utf-8'));c={int(x['code']) for x in d['codes']};assert c=={0,1,2,3,66},c"
+  && python tools/validate_task_schema.py --schema harness/schemas/task.schema.json 06_sources/SRC-0003_kaizen-chi-tiet-dot1.md
+  && python tools/verify_doc_artifact.py harness/VERSION --no-links --regex "^1\.0\.4\s*$"
+  && python -c "import re;v=open('harness/VERSION',encoding='utf-8').read().strip();h=open('harness/HARNESS.md',encoding='utf-8').read();assert re.search(r'^\| Phi\S+ b\S+ \| '+re.escape(v)+r' ',h,re.M),v"
+done_when:
+  - "test_task_schema_path 5 ca PASS tren Windows"
+  - "exit_codes.json dung tap ma 0, 1, 2, 3, 66 (python -c)"
+  - "Moi the SRC-0003 qua schema moi"
+  - "harness/VERSION = 1.0.4 va khop HARNESS.md (C12)"
+size: "1 session · 5 files"
+depends_on:
+  - TK-0042
+fixes: ""
+log_level: LOOP
+max_loops: 2
+```
+
+### TK-0043 — B3b · `task/`
+
+```yaml
+schema: 1
+id: TK-0043
+cycle: CYC-08
+origin: DEC-0037
+assignee: W1
+goal: Tao tools/validate.py kiem C1-C3 (HARNESS 8.3) va SAME_MODEL, mac dinh canh bao; them kiem self_check/CLAIM_MISMATCH (E40); cho sua test cu khi da khai truoc (E20)
+write_scope:
+  - tools/validate.py
+  - tools/tests/test_validate_core.py
+  - tools/README.md
+constraints:
+  - "Nhanh task/; touched_protected: no; khong sua .github/"
+  - "C1, C2, C3 dung dinh nghia HARNESS muc 8.3 (bang kiem); SAME_MODEL theo harness/MODEL_POLICY.md#SAME_MODEL"
+  - "E40: run co self_check (khoa tuy chon do TK-0042 them) mau thuan ket qua kiem thi bao CLAIM_MISMATCH"
+  - "E20: task khai ten test cu duoc sua trong constraints truoc Run thi khong bao vi pham; khong khai thi bao"
+  - "Giao dien: python tools/validate.py [--strict] [--json] [--base REF]; mac dinh canh bao (ma 0 kem WARN), --strict tra ma 1 khi co vi pham; ma thoat theo SPEC_TOOLS#CONVENTIONS va harness/exit_codes.json (TK-0042, TK-0055)"
+  - "C1-C3 cham theo chenh lech base-head nhu gate (--base); run lich su khong bi cham lai (24/55 run cu da FAIL schema, DEC-0037 A4)"
+  - "Chi doc; khong ghi file, khong goi mang; HARNESS 8.4: khong comment, khong docstring"
+  - "E20: mac dinh khong sua test cu"
+inputs:
+  - harness/schemas/run.schema.json
+  - 01_plan/SPEC_TOOLS.md
+  - harness/HARNESS.md
+  - harness/exit_codes.json
+  - tools/README.md
+read_also:
+  - harness/HARNESS.md
+  - harness/MODEL_POLICY.md#SAME_MODEL
+  - 04_control/decisions/DEC-0037_the-buoc3.md
+line_budget: 400
+verify: >-
+  python -m pytest -q --tb=line tools/tests/test_validate_core.py
+  && python tools/validate.py --base origin/main --json
+done_when:
+  - "Test duong va am cho C1, C2, C3, SAME_MODEL, CLAIM_MISMATCH, E20; PASS tren Windows"
+  - "Mac dinh tra ma 0 kem WARN; --strict tra ma 1 khi co vi pham (test)"
+  - "Chay tren main voi --base origin/main tra ma 0"
+  - "tools/README.md co muc validate.py: muc dich, lenh mau, ma thoat"
+size: "1 session · 3 files · code"
+depends_on:
+  - TK-0055
+fixes: ""
+log_level: LOOP
+max_loops: 2
+```
+
+### TK-0044 — B3c · `task/`
+
+```yaml
+schema: 1
+id: TK-0044
+cycle: CYC-08
+origin: DEC-0037
+assignee: W1
+goal: Tao tools/drift_check.py bon kiem troi (so PR lead/ mo <= 1; DEC lien tuc; VERSION; STATE theo C6) va so append-only (E38 phan so); STATE chi doc, khong dong bo ghi (E29); noi vao tools/validate.py
+write_scope:
+  - tools/drift_check.py
+  - tools/tests/test_drift_check.py
+  - tools/validate.py
+  - tools/README.md
+constraints:
+  - "Nhanh task/; tuan tu sau TK-0043, khong song song cung write_scope; touched_protected: no"
+  - "So PR lead/ mo: script khong goi mang; nhan so lieu tu tham so (--open-lead N hoac --open-prs file JSON do nguoi goi lay bang gh pr list); thieu so lieu thi bao WARN, khong PASS"
+  - "DEC lien tuc: cham theo chenh lech: PR khong tao khoang trong moi, DEC moi = so lon nhat + 1; khoang trong lich su DEC-0022..0025, DEC-0027 la da biet (DEC-0037 dot 2 ghi nhan), khong bao loi"
+  - "VERSION: dang X.Y.Z; khong giam so voi base; PR upgrade/ tang dung mot lan (E25 REJECTED)"
+  - "STATE: C6 (HARNESS 8.3); chi doc, khong ghi, khong sync (E29)"
+  - "So append-only (E38 phan so): file trong 04_control/decisions, risks, requests va 05_memory/discussions chi them dong so voi base (nhu gate G3); phan casefold ten secret thuoc TK-0046"
+  - "Ma thoat theo SPEC_TOOLS#CONVENTIONS va harness/exit_codes.json; HARNESS 8.4: khong comment, khong docstring; khong goi mang"
+inputs:
+  - tools/validate.py
+  - 04_control/STATE.md
+  - harness/VERSION
+  - harness/HARNESS.md
+read_also:
+  - harness/HARNESS.md
+  - tools/gate.py
+  - 04_control/decisions/DEC-0037_the-buoc3.md
+line_budget: 300
+verify: >-
+  python -m pytest -q --tb=line tools/tests/test_drift_check.py
+  && python tools/drift_check.py --base origin/main --open-lead 0 --json
+done_when:
+  - "Test duong va am cho tung kiem (lead/ mo, DEC lien tuc gom ca ca khoang trong lich su, VERSION, C6, append-only); PASS tren Windows"
+  - "Chay tren main voi --base origin/main --open-lead 0 tra ma 0"
+  - "validate.py goi drift_check (hoac co co --drift); tools/README.md co muc drift_check.py"
+size: "1 session · 4 files"
+depends_on:
+  - TK-0043
+fixes: ""
+log_level: LOOP
+max_loops: 2
+```
+
+### TK-0045 — B3d · `task/`
+
+```yaml
+schema: 1
+id: TK-0045
+cycle: CYC-08
+origin: DEC-0037
+assignee: W1
+goal: Tao .github/workflows/verify.yml chay tren windows-latest cho PR, permissions contents read; tools/hooks/pre-push quet secret bang detect-secrets (E23), chan khi gap ma 3 (E16) va khai ON_CRASH (E37)
+write_scope:
+  - .github/workflows/verify.yml
+  - tools/hooks/pre-push
+  - tools/tests/test_hooks_secret.py
+  - tools/requirements.txt
+  - tools/README.md
+constraints:
+  - "CAM mo PR truoc khi co lenh truc tiep OWNER O3.1 bang van ban (cham .github/, 🔒); touched_protected: yes"
+  - "Khong cap secret cho job CI; permissions: contents: read; on: pull_request"
+  - "verify.yml chay pytest tren cac file test lien quan va buoc 'python tools/ci/run_checks.py' chi khi file do ton tai (TK-0056 them sau, khong can sua .github/)"
+  - "pre-push: khai ON_CRASH = chan (hook gac, E37); ma 3 hoac loi khong ro thi chan, bao BLOCKED kem chan doan (E16, DEC-0037 B3); giu hanh vi hien co cua hook (bao ve main)"
+  - "tools/requirements.txt them detect-secrets ghim phien ban (E24: cai qua pip); danh sach thu vien ngoai trong SPEC_TOOLS#CONVENTIONS do TK-0042 cap nhat"
+  - "write_scope co .github/: the chi qua task.schema sau khi TK-0055 mo rong pattern (F01); truoc do validate_task_schema bao 1 vi pham da biet cho the nay"
+  - "HARNESS 8.4 cho code Python; dong khai bao trinh thong dich cua hook duoc phep"
+inputs:
+  - .github/workflows/check.yml
+  - tools/hooks/pre-push
+  - 01_plan/SPEC_TOOLS.md
+  - tools/requirements.txt
+read_also:
+  - harness/MAIN_PROTECTION.md
+  - harness/tools/PREFLIGHT.md
+  - 04_control/decisions/DEC-0037_the-buoc3.md
+line_budget: 350
+verify: >-
+  python -m pytest -q --tb=line tools/tests/test_hooks_secret.py
+  && python -c "from ruamel.yaml import YAML;d=YAML(typ='safe').load(open('.github/workflows/verify.yml',encoding='utf-8'));j=list(d['jobs'].values());t=open('.github/workflows/verify.yml',encoding='utf-8').read();assert d['permissions']=={'contents':'read'};assert all(x['runs-on']=='windows-latest' for x in j);assert 'secrets.' not in t;assert 'pull_request' in t"
+done_when:
+  - "verify.yml: windows-latest, permissions contents read, khong dung secrets, chay tren pull_request (python -c)"
+  - "Hook pre-push: test gap secret thi chan; gap ma 3 thi chan kem chan doan; khai ON_CRASH; test PASS tren Windows"
+  - "requirements.txt co detect-secrets ghim phien ban; tools/README.md cap nhat"
+size: "1 session · 5 files"
+depends_on:
+  - TK-0044
+fixes: ""
+log_level: LOOP
+max_loops: 2
+```
+
+### TK-0056 — B3d2 · `task/`
+
+```yaml
+schema: 1
+id: TK-0056
+cycle: CYC-08
+origin: DEC-0037
+assignee: W1
+goal: Tao tools/injection_scan.py viet lai bang Python tu nguon GSD Core (DEC-0037 A2, B5) quet chen chi thi va base64 tren file .md thay doi trong PR, muc canh bao (E39); NOTICE MIT; tools/ci/run_checks.py va baseline detect-secrets tools/ci/secrets_baseline.json (Q-C)
+write_scope:
+  - tools/injection_scan.py
+  - tools/NOTICE_injection_scan.md
+  - tools/tests/test_injection_scan.py
+  - tools/ci/run_checks.py
+  - tools/ci/secrets_baseline.json
+constraints:
+  - "Nhanh task/; touched_protected: no"
+  - "Nguon: open-gsd/gsd-core commit 663f9ad90d31b09b457253bcff0d622c98d6b10f; blob scripts/prompt-injection-scan.sh 3b8e6adbcbc84bfe77ff988cf4c4a64d31225852, scripts/base64-scan.sh 8f99db627e10172194f4bf6aeabd3a19dc563e91, LICENSE d47f8ea21c0c46de01da7f0f61f92d4bee44631b; doi chieu blob id truoc khi viet"
+  - "NOTICE_injection_scan.md: chep nguyen van LICENSE (MIT, Copyright (c) 2026 Open GSD) kem repo, SHA day du, blob id, va mo ta phan phai sinh (bo mau, nguong base64)"
+  - "Chuyen 26 mau PATTERNS va 18 mau DECODED_PATTERNS sang Python re voi IGNORECASE; bien trai (?<![A-Za-z0-9]) thay cho (^|[^[:alnum:]])"
+  - "Pham vi: --diff <base> lay file .md trong git diff --name-only --diff-filter=ACMR <base>...HEAD; them --file, --dir; goi git bang danh sach tham so, khong qua shell"
+  - "Gioi han: file > 2 MiB bo qua (BO QUA qua lon); dong > 1 MiB bo qua dong (QUET MOT PHAN); base64 [A-Za-z0-9+/]{40,}={0,3}, toi da 1000 chuoi moi file; giai ma b64decode validate=True, loi thi bo chuoi; >= 70% ky tu in duoc; byte NUL trong 8 KiB dau thi bo qua (nhi phan)"
+  - "Doc byte, bo BOM, giai ma UTF-8 errors=replace, doi CRLF thanh LF truoc regex (F53)"
+  - "Hien thi chi duong dan, so dong, ten mau, trich <= 120 ky tu da thay ky tu dieu khien; khong in toan dong hay toan noi dung giai ma"
+  - "Allowlist la danh sach duong dan chinh xac o dau file: tools/injection_scan.py, tools/tests/test_injection_scan.py, tools/NOTICE_injection_scan.md va thu muc fixture cua test; them muc moi can lenh OWNER"
+  - "Muc canh bao mac dinh: co phat hien van ma 0 kem WARN; --strict ma 1; ma 2 loi dung hoac moi truong; 66 pham vi rong; 3 loi khong ro (harness/exit_codes.json)"
+  - "Dong tong ket bat buoc: quet N, WARN W, bo qua S (ly do), mot phan P, loi doc E; file bo qua hoac loi khong bao gio tinh la sach; co loi doc thi ma 2"
+  - "Khong goi shell, khong eval, khong mang; chi thu vien chuan (rieng run_checks.py goi detect-secrets da cho phep o SPEC_TOOLS, DEC-0037 A6); HARNESS 8.4"
+  - "Chuoi mau trong test ghep tung doan de file test khong tu tao hit quet moi (nhu TK-0065)"
+  - "run_checks.py: chay injection_scan --diff va detect-secrets voi baseline; la diem cam cho verify.yml cua TK-0045"
+inputs:
+  - 06_sources/SRC-0008_gsd-core-de-xuat-kaizen.md
+  - harness/exit_codes.json
+  - 01_plan/SPEC_TOOLS.md
+read_also:
+  - 04_control/decisions/DEC-0037_the-buoc3.md
+  - tools/scan.py
+line_budget: 400
+verify: >-
+  python -m pytest -q --tb=line tools/tests/test_injection_scan.py
+  && python tools/injection_scan.py --dir 01_plan --json
+  && python tools/verify_doc_artifact.py tools/NOTICE_injection_scan.md --no-links --contains "663f9ad90d31b09b457253bcff0d622c98d6b10f" --contains "Copyright (c) 2026 Open GSD" --contains "Permission is hereby granted"
+  && python -c "import json;d=json.load(open('tools/ci/secrets_baseline.json',encoding='utf-8'));assert {'version','results'}<=set(d)"
+done_when:
+  - "Moi mau mot ca duong; ca am cho hau to; base64 chen chi thi WARN; base64 nhi phan bo qua; file > 2 MiB, dong > 1 MiB, loi doc, pham vi rong, --strict, CRLF/BOM, allowlist chinh xac; chuoi 1 MiB chay < 5 giay; PASS tren Windows"
+  - "injection_scan --dir 01_plan tra ma 0"
+  - "NOTICE co SHA, dong ban quyen va doan cho phep MIT (--contains); baseline co khoa version, results"
+size: "1 session · 5 files"
+depends_on:
+  - TK-0045
+fixes: ""
+log_level: LOOP
+max_loops: 2
+```
+
+### TK-0046 — B3e · `upgrade/`
+
+```yaml
+schema: 1
+id: TK-0046
+cycle: CYC-08
+origin: DEC-0037
+assignee: W1
+goal: Ghi van ban khung theo E4, E6 mot phan, E9 mot phan, E24, E38 phan casefold (DEC-0036 B2-B4, DEC-0032) vao WORKER.md, BLOCKS.md, HARNESS.md, SPEC_TOOLS.md; tang VERSION
+write_scope:
+  - harness/rules/WORKER.md
+  - harness/templates/BLOCKS.md
+  - harness/HARNESS.md
+  - harness/VERSION
+  - 01_plan/SPEC_TOOLS.md
+constraints:
+  - "Nhanh upgrade/; harness/VERSION 1.0.4 -> 1.0.5; dong 'Phien ban' trong HARNESS.md sua cung so (C12)"
+  - "Lenh OWNER 🔒 cho harness/ truoc khi mo PR; touched_protected: yes"
+  - "E4 (DEC-0036 B2): danh sach diem dung cua WORKER chuyen tu WORKER.md sang muc moi ## STOP trong harness/templates/BLOCKS.md; WORKER.md tro toi do; 'khong ro model' khong con la diem dung (E21); them luat lech ke hoach chi trong write_scope va khong thu ten goi gan giong"
+  - "E6 (DEC-0036 B3): ghi dung muc da co: verify chay trong worktree tam cua head bang gate lay tu origin/main, mot lan chay chuan; worktree tam chi tach thu muc checkout, KHONG phai sandbox; raw capture va cach ly day du HOAN (RSK do LEAD mo o PR lead/ rieng, ngoai write_scope)"
+  - "E9 (DEC-0036 B4): UTF-8 khong BOM, LF cho file khung tu viet, cam Out-File PowerShell 5.1, cong cu moi cai qua pip; -text cho toan bo checks/ HOAN cung E22; kiem ma hoa khong thay the giu nguyen byte"
+  - "E24: danh sach binary nen da duyet (Git, Python, pwsh 7.4, 9Router, Codex CLI); binary moi can DEC"
+  - "E38 phan casefold: ten file hoac bien secret so khop khong phan biet hoa thuong; phan so append-only o TK-0044"
+  - "E22 HOAN Dot 2 (DEC-0034 O2.1): khong dua vao van ban"
+  - "SPEC_TOOLS#CONVENTIONS them con tro toi harness/exit_codes.json (DEC-0037 B8)"
+  - "WORKER.md ngan hon ban truoc: duoi 847 tu (dem bang len(text.split()) UTF-8, nhu verify_doc_artifact --max-words)"
+inputs:
+  - harness/rules/WORKER.md
+  - harness/templates/BLOCKS.md
+  - 05_memory/upstream/00_tong_quan_upstream.md
+  - harness/VERSION
+read_also:
+  - 05_memory/upstream/02_quyen_worker_va_phong_thu_injection.md
+  - 04_control/decisions/DEC-0036_ghi-nhan-cua-so-b3.md
+  - 04_control/decisions/DEC-0037_the-buoc3.md
+line_budget: 300
+verify: >-
+  python tools/verify_doc_artifact.py harness/rules/WORKER.md --no-links --contains "harness/templates/BLOCKS.md" --max-words 846
+  && python tools/verify_doc_artifact.py harness/templates/BLOCKS.md --no-links --contains "## STOP" --contains "write_scope"
+  && python tools/verify_doc_artifact.py 01_plan/SPEC_TOOLS.md --no-links --contains "exit_codes.json" --contains "Out-File" --contains "sandbox" --contains "9Router"
+  && python tools/verify_doc_artifact.py harness/HARNESS.md --no-links --contains "casefold"
+  && python tools/verify_doc_artifact.py harness/VERSION --no-links --regex "^1\.0\.5\s*$"
+  && python -c "import re;v=open('harness/VERSION',encoding='utf-8').read().strip();h=open('harness/HARNESS.md',encoding='utf-8').read();assert re.search(r'^\| Phi\S+ b\S+ \| '+re.escape(v)+r' ',h,re.M),v"
+done_when:
+  - "WORKER.md duoi 847 tu va tro BLOCKS.md; BLOCKS.md co muc ## STOP (diem dung) va luat write_scope"
+  - "SPEC_TOOLS ghi muc cach ly that (worktree, khong sandbox), quy tac ghi file Windows, binary nen va con tro exit_codes.json; HARNESS ghi casefold"
+  - "harness/VERSION = 1.0.5 va khop HARNESS.md (C12)"
+size: "1 session · 5 files"
+depends_on:
+  - TK-0056
+fixes: ""
+log_level: LOOP
+max_loops: 2
+```
+
+### TK-0047 — B3f · `task/` (C9 cuối Bước 3, Q13)
+
+```yaml
+schema: 1
+id: TK-0047
+cycle: CYC-08
+origin: DEC-0037
+assignee: W1
+goal: Them kiem C9 vao tools/validate.py theo dac ta DEC-0036 B5 (task da dong khong cham theo trang thai DEC hien tai; muc CAN KIEM TRA); merge truoc moi tach file Buoc 4
+write_scope:
+  - tools/validate.py
+  - tools/tests/test_validate_c9.py
+  - tools/README.md
+constraints:
+  - "Nhanh task/; touched_protected: no; cuoi Buoc 3 (Q13 YES, DEC-0036 B5); C9 PASS tren main la dieu kien vao TK-0048"
+  - "Task da dong = co dong outcome DONE hoac CANCELLED trong neo TASKS cua 02_work/cycles/CYC-nn.md tren base; ngay lap task = git log --diff-filter=A --follow --format=%cs"
+  - "R1 task mo: origin va DEC trong constraints phai ACTIVE bay gio (PASS/FAIL)"
+  - "R2 task da dong, PR khong dung: khong cham"
+  - "R3 task da dong chi doi ten nguyen byte (blob khong doi): cham theo trang thai DEC tai ngay lap; khong ACTIVE luc do thi FAIL"
+  - "R4 task da dong co bat ky thay doi noi dung: CAN KIEM TRA, liet ke truong doi; khong tu PASS"
+  - "R5 thu tu su kien khong xac dinh (dong Status cung ngay, thieu ngay lap, khong thay DEC o decisions/ va superseded/): CAN KIEM TRA; rieng task mo khong thay DEC thi FAIL"
+  - "R6 01_plan/PLAN.md based_on: moi DEC phai ACTIVE bay gio (LEAD luat 21)"
+  - "Muc CAN KIEM TRA khong tinh la PASS trong ma thoat va dong tong ket (theo harness/exit_codes.json)"
+  - "Test dung repo git tam trong tmp_path, khong dung du lieu that; HARNESS 8.4; khong goi mang"
+inputs:
+  - tools/validate.py
+  - harness/HARNESS.md
+  - harness/schemas/POINTER_GRAMMAR.md
+  - 02_work/cycles/CYC-03.md
+read_also:
+  - 04_control/decisions/DEC-0036_ghi-nhan-cua-so-b3.md
+  - harness/HARNESS.md
+line_budget: 400
+verify: >-
+  python -m pytest -q --tb=line tools/tests/test_validate_c9.py
+  && python tools/validate.py --base origin/main --json
+done_when:
+  - "Test T1-T13 cua dac ta C9 (task mo ACTIVE/RETIRED/SUPERSEDED; DONE va CANCELLED khong dung; doi ten nguyen byte truoc/sau ngay RETIRED; sua mot ky tu; doi ten kem sua; cung ngay; thieu lich su git; PLAN based_on RETIRED/ACTIVE; CAN KIEM TRA khong tinh PASS) PASS tren Windows"
+  - "validate.py --base origin/main tren main tra ma 0 va C9 PASS (L4.0)"
+  - "tools/README.md cap nhat muc validate.py (C9)"
+size: "1 session · 3 files"
+depends_on:
+  - TK-0046
 fixes: ""
 log_level: LOOP
 max_loops: 2
