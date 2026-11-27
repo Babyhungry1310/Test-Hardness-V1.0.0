@@ -1020,6 +1020,158 @@ log_level: LOOP
 max_loops: 2
 ```
 
+### TK-0061 — B3a0 · `upgrade/`
+
+```yaml
+schema: 1
+id: TK-0061
+cycle: CYC-08
+origin: DEC-0037
+assignee: W1
+goal: Them 3 kiem ngu nghia vao tools/validate_task_schema.py (--base-ref; ma O co trong bang O va do thi khong vong; path trong goal thuoc write_scope); tools/verify_doc_artifact.py doi CRLF thanh LF truoc regex (F53) va bat BOM, ky tu vo (F56)
+write_scope:
+  - tools/validate_task_schema.py
+  - tools/tests/test_validate_task_schema.py
+  - tools/verify_doc_artifact.py
+  - tools/tests/test_verify_doc_artifact.py
+  - harness/VERSION
+constraints:
+  - "Nhanh upgrade/; harness/VERSION 1.0.2 -> 1.0.3 (moi PR upgrade/ tang VERSION mot lan; E25 REJECTED)"
+  - "Lenh OWNER 🔒 cho harness/VERSION truoc khi mo PR; touched_protected: yes"
+  - "--base-ref <ref>: the co id da co tren ref ma goal, write_scope hoac done_when khac thi FAIL ID_MEANING_CHANGED (F03); the moi khong bi kiem"
+  - "Ma O nhac trong constraints, inputs phai co trong bang O (muc 3) cua cung file, neu khong FAIL O_UNKNOWN; do thi batch (after:) gom ca nut O khong co vong, neu co FAIL GRAPH_CYCLE"
+  - "Moi duong dan dang thu_muc/ten.duoi trong goal phai thuoc write_scope, neu khong FAIL GOAL_PATH_OUT_OF_SCOPE"
+  - "verify_doc_artifact: doi CRLF thanh LF truoc --regex; BOM dau file FAIL BOM; chuoi vo UTF-8 doc nham cp1252 (vd 'â†’', 'Ã¡') FAIL MOJIBAKE; khong doi hanh vi cac co hien co"
+  - "Ma thoat theo SPEC_TOOLS#CONVENTIONS hien hanh; khong sua test cu (E20)"
+  - "Code theo HARNESS 8.4: khong comment, khong docstring; ghi file bang Python UTF-8 LF"
+inputs:
+  - tools/validate_task_schema.py
+  - tools/verify_doc_artifact.py
+  - 06_sources/SRC-0003_kaizen-chi-tiet-dot1.md
+read_also:
+  - 01_plan/SPEC_TOOLS.md#CONVENTIONS
+  - 04_control/decisions/DEC-0037_the-buoc3.md
+line_budget: 350
+verify: >-
+  python -m pytest -q --tb=line tools/tests/test_validate_task_schema.py tools/tests/test_verify_doc_artifact.py
+  && python tools/validate_task_schema.py --schema harness/schemas/task.schema.json --base-ref origin/main 06_sources/SRC-0003_kaizen-chi-tiet-dot1.md
+  && python tools/verify_doc_artifact.py harness/VERSION --no-links --regex "^1\.0\.3\s*$"
+done_when:
+  - "Test moi cho ID_MEANING_CHANGED, O_UNKNOWN, GRAPH_CYCLE, GOAL_PATH_OUT_OF_SCOPE, CRLF, BOM, MOJIBAKE: moi ma mot ca duong mot ca am; PASS tren Windows"
+  - "Toan bo test cu cua hai file PASS khong sua"
+  - "validate_task_schema --base-ref origin/main tren SRC-0003 PASS"
+  - "harness/VERSION = 1.0.3"
+size: "1 session · 5 files"
+depends_on:
+  - TK-0066
+fixes: ""
+log_level: LOOP
+max_loops: 2
+```
+
+### TK-0042 — B3a · `upgrade/`
+
+```yaml
+schema: 1
+id: TK-0042
+cycle: CYC-08
+origin: DEC-0037
+assignee: W1
+goal: Ghi quy uoc ma thoat va bang loi vao 01_plan/SPEC_TOOLS.md (E5, E16, E18); harness/schemas/run.schema.json MINOR them khoa tuy chon models, evidence_kind, self_check (E7 mot phan, E21, E40); chi van ban va schema
+write_scope:
+  - harness/schemas/run.schema.json
+  - harness/schemas/EVOLUTION.md
+  - 01_plan/SPEC_TOOLS.md
+  - harness/VERSION
+  - harness/HARNESS.md
+constraints:
+  - "Nhanh upgrade/; harness/VERSION 1.0.3 -> 1.0.4"
+  - "Lenh OWNER 🔒 cho harness/ truoc khi mo PR; touched_protected: yes"
+  - "E5 (DEC-0037 B1): ma 0 dat, 1 FAIL, 2 loi dung hoac moi truong, 3 khong ro; loi quyen, moi truong khong tinh loop, toi da 2 lan thu; ma 66 do TK-0055 them"
+  - "E16 (DEC-0037 B3): hook gap ma 3 thi chan, bao BLOCKED kem chan doan"
+  - "E18 (DEC-0037 B4): bang loi trong SPEC_TOOLS#CONVENTIONS: loai loi, ma thoat, co tinh loop, tran thu, xu ly khi cham tran; E5 la mac dinh"
+  - "E7 mot phan (DEC-0037 B2): chi them khoa models (danh sach chuoi) va evidence_kind; KHONG them raw capture"
+  - "E40: them khoa tuy chon self_check; ghi ma CLAIM_MISMATCH trong bang loi (validate thi hanh o TK-0043)"
+  - "run.schema chi them truong tuy chon (MINOR, EVOLUTION.md); khong doi, khong xoa truong cu; ghi dong thay doi vao EVOLUTION.md; harness/HARNESS.md chi sua neu bang kiem C can ten CLAIM_MISMATCH"
+  - "Khong them file run nao vao danh sach FAIL so voi schema cu (24/55 run lich su da FAIL tu truoc, DEC-0037 A4)"
+  - "Khong viet tools/*.py trong task nay"
+inputs:
+  - harness/schemas/run.schema.json
+  - harness/schemas/EVOLUTION.md
+  - 01_plan/SPEC_TOOLS.md
+  - harness/VERSION
+read_also:
+  - 01_plan/SPEC_TOOLS.md#CONVENTIONS
+  - harness/MODEL_POLICY.md#SAME_MODEL
+  - 04_control/decisions/DEC-0037_the-buoc3.md
+line_budget: 350
+verify: >-
+  python tools/verify_doc_artifact.py 01_plan/SPEC_TOOLS.md --no-links --contains "E5" --contains "E16" --contains "E18" --contains "BLOCKED" --contains "CLAIM_MISMATCH"
+  && python tools/verify_doc_artifact.py harness/schemas/EVOLUTION.md --no-links --contains "evidence_kind"
+  && python tools/verify_doc_artifact.py harness/VERSION --no-links --regex "^1\.0\.4\s*$"
+  && python -c "import json,glob,subprocess,jsonschema;from ruamel.yaml import YAML;y=YAML(typ='safe');n=json.load(open('harness/schemas/run.schema.json',encoding='utf-8'));o=json.loads(subprocess.run(['git','show','origin/main:harness/schemas/run.schema.json'],capture_output=True,check=True).stdout);L=lambda f:y.load(open(f,encoding='utf-8').read().split('---')[1]);B=lambda s:{f for f in glob.glob('02_work/runs/*.md') if list(jsonschema.Draft202012Validator(s).iter_errors(L(f)))};k={'models','evidence_kind','self_check'};assert not B(n)-B(o);assert k<=set(n['properties']);assert not k&set(n['required'])"
+done_when:
+  - "SPEC_TOOLS#CONVENTIONS co ma 0/1/2/3, quy tac E16 va bang loi E18 kem CLAIM_MISMATCH (--contains)"
+  - "run.schema co 3 khoa tuy chon moi, khong khoa nao bat buoc; khong them run FAIL so voi schema tren origin/main (python -c)"
+  - "EVOLUTION.md ghi thay doi MINOR; harness/VERSION = 1.0.4"
+size: "1 session · 5 files"
+depends_on:
+  - TK-0061
+fixes: ""
+log_level: LOOP
+max_loops: 2
+```
+
+### TK-0055 — B3a2 · `upgrade/`
+
+```yaml
+schema: 1
+id: TK-0055
+cycle: CYC-08
+origin: DEC-0037
+assignee: W1
+goal: Sua $defs/path trong harness/schemas/task.schema.json cho phep tien to .github/ (F01, Q-B); tao harness/exit_codes.json so ma thoat mot nguon (E36) kem lop loi (E35 phan enum); ghi quy uoc ON_CRASH (E37) vao 01_plan/SPEC_TOOLS.md
+write_scope:
+  - harness/schemas/task.schema.json
+  - tools/tests/test_task_schema_path.py
+  - harness/exit_codes.json
+  - 01_plan/SPEC_TOOLS.md
+  - harness/VERSION
+constraints:
+  - "Nhanh upgrade/; harness/VERSION 1.0.4 -> 1.0.5"
+  - "Lenh OWNER 🔒 cho harness/ truoc khi mo PR; touched_protected: yes"
+  - "Pattern moi dung: ^(?:\\.github/)?[A-Za-z0-9_][A-Za-z0-9_./-]*$ (dong delta TK-0055); chi mo rong, khong thu hep"
+  - "Test 4 ca: .github/workflows/verify.yml hop le; .secrets.baseline, .git/config, ../x khong hop le; them 1 ca hoi quy: path thuong van hop le"
+  - "exit_codes.json: dung tap ma 0 OK, 1 FAIL, 2 USAGE_OR_ENV, 3 UNKNOWN, 66 NO_INPUT (E5 DEC-0037 B1, E36); moi ma co ten va mo ta; pham vi rong tra 66"
+  - "ON_CRASH (E37): moi hook khai ON_CRASH; hook gac = chan, hook quan sat = cho qua; thieu khai bao la loi; ghi vao SPEC_TOOLS#CONVENTIONS (hanh vi hook o TK-0045)"
+  - "Moi the trong SRC-0003 van qua schema moi"
+inputs:
+  - harness/schemas/task.schema.json
+  - 01_plan/SPEC_TOOLS.md
+  - harness/VERSION
+read_also:
+  - 01_plan/SPEC_TOOLS.md#CONVENTIONS
+  - 04_control/decisions/DEC-0037_the-buoc3.md
+line_budget: 250
+verify: >-
+  python -m pytest -q --tb=line tools/tests/test_task_schema_path.py
+  && python -c "import json;d=json.load(open('harness/exit_codes.json',encoding='utf-8'));c={int(x['code']) for x in d['codes']};assert c=={0,1,2,3,66},c"
+  && python tools/verify_doc_artifact.py 01_plan/SPEC_TOOLS.md --no-links --contains "ON_CRASH" --contains "exit_codes.json"
+  && python tools/validate_task_schema.py --schema harness/schemas/task.schema.json 06_sources/SRC-0003_kaizen-chi-tiet-dot1.md
+  && python tools/verify_doc_artifact.py harness/VERSION --no-links --regex "^1\.0\.5\s*$"
+done_when:
+  - "test_task_schema_path 5 ca PASS tren Windows"
+  - "exit_codes.json dung tap ma 0, 1, 2, 3, 66 (python -c)"
+  - "SPEC_TOOLS ghi ON_CRASH va tro exit_codes.json; moi the SRC-0003 qua schema moi"
+  - "harness/VERSION = 1.0.5"
+size: "1 session · 5 files"
+depends_on:
+  - TK-0042
+fixes: ""
+log_level: LOOP
+max_loops: 2
+```
+
 ### Bước 3–5 — không thẻ YAML trong P6d (Q-E)
 
 Chỉ áp **Bảng delta** (và đồ thị batch). Thẻ YAML đủ trường cho TK-0042…TK-0052 / TK-0055/0056/0059 viết ở đầu mỗi Bước, PR `lead/` riêng, sau khi có số đo L1.1.
