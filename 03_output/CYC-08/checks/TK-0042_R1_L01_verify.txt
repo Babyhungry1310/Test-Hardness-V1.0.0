@@ -1,0 +1,5 @@
+PASS: 1 file, 9 phép kiểm, 0 vi phạm
+PASS: 1 file, 4 phép kiểm, 0 vi phạm
+PASS: 1 file, 3 phép kiểm, 0 vi phạm
+schema 2 valid: True; schema 1 with models rejected: True
+EXIT_CODE: 0
