@@ -21,7 +21,7 @@ done_check:
 loops:
   - "L01 | PASS | passed=25 failed=0"
   - "L02 | PASS | passed=25 failed=0"
-deviations: {assumptions: [], differences: ["model CHƯA XÁC MINH: chưa liên kết được nhật ký với phiên"], unverified: []}
+deviations: {assumptions: [], differences: ["model CHƯA XÁC MINH: chưa liên kết được nhật ký với phiên", "G5: 1 hit mới zone2_email (WARN) trong test_validate_task_schema.py, OWNER chấp nhận D-T61b"], unverified: []}
 escalate: "no"
 escalation: {spec: "", problem: "", proposal: ""}
 touched_protected: "no"
