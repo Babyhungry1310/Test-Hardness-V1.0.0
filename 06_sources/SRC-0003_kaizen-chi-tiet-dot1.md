@@ -1053,11 +1053,11 @@ read_also:
 line_budget: 350
 verify: >-
   python -m pytest -q --tb=line tools/tests/test_validate_task_schema.py tools/tests/test_verify_doc_artifact.py
-  && python tools/validate_task_schema.py --schema harness/schemas/task.schema.json --base-ref origin/main 06_sources/SRC-0003_kaizen-chi-tiet-dot1.md
+  && python -c "import json,subprocess,sys;r=subprocess.run([sys.executable,'tools/validate_task_schema.py','--schema','harness/schemas/task.schema.json','--base-ref','origin/main','--json','06_sources/SRC-0003_kaizen-chi-tiet-dot1.md'],capture_output=True,text=True,encoding='utf-8');d=json.loads(r.stdout);bad=[f for f in d['findings'] if not (f['task']=='TK-0045' and f['rule']=='SCHEMA' and '.github/' in f['message'])];assert not bad,bad"
 done_when:
   - "Test moi cho ID_MEANING_CHANGED, O_UNKNOWN, GRAPH_CYCLE, GOAL_PATH_OUT_OF_SCOPE, CRLF, BOM, MOJIBAKE: moi ma mot ca duong mot ca am; PASS tren Windows"
   - "Toan bo test cu cua hai file PASS khong sua"
-  - "validate_task_schema --base-ref origin/main tren SRC-0003 PASS"
+  - "validate_task_schema --base-ref origin/main tren SRC-0003: khong vi pham nao ngoai vi pham da biet F01 cua TK-0045 (.github/, het khi TK-0055 merge)"
 size: "1 session · 4 files"
 depends_on:
   - TK-0066
