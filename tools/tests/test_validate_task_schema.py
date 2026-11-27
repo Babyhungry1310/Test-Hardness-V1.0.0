@@ -193,5 +193,42 @@ class TestSchemaEmpty(unittest.TestCase):
             self.assertTrue(any("'goal' rỗng" in f["message"] for f in res["findings"]))
 
 
+def test_semantic_actions_and_paths(tmp_path):
+    plan = tmp_path / "plan.md"
+    text = '## 3. Bảng OWNER / LEAD\n| O3.6 | owner |\n\n```yaml\nid: TK-0001\ngoal: edit tools/a.py\nwrite_scope: [tools/a.py]\nconstraints: [O3.6]\ninputs: []\n```\n'
+    plan.write_text(text, encoding="utf-8")
+    cards, _ = v.extract_cards(plan, True)
+    assert not v.semantic_findings(plan, cards, None, True)
+    plan.write_text(text.replace('O3.6]', 'O9.9]').replace('edit tools/a.py', 'edit tools/b.py'), encoding="utf-8")
+    cards, _ = v.extract_cards(plan, True)
+    assert {finding.rule for finding in v.semantic_findings(plan, cards, None, True)} == {"O_UNKNOWN", "GOAL_PATH_OUT_OF_SCOPE"}
+
+
+def test_batch_cycles(tmp_path):
+    plan = tmp_path / "plan.md"
+    plan.write_text('- B1 | tasks: TK-0001 | after: B2\n- B2 | tasks: TK-0002 | after: B1\n', encoding="utf-8")
+    assert any(finding.rule == "GRAPH_CYCLE" for finding in v.semantic_findings(plan, [], None, True))
+    plan.write_text('- B1 | tasks: TK-0001 | after: O3.6\n- B2 | tasks: TK-0002 | after: B1\n', encoding="utf-8")
+    assert not v.semantic_findings(plan, [], None, True)
+
+
+def test_base_ref_meaning(tmp_path, monkeypatch):
+    import subprocess
+    monkeypatch.chdir(tmp_path)
+    subprocess.run(['git', 'init', '-q'], check=True)
+    subprocess.run(['git', 'config', 'user.email', 'test@example.invalid'], check=True)
+    subprocess.run(['git', 'config', 'user.name', 'test'], check=True)
+    plan = tmp_path / 'plan.md'
+    text = '```yaml\nid: TK-0001\ngoal: original\nwrite_scope: [tools/a.py]\ndone_when: [ok]\n```\n'
+    plan.write_text(text, encoding='utf-8')
+    subprocess.run(['git', 'add', 'plan.md'], check=True)
+    subprocess.run(['git', 'commit', '-qm', 'base'], check=True)
+    cards, _ = v.extract_cards(plan, True)
+    assert not v.semantic_findings(plan, cards, 'HEAD', True)
+    plan.write_text(text.replace('original', 'changed'), encoding='utf-8')
+    cards, _ = v.extract_cards(plan, True)
+    assert any(finding.rule == 'ID_MEANING_CHANGED' for finding in v.semantic_findings(plan, cards, 'HEAD', True))
+
+
 if __name__ == "__main__":
     unittest.main()

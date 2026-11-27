@@ -143,5 +143,18 @@ class TestAppendOnly(Base):
         self.assertIn("APPEND_ONLY", self.rules(res))
 
 
+def test_encoding_and_crlf(tmp_path):
+    path = tmp_path / 'doc.txt'
+    path.write_bytes(b'x\r\n')
+    assert v.main([str(path), '--regex', '^x$']) == 0
+    path.write_bytes(b'\xef\xbb\xbfx\n')
+    findings, _ = v.verify(v.argparse.Namespace(paths=[str(path)], no_default_forbid=True, forbid=[], sha256=[], same_as=[], contains=[], regex=[], heading=[], max_words=None, no_links=True, no_tables=True, append_only_vs=None))
+    assert any(finding.rule == 'BOM' for finding in findings)
+    path.write_text('\u00e2\u2020\u2019', encoding='utf-8')
+    assert v.main([str(path)]) == 1
+    path.write_text('\u0110\u1ed3ng b\u1ed9 \u2192 ki\u1ec3m', encoding='utf-8')
+    assert v.main([str(path)]) == 0
+
+
 if __name__ == "__main__":
     unittest.main()
