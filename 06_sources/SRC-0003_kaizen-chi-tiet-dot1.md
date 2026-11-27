@@ -170,8 +170,11 @@ Mọi mã P5 dưới đây giữ nguyên nghĩa. Định nghĩa chép từ `06_s
 | B3a2 | ĐỔI | `after: B3a1` | `after: B3a` | — | DEC-0034; D9 | Đ3 |
 | O2.1 | ĐỔI · cổng | Trước TK-0042 | Đã chốt 2026-11-24 (QUYET_DINH_OWNER_CUA_SO_B3, nội dung ở DEC-0034); TK-0040 giữ nguyên H0, P3a ghi trạng thái | — | DEC-0034 | Đ3 |
 | O2.4 | THÊM | — | OWNER chốt dòng REVIEW_SECTION_9 gộp vào HARNESS mục 9 và VERSION mới cho TK-0041 (đã chốt: dòng 1–3, VERSION 1.0.2) | — | DEC-0034 | Đ2 |
+| TK-0066 | THÊM | — | Thay `tools/gate.py` và `tools/tests/test_gate.py` bằng bản v5 (G5 chênh lệch base–head; `--accept-scan` nhiều quy tắc; G4 cảnh báo ANSI; G11 `tools/tests` chênh lệch) (thẻ đầy đủ) | — | DEC-0036 A7 | Đ3 (B3p5) |
+| B3p5 | THÊM | — | `B3p5 \| tasks: TK-0066 \| after: B3p4` | — | DEC-0036 A7 | Đ3 |
+| B3a0 | ĐỔI · `supersedes: B3a0 (DEC-0034)` | `after: B3p4, O3.6` | `after: B3p5, O3.6` | — | DEC-0036 A7 | Đ3 |
 
-Các dòng B2a, TK-0039, B3b, B3e đổi thứ tự so với P5, có `supersedes`, ghi vào DEC-0032. Các dòng TK-0060, TK-0059, TK-0061, B1b3a, B1b4, B2a, B3a1, L5.1 thêm ở cửa sổ trước Bước 2, ghi vào DEC-0033. Các dòng TK-0062…TK-0065, O3.6, TK-0061 (batch), B3a, B3a2, O2.1 (cổng), O2.4 thêm ở cửa sổ trước Bước 3, ghi vào DEC-0034.
+Các dòng B2a, TK-0039, B3b, B3e đổi thứ tự so với P5, có `supersedes`, ghi vào DEC-0032. Các dòng TK-0060, TK-0059, TK-0061, B1b3a, B1b4, B2a, B3a1, L5.1 thêm ở cửa sổ trước Bước 2, ghi vào DEC-0033. Các dòng TK-0062…TK-0065, O3.6, TK-0061 (batch), B3a, B3a2, O2.1 (cổng), O2.4 thêm ở cửa sổ trước Bước 3, ghi vào DEC-0034. Các dòng TK-0066, B3p5, B3a0 (ĐỔI) ghi vào DEC-0036.
 
 
 ## Bảng truy vết E27–E43
@@ -219,6 +222,7 @@ Các dòng B2a, TK-0039, B3b, B3e đổi thứ tự so với P5, có `supersedes
 | TK-0063 | Đ3 | task/ | T1 | WORKER (chọn theo DEC-0033) | REVIEWER (chọn theo DEC-0034) | W1 | [TK-0062] | B3p2 | nhẹ |
 | TK-0064 | Đ3 | task/ | T1 | WORKER (chọn theo DEC-0033) | REVIEWER (chọn theo DEC-0034) | W1 | [TK-0063] | B3p3 | nhẹ |
 | TK-0065 | Đ3 | task/ | T2 | WORKER (chọn theo DEC-0033) | REVIEWER (chọn theo DEC-0034) | W1 | [TK-0064] | B3p4 | nhẹ–vừa |
+| TK-0066 | Đ3 | task/ | T1 | WORKER (chọn theo DEC-0033) | REVIEWER (chọn theo DEC-0036) | W1 | [TK-0065] | B3p5 | nhẹ |
 | TK-0061 | Đ3 | upgrade/ | T2 | WORKER (chọn theo DEC-0033) | REVIEWER (chọn theo DEC-0034) | W1 | [TK-0065] | B3a0 | vừa |
 | TK-0042 | Đ3a | upgrade/ | T2 | WORKER (đề xuất: xai/grok-4.5) | REVIEWER (đề xuất: ag/gemini-3.8-flash) | W1 | [TK-0061] | B3a | vừa |
 | TK-0055 | Đ3 | upgrade/ | T2 | WORKER (đề xuất: xai/grok-4.5) | REVIEWER (đề xuất: ag/gemini-3.8-flash) | W1 | [TK-0042] | B3a2 | vừa |
@@ -260,7 +264,8 @@ Thẻ YAML đầy đủ trong mục 4 cho B1b–Bước 2 (Q-E) và TK-0062…TK
     - B3p2 | tasks: TK-0063 | after: B3p1
     - B3p3 | tasks: TK-0064 | after: B3p2
     - B3p4 | tasks: TK-0065 | after: B3p3
-    - B3a0 | tasks: TK-0061 | after: B3p4, O3.6
+    - B3p5 | tasks: TK-0066 | after: B3p4
+    - B3a0 | tasks: TK-0061 | after: B3p5, O3.6
     - B3a | tasks: TK-0042 | after: B3a0
     - B3a2 | tasks: TK-0055 | after: B3a
     - B3b | tasks: TK-0043 | after: B3a2
@@ -286,7 +291,7 @@ Một chuỗi thẳng từ B1b tới B5b; O-task chen ở B1b (L1.1), B3a0 (O3.6
       B1b --> B1b2[B1b2 TK-0057] --> B1b3[B1b3 TK-0058]
       B1b3 --> B1b3a[B1b3a TK-0060] --> B1b4[B1b4 TK-0059] --> B2a[B2a TK-0039] --> B2b[B2b TK-0040] --> B2c[B2c TK-0041]
       B2c --> B3p1[B3p1 TK-0062] --> B3p2[B3p2 TK-0063] --> B3p3[B3p3 TK-0064] --> B3p4[B3p4 TK-0065]
-      B3p4 --> O36((O3.6)) --> B3a0[B3a0 TK-0061]
+      B3p4 --> B3p5[B3p5 TK-0066] --> O36((O3.6)) --> B3a0[B3a0 TK-0061]
       B3a0 --> B3a[B3a TK-0042] --> B3a2[B3a2 TK-0055]
       B3a2 --> B3b[B3b TK-0043] --> B3c[B3c TK-0044] --> B3d[B3d TK-0045]
       O31((O3.1)) --> B3d
