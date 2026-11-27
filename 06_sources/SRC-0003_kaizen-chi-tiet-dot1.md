@@ -1095,6 +1095,7 @@ constraints:
   - "run.schema chi them truong tuy chon (MINOR, EVOLUTION.md); khong doi, khong xoa truong cu; ghi dong thay doi vao EVOLUTION.md; harness/HARNESS.md chi sua neu bang kiem C can ten CLAIM_MISMATCH"
   - "Khong them file run nao vao danh sach FAIL so voi schema cu (24/55 run lich su da FAIL tu truoc, DEC-0037 A4)"
   - "Khong viet tools/*.py trong task nay"
+  - "SPEC_TOOLS#CONVENTIONS: them detect-secrets vao danh sach thu vien ngoai (E23, E24; DEC-0037 A6) cho TK-0045, TK-0056"
 inputs:
   - harness/schemas/run.schema.json
   - harness/schemas/EVOLUTION.md
@@ -1167,6 +1168,150 @@ done_when:
 size: "1 session · 5 files"
 depends_on:
   - TK-0042
+fixes: ""
+log_level: LOOP
+max_loops: 2
+```
+
+### TK-0043 — B3b · `task/`
+
+```yaml
+schema: 1
+id: TK-0043
+cycle: CYC-08
+origin: DEC-0037
+assignee: W1
+goal: Tao tools/validate.py kiem C1-C3 (HARNESS 8.3) va SAME_MODEL, mac dinh canh bao; them kiem self_check/CLAIM_MISMATCH (E40); cho sua test cu khi da khai truoc (E20)
+write_scope:
+  - tools/validate.py
+  - tools/tests/test_validate_core.py
+  - tools/README.md
+constraints:
+  - "Nhanh task/; touched_protected: no; khong sua .github/"
+  - "C1, C2, C3 dung dinh nghia HARNESS muc 8.3 (bang kiem); SAME_MODEL theo harness/MODEL_POLICY.md#SAME_MODEL"
+  - "E40: run co self_check (khoa tuy chon do TK-0042 them) mau thuan ket qua kiem thi bao CLAIM_MISMATCH"
+  - "E20: task khai ten test cu duoc sua trong constraints truoc Run thi khong bao vi pham; khong khai thi bao"
+  - "Giao dien: python tools/validate.py [--strict] [--json] [--base REF]; mac dinh canh bao (ma 0 kem WARN), --strict tra ma 1 khi co vi pham; ma thoat theo SPEC_TOOLS#CONVENTIONS va harness/exit_codes.json (TK-0042, TK-0055)"
+  - "C1-C3 cham theo chenh lech base-head nhu gate (--base); run lich su khong bi cham lai (24/55 run cu da FAIL schema, DEC-0037 A4)"
+  - "Chi doc; khong ghi file, khong goi mang; HARNESS 8.4: khong comment, khong docstring"
+  - "E20: mac dinh khong sua test cu"
+inputs:
+  - harness/schemas/run.schema.json
+  - 01_plan/SPEC_TOOLS.md
+  - harness/HARNESS.md
+  - harness/exit_codes.json
+  - tools/README.md
+read_also:
+  - harness/HARNESS.md
+  - harness/MODEL_POLICY.md#SAME_MODEL
+  - 04_control/decisions/DEC-0037_the-buoc3.md
+line_budget: 400
+verify: >-
+  python -m pytest -q --tb=line tools/tests/test_validate_core.py
+  && python tools/validate.py --base origin/main --json
+done_when:
+  - "Test duong va am cho C1, C2, C3, SAME_MODEL, CLAIM_MISMATCH, E20; PASS tren Windows"
+  - "Mac dinh tra ma 0 kem WARN; --strict tra ma 1 khi co vi pham (test)"
+  - "Chay tren main voi --base origin/main tra ma 0"
+  - "tools/README.md co muc validate.py: muc dich, lenh mau, ma thoat"
+size: "1 session · 3 files · code"
+depends_on:
+  - TK-0055
+fixes: ""
+log_level: LOOP
+max_loops: 2
+```
+
+### TK-0044 — B3c · `task/`
+
+```yaml
+schema: 1
+id: TK-0044
+cycle: CYC-08
+origin: DEC-0037
+assignee: W1
+goal: Tao tools/drift_check.py bon kiem troi (so PR lead/ mo <= 1; DEC lien tuc; VERSION; STATE theo C6) va so append-only (E38 phan so); STATE chi doc, khong dong bo ghi (E29); noi vao tools/validate.py
+write_scope:
+  - tools/drift_check.py
+  - tools/tests/test_drift_check.py
+  - tools/validate.py
+  - tools/README.md
+constraints:
+  - "Nhanh task/; tuan tu sau TK-0043, khong song song cung write_scope; touched_protected: no"
+  - "So PR lead/ mo: script khong goi mang; nhan so lieu tu tham so (--open-lead N hoac --open-prs file JSON do nguoi goi lay bang gh pr list); thieu so lieu thi bao WARN, khong PASS"
+  - "DEC lien tuc: cham theo chenh lech: PR khong tao khoang trong moi, DEC moi = so lon nhat + 1; khoang trong lich su DEC-0022..0025, DEC-0027 la da biet (DEC-0037 dot 2 ghi nhan), khong bao loi"
+  - "VERSION: dang X.Y.Z; khong giam so voi base; PR upgrade/ tang dung mot lan (E25 REJECTED)"
+  - "STATE: C6 (HARNESS 8.3); chi doc, khong ghi, khong sync (E29)"
+  - "So append-only (E38 phan so): file trong 04_control/decisions, risks, requests va 05_memory/discussions chi them dong so voi base (nhu gate G3); phan casefold ten secret thuoc TK-0046"
+  - "Ma thoat theo SPEC_TOOLS#CONVENTIONS va harness/exit_codes.json; HARNESS 8.4: khong comment, khong docstring; khong goi mang"
+inputs:
+  - tools/validate.py
+  - 04_control/STATE.md
+  - harness/VERSION
+  - harness/HARNESS.md
+read_also:
+  - harness/HARNESS.md
+  - tools/gate.py
+  - 04_control/decisions/DEC-0037_the-buoc3.md
+line_budget: 300
+verify: >-
+  python -m pytest -q --tb=line tools/tests/test_drift_check.py
+  && python tools/drift_check.py --base origin/main --open-lead 0 --json
+done_when:
+  - "Test duong va am cho tung kiem (lead/ mo, DEC lien tuc gom ca ca khoang trong lich su, VERSION, C6, append-only); PASS tren Windows"
+  - "Chay tren main voi --base origin/main --open-lead 0 tra ma 0"
+  - "validate.py goi drift_check (hoac co co --drift); tools/README.md co muc drift_check.py"
+size: "1 session · 4 files"
+depends_on:
+  - TK-0043
+fixes: ""
+log_level: LOOP
+max_loops: 2
+```
+
+### TK-0045 — B3d · `task/`
+
+```yaml
+schema: 1
+id: TK-0045
+cycle: CYC-08
+origin: DEC-0037
+assignee: W1
+goal: Tao .github/workflows/verify.yml chay tren windows-latest cho PR, permissions contents read; tools/hooks/pre-push quet secret bang detect-secrets (E23), chan khi gap ma 3 (E16) va khai ON_CRASH (E37)
+write_scope:
+  - .github/workflows/verify.yml
+  - tools/hooks/pre-push
+  - tools/tests/test_hooks_secret.py
+  - tools/requirements.txt
+  - tools/README.md
+constraints:
+  - "CAM mo PR truoc khi co lenh truc tiep OWNER O3.1 bang van ban (cham .github/, 🔒); touched_protected: yes"
+  - "Khong cap secret cho job CI; permissions: contents: read; on: pull_request"
+  - "verify.yml chay pytest tren cac file test lien quan va buoc 'python tools/ci/run_checks.py' chi khi file do ton tai (TK-0056 them sau, khong can sua .github/)"
+  - "pre-push: khai ON_CRASH = chan (hook gac, E37); ma 3 hoac loi khong ro thi chan, bao BLOCKED kem chan doan (E16, DEC-0037 B3); giu hanh vi hien co cua hook (bao ve main)"
+  - "tools/requirements.txt them detect-secrets ghim phien ban (E24: cai qua pip); danh sach thu vien ngoai trong SPEC_TOOLS#CONVENTIONS do TK-0042 cap nhat"
+  - "write_scope co .github/: the chi qua task.schema sau khi TK-0055 mo rong pattern (F01); truoc do validate_task_schema bao 1 vi pham da biet cho the nay"
+  - "HARNESS 8.4 cho code Python; dong khai bao trinh thong dich cua hook duoc phep"
+inputs:
+  - .github/workflows/check.yml
+  - tools/hooks/pre-push
+  - 01_plan/SPEC_TOOLS.md
+  - tools/requirements.txt
+read_also:
+  - harness/MAIN_PROTECTION.md
+  - harness/tools/PREFLIGHT.md
+  - 04_control/decisions/DEC-0037_the-buoc3.md
+line_budget: 350
+verify: >-
+  python -m pytest -q --tb=line tools/tests/test_hooks_secret.py
+  && python -c "from ruamel.yaml import YAML;d=YAML(typ='safe').load(open('.github/workflows/verify.yml',encoding='utf-8'));j=list(d['jobs'].values());t=open('.github/workflows/verify.yml',encoding='utf-8').read();assert d['permissions']=={'contents':'read'};assert all(x['runs-on']=='windows-latest' for x in j);assert 'secrets.' not in t;assert 'pull_request' in t"
+done_when:
+  - "verify.yml: windows-latest, permissions contents read, khong dung secrets, chay tren pull_request (python -c)"
+  - "Hook pre-push: test gap secret thi chan; gap ma 3 thi chan kem chan doan; khai ON_CRASH; test PASS tren Windows"
+  - "requirements.txt co detect-secrets ghim phien ban; tools/README.md cap nhat"
+size: "1 session · 5 files"
+depends_on:
+  - TK-0044
 fixes: ""
 log_level: LOOP
 max_loops: 2
