@@ -170,6 +170,8 @@ def verify(args) -> tuple[list[Finding], int]:
             findings.append(Finding(raw, 0, "MISSING_FILE", "file không tồn tại"))
             continue
         data = path.read_bytes()
+        if data.startswith(b"\xef\xbb\xbf"):
+            findings.append(Finding(raw, 0, "BOM", "file có UTF-8 BOM"))
         try:
             text = data.decode("utf-8")
         except UnicodeDecodeError as exc:
@@ -177,6 +179,8 @@ def verify(args) -> tuple[list[Finding], int]:
             continue
         if not text.strip():
             findings.append(Finding(raw, 0, "EMPTY_FILE", "file rỗng"))
+        if re.search("[\\u00c3\\u00c2][\\u0080-\\u00bf\\u00a0-\\u00bf]|\\u00e2[\\u0080-\\u00bf\\u20ac\\u2020\\u201a][\\u0080-\\u00bf\\u2122\\u2019\\u201c\\u201d]", text):
+            findings.append(Finding(raw, 0, "MOJIBAKE", "nội dung có dấu hiệu sai mã hóa"))
         lines = text.splitlines()
 
         for needle in args.contains or []:
@@ -185,7 +189,7 @@ def verify(args) -> tuple[list[Finding], int]:
                 findings.append(Finding(raw, 0, "CONTAINS", f"thiếu chuỗi {needle!r}"))
         for pat in args.regex or []:
             checks_run += 1
-            if not re.search(pat, text, re.M):
+            if not re.search(pat, text.replace("\r\n", "\n"), re.M):
                 findings.append(Finding(raw, 0, "REGEX", f"không có dòng khớp {pat!r}"))
         if args.heading:
             checks_run += 1

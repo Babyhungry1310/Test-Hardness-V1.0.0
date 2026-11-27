@@ -30,7 +30,9 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import subprocess
 import sys
+import tempfile
 from dataclasses import dataclass, field
 from pathlib import Path, PurePosixPath
 
@@ -372,6 +374,53 @@ def load_schema(path: Path) -> tuple[dict, list | None, str | None]:
     return schema, required, pattern
 
 
+def semantic_findings(plan: Path, cards: list[Card], base_ref: str | None, use_yaml: bool) -> list[Finding]:
+    text = plan.read_text(encoding="utf-8")
+    findings = []
+    section = re.search(r"^## 3\. Bảng OWNER / LEAD[^\n]*\n(.*?)(?=^## |\Z)", text, re.M | re.S)
+    known_actions = set(re.findall(r"^\|\s*(O\d+\.\d+)\s*\|", section.group(1), re.M)) if section else None
+    graph = {}
+    for match in re.finditer(r"^\s*-\s*([\w.]+)\s*\|\s*tasks:\s*[^\n|]*\|\s*after:\s*([^\n]*)", text, re.M):
+        graph[match.group(1)] = [item.strip() for item in match.group(2).split(",") if item.strip() and item.strip() != "—"]
+    for cycle in find_cycles(graph):
+        findings.append(Finding(str(plan), 1, "?", "GRAPH_CYCLE", " → ".join(cycle)))
+    previous = {}
+    if base_ref:
+        root = subprocess.run(["git", "rev-parse", "--show-toplevel"], capture_output=True, text=True, encoding="utf-8", check=True).stdout.strip()
+        relative = plan.resolve().relative_to(Path(root).resolve()).as_posix()
+        result = subprocess.run(["git", "show", f"{base_ref}:{relative}"], capture_output=True, encoding="utf-8")
+        if result.returncode:
+            raise ValueError(f"không đọc được {base_ref}:{relative}: {result.stderr.strip()}")
+        with tempfile.TemporaryDirectory() as directory:
+            baseline = Path(directory) / "plan.md"
+            baseline.write_text(result.stdout, encoding="utf-8", newline="\n")
+            baseline_cards, errors = extract_cards(baseline, use_yaml)
+            if errors:
+                raise ValueError("không đọc được thẻ tại base")
+            previous = {card.data.get("id"): card.data for card in baseline_cards}
+    for card in cards:
+        data = card.data
+        task = str(data.get("id", "?"))
+        def add(rule, message):
+            findings.append(Finding(str(plan), card.line, task, rule, message))
+        if task in previous:
+            changed = [key for key in ("goal", "write_scope", "done_when") if data.get(key) != previous[task].get(key)]
+            if changed:
+                add("ID_MEANING_CHANGED", ", ".join(changed))
+        if known_actions is not None:
+            for key in ("constraints", "inputs"):
+                for action in re.findall(r"\bO\d+\.\d+\b", str(data.get(key, ""))):
+                    if action not in known_actions:
+                        add("O_UNKNOWN", action)
+        goal = data.get("goal")
+        scope = data.get("write_scope")
+        if isinstance(goal, str) and isinstance(scope, list):
+            for path in re.findall(r"(?<![\w./-])(?:[\w.-]+/)+[\w.-]+\.[A-Za-z0-9]+", goal):
+                if path not in scope:
+                    add("GOAL_PATH_OUT_OF_SCOPE", path)
+    return findings
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="Kiểm cơ học thẻ task trước khi gửi REVIEWER.")
     ap.add_argument("plans", nargs="+", type=Path, help="file kế hoạch (.md) chứa thẻ task")
@@ -386,6 +435,7 @@ def main(argv: list[str] | None = None) -> int:
                     help="file (sổ, STATE, kế hoạch cũ) chứa ID task đã có; lặp lại được")
     ap.add_argument("--no-yaml", action="store_true", help="không dùng PyYAML, chỉ dùng bộ đọc tối giản")
     ap.add_argument("--json", action="store_true", help="in kết quả dạng JSON")
+    ap.add_argument("--base-ref", help="đối chiếu ý nghĩa thẻ với Git ref")
     args = ap.parse_args(argv)
     # Console Windows mặc định không phải UTF-8: tránh UnicodeEncodeError khi in tiếng Việt.
     for stream in (sys.stdout, sys.stderr):
@@ -418,7 +468,8 @@ def main(argv: list[str] | None = None) -> int:
             c, f = extract_cards(plan, use_yaml=not args.no_yaml)
             cards += c
             findings += f
-    except (OSError, ValueError, re.error) as exc:
+            findings += semantic_findings(plan, c, args.base_ref, not args.no_yaml)
+    except (OSError, ValueError, re.error, subprocess.CalledProcessError) as exc:
         print(f"validate_task_schema: lỗi dùng lệnh hoặc đọc file: {exc}", file=sys.stderr)
         return EXIT_USAGE
 
