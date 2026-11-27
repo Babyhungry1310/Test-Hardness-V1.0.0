@@ -32,6 +32,8 @@ keywords: [cua-so-buoc3, ghi-nhan, o3-6, gate-v5, plan-based-on, xac-minh-model]
 ### A. Ghi nhận (đã xảy ra; mỗi dòng có nguồn)
 Mức bằng chứng model của REVIEWER: **mức C** = có dòng đúng model trong khung giờ review, chưa liên kết được với phiên (không có định danh phiên, không bảo đảm khung độc quyền).
 
+Hash CSV ở A3, A4, A6, A7, A8 là sha256 mà `tools/usage_9router.py --out` in ra lúc tạo file, tính trên nội dung LF. Trên Windows, script ghi file bằng `write_text` không đặt `newline`, nên file trên đĩa là CRLF và băm trực tiếp ra giá trị khác. Đối chiếu: đổi CRLF thành LF rồi băm. Tác tử đã đối chiếu 5 file ngày 2026-11-27: khớp. CSV chỉ chứng minh mức C, không liên kết model với phiên.
+
 | Mã | Ngày | Nội dung | Nguồn |
 | --- | --- | --- | --- |
 | A1 | 2026-11-25 | D2b: REVIEWER của TK-0062 là Grok, thay Gemini của DEC-0035 A. | Phiếu GIAO_TK-0062_R2_LUNA mục 0; PR #112 → `401aff5` |

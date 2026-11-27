@@ -17,10 +17,6 @@ PROFILE: SHORT
 - DEC-0033 | ACTIVE | E44 model/review, V-RESP, vận hành Đợt 1
 - DEC-0032 | ACTIVE | P6d; SRC-0003
 - DEC-0031 | ACTIVE | E14=tách; E15 chuyển repo mẹ
-- DEC-0030 | ACTIVE | cập nhật test_scan_core trước TK-0014 giải mã base64
-- DEC-0026 | ACTIVE | TK-0030 fixes TK-0007
-- DEC-0021 | ACTIVE | Phân biệt tuyến và model thực tế
-- DEC-0019 | ACTIVE | Vận hành Kaizen theo E14
 - Danh sách DEC ACTIVE đầy đủ: `04_control/decisions/`.
 ### 4. Next action
 - Chờ OWNER: phân vai (thử tuyến Luna, Gemini); câu mở C1, C2 của DEC-0036.
