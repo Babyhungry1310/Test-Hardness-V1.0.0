@@ -38,6 +38,7 @@ keywords: [o3-6, the-buoc3, e5, e7, e16, e18, tk-0056, gsd-core, injection-scan]
 | A4 | 24/55 file run lịch sử (`02_work/runs/`) không qua `harness/schemas/run.schema.json` hiện hành (khuôn cũ). Thẻ sửa `run.schema` kiểm "không thêm file FAIL", không đòi toàn bộ đạt. | Claude 2 chạy jsonschema trên main `01eb881` |
 | A5 | Dãy số DEC trên main thiếu DEC-0022, 0023, 0024, 0025, 0027 (không có file ở `decisions/` lẫn `superseded/`; DEC-0027 chỉ có trong một commit nhánh chưa merge). Đây là khoảng trống lịch sử đã biết; kiểm "DEC liên tục" (TK-0044) chấm theo chênh lệch, không báo các khoảng trống này. | `ls 04_control/decisions/DEC-* 04_control/decisions/superseded/DEC-*`; `git log --all --diff-filter=A` |
 | A6 | `01_plan/SPEC_TOOLS.md#CONVENTIONS` chỉ cho thư viện ngoài `jsonschema`, `ruamel.yaml`, `pytest`. TK-0045 (pre-push, E23) và TK-0056 (baseline, Q-C) cần `detect-secrets`; theo E24 (ACCEPTED, công cụ Python mới cài qua pip), TK-0042 thêm `detect-secrets` vào danh sách đó. | SPEC_TOOLS dòng "Thư viện ngoài chuẩn"; DEC-0034 O2.1 (E23, E24) |
+| A7 | C12 (HARNESS 8.3): `harness/VERSION` phải khớp dòng "Phiên bản" ở `harness/HARNESS.md` (dòng 10, hiện 1.0.2). Thẻ đợt 1 TK-0061 và TK-0055 tăng VERSION nhưng không có `HARNESS.md` trong write_scope, nên sẽ làm lệch C12. | HARNESS dòng 10, dòng C12 bảng 8.3 |
 
 ### B. Quyết định OWNER
 | Mã | Nội dung | Trạng thái |
@@ -49,6 +50,7 @@ keywords: [o3-6, the-buoc3, e5, e7, e16, e18, tk-0056, gsd-core, injection-scan]
 | B5 | TK-0056 viết lại bằng Python, phái sinh từ nguồn A2; NOTICE chép nguyên văn LICENSE kèm repo, SHA, blob id; mức cảnh báo (E39); không gọi shell, không mạng. | OWNER chốt 2026-11-27 |
 | B6 | PR P3b (O3.6) là một PR `lead/`, ba commit theo đợt: đợt 1 = DEC này + thẻ TK-0061, TK-0042, TK-0055; đợt 2 = TK-0043, TK-0044, TK-0045; đợt 3 = TK-0056, TK-0046, TK-0047 + STATE. Review từng commit; OWNER merge sau đợt 3. | OWNER chốt 2026-11-27 |
 | B7 | Phân vai P3b: Claude 2 soạn nội dung; Terra chép nguyên văn theo sha256 và chạy gate; Luna review (khác họ với người soạn). Model của Terra, Luna ghi theo mức bằng chứng thực có (như DEC-0036 B11). | OWNER chốt 2026-11-27 |
+| B8 | Sửa theo A7: TK-0061 đổi sang nhánh `task/`, không tăng VERSION (chỉ sửa `tools/`); quy ước ON_CRASH (E37) chuyển sang TK-0042; TK-0055 thay `01_plan/SPEC_TOOLS.md` bằng `harness/HARNESS.md` trong write_scope; con trỏ tới `exit_codes.json` trong SPEC_TOOLS do TK-0046 ghi. Chuỗi VERSION: TK-0042 1.0.3, TK-0055 1.0.4, TK-0046 1.0.5; thẻ nào tăng VERSION thì verify kiểm C12. | OWNER chốt 2026-11-27 |
 <!-- END: RATIONALE -->
 <!-- ANCHOR: CONSEQUENCES -->
 ## Consequences
