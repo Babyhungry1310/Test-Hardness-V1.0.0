@@ -1,0 +1,7 @@
+Base: 1441681a9c2efce7243449145b2d484d5ea4d65c
+Clean base: python -m pytest -q --tb=line
+23 passed in 6.16s
+EXIT_CODE: 0
+Clean base cwd with TK-0043 tools/validate.py: python <task-worktree>/tools/validate.py --base origin/main --json
+{"status": "PASS", "issues": []}
+EXIT_CODE: 0
