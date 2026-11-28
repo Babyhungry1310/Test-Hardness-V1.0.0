@@ -25,6 +25,11 @@ OWNER chạy một lần cho mỗi bản clone: `git config core.hooksPath tools
 | 10. Mẫu `pytest.ini` | `tools/pytest_ini_check.py` | Hoàn thành |
 
 ## Danh mục công cụ và hook
+### `tools/validate.py`
+- Kiểm C1–C3, SAME_MODEL, CLAIM_MISMATCH và E20 trên diff giữa base và HEAD đã commit; đọc bằng chứng từ HEAD.
+- `python tools/validate.py --base origin/main --json`; mặc định mã 0 kèm WARN nếu có phát hiện, `--strict` trả mã 1 khi có phát hiện; mã 2 là lỗi dùng hoặc môi trường.
+- Theo DEC-0039 B3, actual model không được chấm trong Đợt 1. E40 chỉ báo khi xác định được mâu thuẫn: file chứng cứ PASS vắng hoặc tiêu chí chỉ yêu cầu file tồn tại mà claim FAIL. Nội dung hay hành vi chưa có phép kiểm gắn rõ giữ UNKNOWN.
+- Công cụ chỉ đọc, không gọi mạng; thay đổi chưa commit không ảnh hưởng kết quả.
 ### `tools/assign_audit.py`
 - Mục đích: Đối chiếu phân công model giữa `MODEL_MATRIX.md`, `MODEL_CATALOG.md`, run và RVW; kiểm tra tính độc lập REVIEWER.
 - Lệnh mẫu: `python tools/assign_audit.py --root . --cycle CYC-01` (mã thoát: 0). Mã thoát: 0 đạt, 1 sai lệch, 2 lỗi đối số/file.
