@@ -31,3 +31,7 @@ Thay đổi: thêm trường tùy chọn `related` (danh sách con trỏ, như �
 2. Thêm bước nâng đời `1 → 2` vào thư viện chung của script.
 3. Mẫu `decision.md` ghi `schema: 2`; bản ghi mới dùng mẫu này.
 4. `DEC-0002` cũ vẫn ghi `schema: 1` trong file và vẫn đạt khi kiểm.
+
+## 4. Run 1 → 2 (TK-0042)
+
+Thay đổi MINOR thêm ba trường tùy chọn `models`, `evidence_kind` và `self_check`. Riêng run dùng `schema: 1` hoặc `schema: 2` trong cùng `run.schema.json`, vì gate G10 và các công cụ đọc một file schema. Bản ghi schema 1 giữ nguyên hợp lệ; ba trường mới chỉ được dùng với schema 2.

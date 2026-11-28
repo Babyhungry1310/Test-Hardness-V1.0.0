@@ -5,8 +5,18 @@ Nguồn: DEC-0015, DEC-0016. Nền: `main` @ 67a092f.
 <!-- ANCHOR: CONVENTIONS -->
 ## 1. Quy ước
 - Cây file: script `tools/<tên>.py`; hook `tools/hooks/`; test `tools/tests/test_<tên>.py`; dữ liệu test cố định `tools/tests/data/`; thư viện cần cài `tools/requirements.txt`. Đường dẫn `harness/tools/…` trong đặc tả của khung đọc là `tools/…`.
-- Python 3.11 trở lên. Thư viện ngoài chuẩn chỉ gồm `jsonschema`, `ruamel.yaml`, `pytest`. Không script nào gọi model hay gọi mạng.
-- Mỗi script: tham số dòng lệnh, cờ `--json`, mã thoát `0` đạt · `1` không đạt · `2` lỗi dùng hoặc lỗi nội bộ.
+- Python 3.11 trở lên. Thư viện ngoài chuẩn gồm `jsonschema`, `ruamel.yaml`, `pytest`, `detect-secrets` (E23, E24). Không script nào gọi model hay gọi mạng.
+- Mỗi script: tham số dòng lệnh, cờ `--json`, mã thoát `0` đạt · `1` FAIL · `2` lỗi dùng hoặc môi trường · `3` không rõ (lỗi nội bộ) (E5). Mã `66` NO_INPUT thêm ở TK-0055. Công cụ cũ đang trả `2` cho lỗi nội bộ giữ nguyên tới khi được sửa.
+- Lỗi quyền, môi trường không tính loop, tối đa 2 lần thử (E5). Hook gặp mã `3` thì chặn, báo BLOCKED kèm chẩn đoán (E16).
+- Mọi hook khai `ON_CRASH`: hook gác chặn, hook quan sát cho qua; thiếu khai báo là lỗi (E37). Hành vi hook thực hiện ở TK-0045.
+
+| Loại lỗi | Mã thoát | Có tính loop | Trần thử | Xử lý khi chạm trần |
+|---|---|---|---|---|
+| Đạt (E5) | 0 | Có | Theo task | Kết thúc PASS |
+| FAIL kiểm (E5, E18) | 1 | Có | Theo task | BLOCKED và báo OWNER |
+| Lỗi dùng, môi trường, quyền (E5, E18) | 2 | Không | 2 | BLOCKED và báo OWNER |
+| Không rõ (E5, E16, E18) | 3 | Có | Theo task | Chặn hook, BLOCKED kèm chẩn đoán |
+| CLAIM_MISMATCH: self_check mâu thuẫn kết quả kiểm (E18, E40) | 1 | Có | Theo task | BLOCKED và báo OWNER; validate thi hành ở TK-0043 |
 - Windows: đường dẫn qua `pathlib`, chấp nhận khoảng trắng và `\`; gọi Git bằng danh sách tham số, không qua shell; file văn bản ghi với newline LF.
 - Test chạy từ gốc repo bằng `python -m pytest -q --tb=line tools/tests/<file>`; import theo dạng `tools.<module>`. Dữ liệu tạm ghi vào `tmp_path`, không ghi vào repo. Repo Git dùng cho test là repo tạm trong `tmp_path` với remote là thư mục bare cục bộ.
 - Test không đổi cấu hình Git, nhánh, thẻ hay remote của bản clone đang làm việc.

@@ -4,7 +4,10 @@
   "additionalProperties": false,
   "required": ["schema", "task", "run", "outcome", "model", "branch", "outputs", "evidence", "done_check", "loops", "deviations", "escalate", "escalation", "touched_protected", "keywords", "usage"],
   "properties": {
-    "schema": {"const": 1},
+    "schema": {"enum": [1, 2]},
+    "models": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$"}},
+    "evidence_kind": {"enum": ["test", "verify", "gate", "scan", "review", "log", "manual"]},
+    "self_check": {"type": "array", "items": {"type": "object", "additionalProperties": false, "required": ["done_when", "claim", "evidence"], "properties": {"done_when": {"type": "integer", "minimum": 1}, "claim": {"enum": ["PASS", "FAIL"]}, "evidence": {"type": "string", "minLength": 1}}}},
     "task": {"type": "string", "pattern": "^TK-\\d{4}$"},
     "run": {"type": "integer", "minimum": 1},
     "outcome": {"enum": ["DONE", "BLOCKED", "CANCELLED"]},
@@ -40,6 +43,10 @@
     "usage": {"type": "array", "items": {"type": "string"}}
   },
   "allOf": [
+    {
+      "if": {"properties": {"schema": {"const": 1}}},
+      "then": {"not": {"anyOf": [{"required": ["models"]}, {"required": ["evidence_kind"]}, {"required": ["self_check"]}]}}
+    },
     {
       "if": {"properties": {"escalate": {"const": "yes"}}, "required": ["escalate"]},
       "then": {"properties": {"escalation": {"properties": {"spec": {"minLength": 1}, "problem": {"minLength": 1}, "proposal": {"minLength": 1}}}}}
