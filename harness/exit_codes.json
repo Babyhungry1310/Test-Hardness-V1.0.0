@@ -1,0 +1,52 @@
+{
+  "schema": 1,
+  "codes": [
+    {
+      "code": 0,
+      "name": "OK",
+      "description": "Đạt."
+    },
+    {
+      "code": 1,
+      "name": "FAIL",
+      "description": "Kiểm không đạt."
+    },
+    {
+      "code": 2,
+      "name": "USAGE_OR_ENV",
+      "description": "Lỗi dùng, môi trường hoặc quyền; không tính loop, tối đa 2 lần thử."
+    },
+    {
+      "code": 3,
+      "name": "UNKNOWN",
+      "description": "Không rõ (lỗi nội bộ); hook gặp mã này thì chặn và báo BLOCKED kèm chẩn đoán."
+    },
+    {
+      "code": 66,
+      "name": "NO_INPUT",
+      "description": "Phạm vi kiểm rỗng, không có đầu vào; không tính là đạt."
+    }
+  ],
+  "error_classes": [
+    {
+      "name": "quota",
+      "description": "Hết hạn mức của tuyến."
+    },
+    {
+      "name": "credit",
+      "description": "Hết tín dụng của tài khoản."
+    },
+    {
+      "name": "incompatible",
+      "description": "Yêu cầu không tương thích với model hoặc tuyến."
+    },
+    {
+      "name": "overloaded",
+      "description": "Tuyến quá tải."
+    },
+    {
+      "name": "unknown",
+      "description": "Chưa phân loại được."
+    }
+  ]
+}

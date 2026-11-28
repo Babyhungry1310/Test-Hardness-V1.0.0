@@ -7,7 +7,7 @@
 
 | Thuộc tính | Giá trị |
 |---|---|
-| Phiên bản | 1.0.3 (Semantic Versioning [THY-26]) |
+| Phiên bản | 1.0.4 (Semantic Versioning [THY-26]) |
 | Ngày | 2026-11-14 |
 | Vị trí trong repo | `harness/HARNESS.md` |
 | Ngôn ngữ | Văn bản tiếng Việt. Mọi **mã, tên file, tên thư mục, khóa YAML, giá trị trạng thái, tên neo** dùng tiếng Anh |
