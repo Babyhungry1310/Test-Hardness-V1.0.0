@@ -1,0 +1,9 @@
+Base: 1441681a9c2efce7243449145b2d484d5ea4d65c
+Experimental commit: ffe47cea8ad107e42c5ac15378efda117b79f182
+L01 and L02 returned PASS, but the tests did not cover the defects below.
+Pre-review: validation reads working tree instead of head; C2 does not verify evidence for each condition.
+Pre-review: C1 accumulates loops across runs; C3 accepts overbroad evidence paths and edits.
+Pre-review: E20 can treat a prohibition as authorization; E40 lacks independently verified FAIL-to-PASS comparison.
+Pre-review: SAME_MODEL UNKNOWN is treated as strict failure despite DEC-0039 B3.
+G11 was interrupted after these findings; no gate verdict was produced.
+The experimental implementation is not included in this record PR.

@@ -1,0 +1,5 @@
+...........                                                              [100%]
+11 passed in 17.01s
+{"status": "PASS", "issues": []}
+
+EXIT_CODE: 0
