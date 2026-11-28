@@ -24,7 +24,7 @@
     "max_loops": {"type": "integer", "minimum": 1}
   },
   "$defs": {
-    "path": {"type": "string", "pattern": "^[A-Za-z0-9_][A-Za-z0-9_./-]*$"},
+    "path": {"type": "string", "pattern": "^(?:\\.github/)?[A-Za-z0-9_][A-Za-z0-9_./-]*$"},
     "pointer": {"type": "string", "pattern": "^(?:(?:(?:TK|DEC|RSK|REQ|SRC)-\\d{4}|CYC-\\d{2}|RVW-CYC-\\d{2}|DSC-\\d{8}-[a-z0-9]{4})(?:#[A-Z][A-Z0-9_]*)?|[A-Za-z0-9_][A-Za-z0-9_./-]*#[A-Z][A-Z0-9_]*|TK-\\d{4}\\.L\\d{2}(?:\\.S\\d{2})?)$"},
     "pointer_or_path": {"anyOf": [{"$ref": "#/$defs/pointer"}, {"$ref": "#/$defs/path"}]}
   }
