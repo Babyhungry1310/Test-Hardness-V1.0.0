@@ -24,4 +24,6 @@ origin: "01_plan/PLAN.md#CYC_08"
 - TK-0066 | run: R1 | outcome: DONE
 - TK-0061 | run: R1 | outcome: DONE
 - TK-0042 | run: R1 | outcome: DONE
+- TK-0055 | run: R1 | outcome: DONE
+- TK-0043 | run: R1 | outcome: BLOCKED
 <!-- END: TASKS -->

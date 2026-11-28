@@ -72,3 +72,11 @@ Nguồn: DEC-0015, DEC-0016. Nền: `main` @ 67a092f.
 - BLOCKED ghi loại DECISION_OWNER/ACTION_LEAD/OUTPUT_WORKER/TOOLING/DEPENDENCY, chủ, điều kiện mở và thời điểm; tra quyết định cũ trước khi chờ OWNER. Event ngoài repo ghi từ/đến, task, chủ, thời điểm; đo PASS đến PR, review vòng, thời gian chờ và lỗi công cụ. SLA không tạo thêm quyền.
 - Tài khoản GitHub chung chưa tách OWNER/tác tử bằng kỹ thuật (DEC-0019, RSK-0004); giữ verdict/phiên riêng. Ưu tiên đề xuất GitHub App/tài khoản riêng, chưa tự thay cấu hình. Không nhận hai approval cùng tài khoản là chứng minh hai chủ thể độc lập.
 <!-- END: HANDOFF -->
+
+<!-- ANCHOR: VALIDATE_R2 -->
+## TK-0043 R2
+- Chấm diff giữa base và HEAD đã commit. Đọc run, minh chứng từ cây commit tương ứng; file untracked hoặc sửa cục bộ không làm đổi kết luận.
+- C1 giới hạn số loop từng run; thứ tự Lnn tiếp tục qua các run. C2 đối chiếu từng done_when với minh chứng tồn tại, kể cả khi done_check có mô tả nhưng evidence rỗng.
+- C3 đối chiếu phạm vi và bằng chứng đúng chu kỳ, task, run; E20 xét khai báo cho phép sửa test trong thẻ trước Run.
+- E40 so claim với kết quả kiểm độc lập của chính tiêu chí; chỉ phát CLAIM_MISMATCH khi có mâu thuẫn xác định. Áp dụng SAME_MODEL cùng ngoại lệ DEC-0039 B3.
+<!-- END: VALIDATE_R2 -->
