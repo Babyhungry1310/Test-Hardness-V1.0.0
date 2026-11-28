@@ -1194,6 +1194,8 @@ constraints:
   - "C1-C3 cham theo chenh lech base-head nhu gate (--base); run lich su khong bi cham lai (24/55 run cu da FAIL schema, DEC-0037 A4)"
   - "Chi doc; khong ghi file, khong goi mang; HARNESS 8.4: khong comment, khong docstring"
   - "E20: mac dinh khong sua test cu"
+  - "DEC-0042: R2 duoc them dung L05, chi sua E40 trong tools/validate.py; duoc sua fixture E40 hien co va them ca hoi quy E40 trong tools/tests/test_validate_core.py"
+  - "DEC-0042 E40: evidence la tham chieu file khi khop nguyen mot phan tu run.evidence hoac tieu chi co dang file exists: <path>; con lai UNKNOWN; test kiem ma CLAIM_MISMATCH va so done_when"
 inputs:
   - harness/schemas/run.schema.json
   - 01_plan/SPEC_TOOLS.md
@@ -1218,7 +1220,7 @@ depends_on:
   - TK-0055
 fixes: ""
 log_level: LOOP
-max_loops: 2
+max_loops: 3
 ```
 
 ### TK-0044 — B3c · `task/`

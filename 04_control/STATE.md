@@ -2,7 +2,7 @@ PHASE: BUILD
 CYCLE: CYC-08
 PROFILE: SHORT
 
-## Handover board (updated: 2026-11-28, base đã kiểm @ 90c6548)
+## Handover board (updated: 2026-11-28, base đã kiểm @ 1a7f123)
 ### 1. Progress
 - CYC-01…CYC-07 | PASS | chi tiết theo thẻ cycle và RVW tương ứng
 - CYC-08 | BUILD | Kaizen Đợt 1 | Bước 1, Bước 2 DONE; cửa sổ trước Bước 3 DONE: TK-0062…TK-0066, F24, F58 (#111–#119); ghi nhận ở DEC-0036; O3.6 (#121), TK-0061 (#122), TK-0042 (#124), DEC-0039 (#125) DONE
@@ -12,6 +12,8 @@ PROFILE: SHORT
 - RSK-0006 | OPEN | MEDIUM | owner: LEAD
 - RSK-0001 | OPEN | MEDIUM | owner: LEAD
 ### 3. Recent decisions
+- DEC-0043 | ACTIVE | Soát thẻ: mỗi done_when có phép kiểm đối chiếu được (V1–V2), từ TK-0044
+- DEC-0042 | ACTIVE | TK-0043: max_loops 3, L05 trong R2 chỉ sửa E40; PR lead/ mở cùng #130
 - DEC-0041 | ACTIVE | TK-0055 R1 DONE (#127); mở lại TK-0043 sau R1 BLOCKED (#128)
 - DEC-0040 | ACTIVE | Ghi nhận TK-0042 (D-T42), B9 thay câu WARN của DEC-0033, CYC-08
 - DEC-0039 | ACTIVE | Gói bằng chứng, manifest, ngoại lệ model Đợt 1
@@ -20,7 +22,7 @@ PROFILE: SHORT
 - DEC-0033 | ACTIVE | E44 model/review, V-RESP, vận hành Đợt 1
 - Danh sách DEC ACTIVE đầy đủ: `04_control/decisions/`.
 ### 4. Next action
-- Kế tiếp: Terra làm TK-0043 R2; Luna review độc lập theo DEC-0041.
+- Kế tiếp: sau khi PR DEC-0042 merge, Terra cập nhật #130 lên base mới, chạy L05 (E40), gate có --run-verify, Luna review vòng 2 trên head cuối; FAIL thì Astra tư vấn trước khi OWNER quyết.
 - Task sửa harness/ (TK-0055, TK-0046) và TK-0045 (.github/, O3.1) cần lệnh OWNER 🔒 trước khi mở PR.
 - Chuỗi Bước 3–5: TK-0055 → TK-0043 → TK-0044 → TK-0045 → TK-0056 → TK-0046 → TK-0047 → Bước 4, 5; đồ thị SRC-0003 mục 2
 - Câu mở DEC-0036 C1, C2: chờ OWNER
